@@ -13,14 +13,14 @@ import java.awt.event.ComponentEvent;
 import java.util.HashMap;
 
 public class UserInterface extends JFrame {
-    private static final int DEfaultWith = 500;
-    private static final int DEfaultHeight =400;
+    private static final int MinWith = 400;
+    private static final int MinHeight =250;
     HashMap<String,JPanel> allGraph = new HashMap<>();
 
     public UserInterface(){}
     public UserInterface(String openFilepath){
         //主界面格式设置
-        setBounds(200,200,DEfaultWith,DEfaultHeight);
+        setBounds(200,200, MinWith*2, MinHeight*2);
         setBackground(Color.gray);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLayout(null);
@@ -64,16 +64,8 @@ public class UserInterface extends JFrame {
                 rightArea.setBounds((int)(x*0.25),(int) (y*0.2),(int) (x*0.75), (int) (y*0.8));
             }
         });
-
         {
             //测试
-            Board []bs = new Board[10];
-            for (int i = 0;i<10;i++){
-                bs[i] = new Board();
-                JTextArea j11 = new JTextArea(i+"");
-                bs[i].add(j11);
-                leftArea.addBoarder(bs[i],i);
-            }
         }
 
         //主界面设计

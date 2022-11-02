@@ -16,4 +16,5 @@ public class JLine extends JPanel {
     {
         super.paint(g);
     }
+
 }

@@ -6,7 +6,7 @@ import java.awt.event.WindowEvent;
 import java.util.HashMap;
 
 public class Management {
-    HashMap<String, UserInterface> openedSet = new HashMap<>();
+    HashMap<String , UserInterface> openedSet = new HashMap<>();
 
     public Management(){
         NewInterface();

@@ -1,6 +1,6 @@
 package window.area;
 
-import window.Board;
+import window.area.part.Board;
 import window.area.part.Boarder;
 
 import javax.swing.*;
@@ -13,40 +13,61 @@ import java.util.ArrayList;
 public class InterfaceLeft extends JScrollPane {
     ArrayList<Boarder> boarders = new ArrayList<>();
     public JPanel leftPane;                 //内容条(装Board内容块)
-    int ckeckedNum = 0;
+    //int ckeckedNum = 0;
     public InterfaceLeft() {
         super();
         leftPane = new JPanel();
+        leftPane.setLayout(new FlowLayout());
+
         getViewport().setView(leftPane);
+        setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_NEVER);           //水平不显示
+
         //滚动页面
         addComponentListener(new ComponentAdapter() {
             //重设小窗口大小
             @Override
             public void componentResized(ComponentEvent e) {
                 super.componentResized(e);
-                leftPane.setPreferredSize(new Dimension(getWidth()/2,getHeight()*+2));
-                deploy();
+
+                FlowLayout fl = new FlowLayout(FlowLayout.CENTER,10,getWidth() / 10);
+                leftPane.setLayout(fl);
+                int hsum = 0;
+                for (Boarder boarder : boarders){
+                    int height = (int) (getWidth() * 4 / 5/boarder.board.AspectrRatio);
+                    boarder.setPreferredSize(new Dimension(getWidth() * 4 / 5, height));
+                    hsum+=height+10;
+                }
+
+
+                leftPane.setPreferredSize(new Dimension(getWidth(),hsum));
+
                 repaint();
             }
         });
 
         //测试
         leftPane.setBackground(Color.green);
-        leftPane.setLayout(null);
+
+        Board []bs = new Board[10];
+        for (int i = 0;i<10;i++){
+            bs[i] = new Board();
+            addBoarder(bs[i],i);
+        }
     }
 
     // 增加内容块
     public void addBoarder(Board B, int index) {
         Boarder boarder = new Boarder(B);
         boarders.add(index, boarder);
+        boarder.setPreferredSize(new Dimension(leftPane.getWidth(),leftPane.getHeight()/4));
         add(boarder);
         deploy();
     }
 
     //重新排布小窗口顺序
     void deploy() {
-        for (int i = 0; i < boarders.size(); i++)
-            boarders.get(i).board.setBounds(0, i * getWidth(), getWidth(), getWidth());
+        for (Boarder boarder : boarders) leftPane.add(boarder);
+            //boarders.get(i).set(0, i * getWidth(), getWidth(), getWidth());
     }
 
     //重绘
@@ -55,5 +76,4 @@ public class InterfaceLeft extends JScrollPane {
         super.paint(g);
     }
 }
-
 
