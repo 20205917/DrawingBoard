@@ -33,7 +33,7 @@ public class InterfaceAbove extends JPanel {
         Button bPen = new Button("Pen");
         Button bText = new Button("Text");
         Button bRubber = new Button("Rubber");
-        Button bNothing = new Button();
+        Button bMouse = new Button("Mouse");
 
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = inner;
@@ -46,7 +46,7 @@ public class InterfaceAbove extends JPanel {
         gbc.weightx = 1;
         addComponent(toolsTable, bRubber, gbl, gbc);
         gbc.gridwidth = GridBagConstraints.REMAINDER;
-        addComponent(toolsTable, bNothing, gbl, gbc);
+        addComponent(toolsTable, bMouse, gbl, gbc);
 
         return toolsTable;
     }
