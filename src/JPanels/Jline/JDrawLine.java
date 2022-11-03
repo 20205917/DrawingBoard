@@ -21,7 +21,7 @@ public class JDrawLine {
 
 
         for(int i=0;i<points.size();i++){
-            g2d.draw()
+            g2d.drawLine(points.get(i).px,points.get(i).py,points.get(i+1).px,points.get(i+1).py);
         }
         return g2d;
     }
