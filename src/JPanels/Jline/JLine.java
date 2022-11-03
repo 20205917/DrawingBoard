@@ -3,7 +3,7 @@ package JPanels.Jline;
 import javax.swing.*;
 import java.awt.*;
 
-public class JLine extends JPanel {
+public abstract class JLine extends JPanel {
     protected static double ClickEffectiveRange = 5;
     protected Color color = new Color(0);
     public boolean isClecked(int X,int Y){
@@ -17,4 +17,24 @@ public class JLine extends JPanel {
         super.paint(g);
     }
 
+}
+class Point{
+    int px;
+    int py;
+    public Point(int x,int y){
+        px = x;
+        py = y;
+    };
+    public int getPx() {
+        return px;
+    }
+    public void setPx(int px) {
+        this.px = px;
+    }
+    public int getPy() {
+        return py;
+    }
+    public void setPy(int py) {
+        this.py = py;
+    }
 }
