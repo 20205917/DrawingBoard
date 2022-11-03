@@ -35,12 +35,13 @@ public class UserInterface extends JFrame {
         setJMenuBar(menuBar);
 
         //三个中间容器
+        {}
         //工具栏
         JPanel aboveArea = new InterfaceAbove();
         add(aboveArea);
 
         //操作窗口
-        JPanel rightArea = new InterfaceRight();
+        InterfaceRight rightArea = new InterfaceRight();
         add(rightArea);
 
         //滚动界面，装左侧预览小窗口
@@ -64,17 +65,12 @@ public class UserInterface extends JFrame {
                 rightArea.setBounds((int)(x*0.25),(int) (y*0.2),(int) (x*0.75), (int) (y*0.8));
             }
         });
-        {
-            //测试
-        }
 
         //主界面设计
 
         USerGlassPane uSerGlassPane = new USerGlassPane();
         setGlassPane(uSerGlassPane);
         setVisible(true);
-
-
 
     }
 
