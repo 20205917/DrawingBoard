@@ -1,28 +1,74 @@
 package window.area.part;
 
+import JPanels.Jline.JDrawLine;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
+import java.awt.event.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 
 //单页画布
 public class Board extends JLayeredPane{
+    //图形集合
     HashMap<String,JComponent> jcomponentSet = new HashMap<>();
+    //画图笔记集合
+    ArrayList<JDrawLine> jDrawLines = new ArrayList<>();
+    //大小
     private int Bwidth = 300;
     private int Bheight = 200;
+    private int selection = 1;      //之后换枚举
+    private boolean ismake = false;
+
+    private Color drawLineColor = Color.black;
+    private BasicStroke drawLineStroke = new BasicStroke(3);
     public Board(){
         //int theTop = 1;
         setLayout(null);
         //白色画板
-
         JPanel background = new JPanel();
         background.setSize(new Dimension(getWidth(),getHeight()));
         background.setBackground(Color.red);
-        background.setSize(600,600);
+        background.setSize(Bwidth,Bheight);
         add(background,DEFAULT_LAYER,-1);
 
+
+
+        addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                super.mouseDragged(e);
+                if(ismake){
+                    switch (selection){
+                        case 1->{
+                            jDrawLines.get(jDrawLines.size()-1).addPoint(e.getX(),e.getY());
+                            jDrawLines.get(jDrawLines.size()-1).drawLine(getGraphics());
+                        }
+                    }
+                }
+            }
+        });
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                switch (selection){
+                    case 1:{
+                        ismake = true;
+                        jDrawLines.add(new JDrawLine(drawLineColor,drawLineStroke));
+                        jDrawLines.get(jDrawLines.size()-1).drawLine(getGraphics());
+                    }
+                }
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                super.mouseReleased(e);
+                ismake = false;
+                jDrawLines.get(jDrawLines.size()-1).drawLine(getGraphics());
+            }
+        });
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -31,8 +77,12 @@ public class Board extends JLayeredPane{
             }
         });
     }
-    public boolean addComponent(String logs){
-        return true;
+
+    @Override
+    public void paint(Graphics g) {
+        super.paint(g);
+        for (JDrawLine jDrawLine : jDrawLines)
+            jDrawLine.drawLine(getGraphics());
     }
 
 
@@ -45,9 +95,6 @@ public class Board extends JLayeredPane{
         }
         return logs.toString();
     }
-
-
-
 
 
 
