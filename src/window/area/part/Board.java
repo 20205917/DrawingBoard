@@ -14,7 +14,7 @@ public class Board extends JLayeredPane{
     //图形集合
     HashMap<String,JComponent> jcomponentSet = new HashMap<>();
     //画图笔记集合
-    ArrayList<JDrawLine> jDrawLines = new ArrayList<>();
+    public ArrayList<JDrawLine> jDrawLines = new ArrayList<>();
     //大小
     private int Bwidth = 300;
     private int Bheight = 200;
@@ -82,7 +82,7 @@ public class Board extends JLayeredPane{
     public void paint(Graphics g) {
         super.paint(g);
         for (JDrawLine jDrawLine : jDrawLines)
-            jDrawLine.drawLine(getGraphics());
+            jDrawLine.drawLine(g);
     }
 
 
