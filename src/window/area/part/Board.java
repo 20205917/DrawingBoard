@@ -2,13 +2,16 @@ package window.area.part;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.HashMap;
 
 
 //单页画布
 public class Board extends JLayeredPane{
     HashMap<String,JComponent> jcomponentSet = new HashMap<>();
-    public double AspectrRatio = 4/3.0;
+    private int Bwidth = 300;
+    private int Bheight = 200;
     public Board(){
         //int theTop = 1;
         setLayout(null);
@@ -17,13 +20,22 @@ public class Board extends JLayeredPane{
         JPanel background = new JPanel();
         background.setSize(new Dimension(getWidth(),getHeight()));
         background.setBackground(Color.red);
-        background.setSize(200,200);
+        background.setSize(600,600);
         add(background,DEFAULT_LAYER,-1);
+
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                super.componentResized(e);
+                background.setSize(Bwidth,Bheight);
+            }
+        });
     }
     public boolean addComponent(String logs){
-
         return true;
     }
+
+
     public String save(){
         StringBuffer logs = new StringBuffer();
         for (String s : jcomponentSet.keySet())
@@ -33,7 +45,25 @@ public class Board extends JLayeredPane{
         }
         return logs.toString();
     }
-    public int getSpecificheight(int x,int y){
-        return x>y*AspectrRatio? y: (int)(x/AspectrRatio);
+
+
+
+
+
+
+    public int getBheight() {
+        return Bheight;
+    }
+
+    public void setBheight(int bheight) {
+        Bheight = bheight;
+    }
+
+    public int getBwidth() {
+        return Bwidth;
+    }
+
+    public void setBwidth(int bwidth) {
+        Bwidth = bwidth;
     }
 }
