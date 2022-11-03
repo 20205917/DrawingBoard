@@ -18,6 +18,8 @@ public class UserInterface extends JFrame {
     HashMap<String,JPanel> allGraph = new HashMap<>();
 
     public UserInterface(){}
+
+
     public UserInterface(String openFilepath){
         //主界面格式设置
         setBounds(200,200, MinWith*2, MinHeight*2);
