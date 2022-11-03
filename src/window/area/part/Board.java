@@ -8,7 +8,16 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
+enum choose{
+    pen,
+    text,
+    rubber,
+    mouse,
+    rect,
+    oval,
+    line,
+    curve
+}
 //单页画布
 public class Board extends JLayeredPane{
     //图形集合
@@ -18,6 +27,7 @@ public class Board extends JLayeredPane{
     //大小
     private int Bwidth = 300;
     private int Bheight = 200;
+
     private int selection = 1;      //之后换枚举
     private boolean ismake = false;
 
@@ -82,7 +92,7 @@ public class Board extends JLayeredPane{
     public void paint(Graphics g) {
         super.paint(g);
         for (JDrawLine jDrawLine : jDrawLines)
-            jDrawLine.drawLine(getGraphics());
+            jDrawLine.drawLine(g);
     }
 
 
