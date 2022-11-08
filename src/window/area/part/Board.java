@@ -1,7 +1,9 @@
 package window.area.part;
 
 import JPanels.JGraph.JGraph;
+import JPanels.JGraph.JRect;
 import JPanels.Jline.JDrawLine;
+import JPanels.MyPoint;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,9 +23,9 @@ public class Board extends JLayeredPane{
     private int Bheight = 200;
 
     //控制图形创建
-    private int selection = 1;      //之后换枚举
+    private int selection = 2;      //之后换枚举
     private boolean isMake = false;
-
+    private MyPoint mousePressedPoint;
     //图形颜色
     private Color drawLineColor = Color.black;
     private BasicStroke drawLineStroke = new BasicStroke(3);
@@ -34,7 +36,6 @@ public class Board extends JLayeredPane{
 
 
     public Board(){
-        //int theTop = 1;
         setLayout(null);
         //白色画板
         JPanel background = new JPanel();
@@ -42,8 +43,6 @@ public class Board extends JLayeredPane{
         background.setBackground(Color.red);
         background.setSize(Bwidth,Bheight);
         add(background,DEFAULT_LAYER,-1);
-
-
 
         addMouseMotionListener(new MouseMotionAdapter() {
             @Override
@@ -54,16 +53,21 @@ public class Board extends JLayeredPane{
                         case 1->{
                             jDrawLines.get(jDrawLines.size()-1).addPoint(e.getX(),e.getY());
                             jDrawLines.get(jDrawLines.size()-1).drawLine(getGraphics()); }
-                        case 2->{
+                        case 2,3,4->{
+                            chooseGraph.resize(mousePressedPoint,new MyPoint(e.getX(),e.getY()));
                         }
+                        default -> {System.out.println( "创建失败"+selection);}
                     }
                 }
             }
         });
+
+
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
+                mousePressedPoint = new MyPoint(e.getX(),e.getY());
                 switch (selection){
                     case 1->{
                         isMake = true;
@@ -74,14 +78,18 @@ public class Board extends JLayeredPane{
                         isMake = true;
                         //创建图形
                         chooseGraph = switch (selection){
-                            case 2 -> new JGraph(drawLineColor,drawLineStroke);
+                            case 2 -> new JRect(drawLineColor,drawLineStroke);
                             case 3 -> new JGraph();
                             default -> new JGraph();
                         };
-                        add(chooseGraph,DEFAULT_LAYER);
+                        chooseGraph.setLocation(e.getX(),e.getY());
+                        chooseGraph.setSize(10,10);
+                        add(chooseGraph,DEFAULT_LAYER+1,0);
                         for (int i=0;i<100;i++){
-                            if(!GraphSet.containsKey("图形"+i))
+                            if(!GraphSet.containsKey("图形"+i)){
                                 GraphSet.put("图形"+i,chooseGraph);
+                                break;
+                            }
                         }
                     }
                 }
@@ -102,6 +110,8 @@ public class Board extends JLayeredPane{
 
             }
         });
+
+
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {

@@ -1,12 +1,14 @@
 package JPanels.Jline;
 
+import JPanels.MyPoint;
+
 import java.awt.*;
 import java.util.Vector;
 
 public class JDrawLine {
     Stroke stroke;
-    Color color = Color.black;
-    Vector<Point> points =  new Vector<>();
+    Color color;
+    Vector<MyPoint> myPoints =  new Vector<>();
 
     public JDrawLine(Color color, Stroke stroke){
         this.stroke = stroke;
@@ -20,12 +22,12 @@ public class JDrawLine {
         g2d.setColor(color);
         g2d.setStroke(stroke);
 
-        for(int i=0;i<points.size()-1;i++){
-            g2d.drawLine(points.get(i).px,points.get(i).py,points.get(i+1).px,points.get(i+1).py);
+        for(int i = 0; i< myPoints.size()-1; i++){
+            g2d.drawLine(myPoints.get(i).px, myPoints.get(i).py, myPoints.get(i+1).px, myPoints.get(i+1).py);
         }
         g2d.dispose();
     }
     public void addPoint(int x,int y){
-        points.add(new Point(x,y));
+        myPoints.add(new MyPoint(x,y));
     }
 }

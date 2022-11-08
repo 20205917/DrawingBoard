@@ -18,12 +18,3 @@ public abstract class JLine extends JPanel {
     }
 
 }
-class Point{
-    int px;
-    int py;
-    public Point(int x,int y){
-        px = x;
-        py = y;
-    };
-
-}
