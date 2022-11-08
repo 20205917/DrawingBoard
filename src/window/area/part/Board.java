@@ -1,5 +1,6 @@
 package window.area.part;
 
+import JPanels.JGraph.JGraph;
 import JPanels.Jline.JDrawLine;
 
 import javax.swing.*;
@@ -12,17 +13,26 @@ import java.util.HashMap;
 //单页画布
 public class Board extends JLayeredPane{
     //图形集合
-    HashMap<String,JComponent> jcomponentSet = new HashMap<>();
-    //画图笔记集合
+    HashMap<String,JComponent> GraphSet = new HashMap<>();
+    //画图笔轨迹集合
     public ArrayList<JDrawLine> jDrawLines = new ArrayList<>();
     //大小
     private int Bwidth = 300;
     private int Bheight = 200;
-    private int selection = 1;      //之后换枚举
-    private boolean ismake = false;
 
+    //控制图形创建
+    private int selection = 1;      //之后换枚举
+    private boolean isMake = false;
+
+    //图形颜色
     private Color drawLineColor = Color.black;
     private BasicStroke drawLineStroke = new BasicStroke(3);
+
+    //当前图形
+    public JGraph chooseGraph;
+
+
+
     public Board(){
         //int theTop = 1;
         setLayout(null);
@@ -39,11 +49,12 @@ public class Board extends JLayeredPane{
             @Override
             public void mouseDragged(MouseEvent e) {
                 super.mouseDragged(e);
-                if(ismake){
+                if(isMake){
                     switch (selection){
                         case 1->{
                             jDrawLines.get(jDrawLines.size()-1).addPoint(e.getX(),e.getY());
-                            jDrawLines.get(jDrawLines.size()-1).drawLine(getGraphics());
+                            jDrawLines.get(jDrawLines.size()-1).drawLine(getGraphics()); }
+                        case 2->{
                         }
                     }
                 }
@@ -54,19 +65,41 @@ public class Board extends JLayeredPane{
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
                 switch (selection){
-                    case 1:{
-                        ismake = true;
+                    case 1->{
+                        isMake = true;
                         jDrawLines.add(new JDrawLine(drawLineColor,drawLineStroke));
                         jDrawLines.get(jDrawLines.size()-1).drawLine(getGraphics());
+                    }
+                    case 2,3,4->{
+                        isMake = true;
+                        //创建图形
+                        chooseGraph = switch (selection){
+                            case 2 -> new JGraph(drawLineColor,drawLineStroke);
+                            case 3 -> new JGraph();
+                            default -> new JGraph();
+                        };
+                        add(chooseGraph,DEFAULT_LAYER);
+                        for (int i=0;i<100;i++){
+                            if(!GraphSet.containsKey("图形"+i))
+                                GraphSet.put("图形"+i,chooseGraph);
+                        }
                     }
                 }
             }
 
+            //鼠标松开
             @Override
             public void mouseReleased(MouseEvent e) {
                 super.mouseReleased(e);
-                ismake = false;
-                jDrawLines.get(jDrawLines.size()-1).drawLine(getGraphics());
+                //创建结束
+                if(isMake){
+                    isMake = false;
+                    switch (selection){
+                        case 1->{jDrawLines.get(jDrawLines.size()-1).drawLine(getGraphics());}
+                        case 2,3,4->{}
+                    }
+                }
+
             }
         });
         addComponentListener(new ComponentAdapter() {
@@ -87,10 +120,10 @@ public class Board extends JLayeredPane{
 
 
     public String save(){
-        StringBuffer logs = new StringBuffer();
-        for (String s : jcomponentSet.keySet())
+        StringBuilder logs = new StringBuilder();
+        for (String s : GraphSet.keySet())
         {
-            JComponent c = jcomponentSet.get(s);
+            JComponent c = GraphSet.get(s);
             logs.append(s).append(getLayer(c)).append(getPosition(c));
         }
         return logs.toString();

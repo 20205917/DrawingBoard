@@ -2,7 +2,7 @@ package JPanels.JGraph;
 
 import java.awt.*;
 
-public class JFillOval extends JFillGraph {
+public class JOval extends JGraph {
     private int weight = 0;
     private int height = 0;
 
