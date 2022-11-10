@@ -10,7 +10,7 @@ import java.awt.event.ComponentEvent;
 public class InterfaceRight extends JScrollPane {
     JPanel rightPane;
 
-    Board board;
+    public Board board;
     public InterfaceRight() {
         super();
         rightPane = new JPanel();

@@ -8,9 +8,9 @@ import java.awt.*;
 
 public class JGraph extends JPanel implements MyComponent {
     protected Color color = Color.black;
-    protected Stroke stroke;
+    protected BasicStroke stroke;
     public JGraph(){}
-    public JGraph(Color color, Stroke stroke){
+    public JGraph(Color color, BasicStroke stroke){
         this.stroke = stroke;
         this.color = color;
         setOpaque(false);
