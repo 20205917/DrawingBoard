@@ -7,7 +7,7 @@ import java.awt.*;
 public class JOval extends JGraph{
 
     public JOval(){}
-    public JOval(Color color,Stroke stroke){
+    public JOval(Color color,BasicStroke stroke){
         super(color,stroke);
     }
     @Override
