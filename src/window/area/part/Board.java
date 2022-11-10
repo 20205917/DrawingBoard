@@ -1,89 +1,54 @@
 package window.area.part;
 
-import JPanels.Jline.JDrawLine;
+import MyComponent.MyComponent;
+import MyComponent.myLine.JDrawLine;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-enum choose{
-    pen,
-    text,
-    rubber,
-    mouse,
-    rect,
-    oval,
-    line,
-    curve
-}
+
 //单页画布
 public class Board extends JLayeredPane{
     //图形集合
-    HashMap<String,JComponent> jcomponentSet = new HashMap<>();
-    //画图笔记集合
-    ArrayList<JDrawLine> jDrawLines = new ArrayList<>();
-    //大小
-    private int Bwidth = 300;
-    private int Bheight = 200;
+    HashMap<String,MyComponent> GraphSet = new HashMap<>();
+    //画图笔轨迹集合
+    public ArrayList<JDrawLine> jDrawLines = new ArrayList<>();
 
-    private int selection = 1;      //之后换枚举
-    private boolean ismake = false;
+    //控制图形创建
+    protected int selection = 3;      //之后换枚举
+    //图形颜色
+    protected Color drawLineColor = Color.blue;
+    protected BasicStroke drawLineStroke = new BasicStroke(3);
 
-    private Color drawLineColor = Color.black;
-    private BasicStroke drawLineStroke = new BasicStroke(3);
+    //当前图形
+    public MyComponent chooseGraph;
+
+
     public Board(){
-        //int theTop = 1;
         setLayout(null);
         //白色画板
         JPanel background = new JPanel();
-        background.setSize(new Dimension(getWidth(),getHeight()));
-        background.setBackground(Color.red);
-        background.setSize(Bwidth,Bheight);
-        add(background,DEFAULT_LAYER,-1);
+        background.setBackground(Color.white);
+        add(background,DEFAULT_LAYER,0);
+
+
+        //处理生成图形时，截获鼠标事件
+        BoardGlassPane boardGlassPane = new BoardGlassPane(this);
+        //一般情况不截取
+        add(boardGlassPane,DRAG_LAYER,0);
 
 
 
-        addMouseMotionListener(new MouseMotionAdapter() {
-            @Override
-            public void mouseDragged(MouseEvent e) {
-                super.mouseDragged(e);
-                if(ismake){
-                    switch (selection){
-                        case 1->{
-                            jDrawLines.get(jDrawLines.size()-1).addPoint(e.getX(),e.getY());
-                            jDrawLines.get(jDrawLines.size()-1).drawLine(getGraphics());
-                        }
-                    }
-                }
-            }
-        });
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                switch (selection){
-                    case 1:{
-                        ismake = true;
-                        jDrawLines.add(new JDrawLine(drawLineColor,drawLineStroke));
-                        jDrawLines.get(jDrawLines.size()-1).drawLine(getGraphics());
-                    }
-                }
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                super.mouseReleased(e);
-                ismake = false;
-                jDrawLines.get(jDrawLines.size()-1).drawLine(getGraphics());
-            }
-        });
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
                 super.componentResized(e);
-                background.setSize(Bwidth,Bheight);
+                background.setSize(getWidth(),getHeight());
+                boardGlassPane.setSize(getWidth(),getHeight());
             }
         });
     }
@@ -97,30 +62,12 @@ public class Board extends JLayeredPane{
 
 
     public String save(){
-        StringBuffer logs = new StringBuffer();
-        for (String s : jcomponentSet.keySet())
-        {
-            JComponent c = jcomponentSet.get(s);
-            logs.append(s).append(getLayer(c)).append(getPosition(c));
-        }
+        StringBuilder logs = new StringBuilder();
+
         return logs.toString();
     }
-
-
-
-    public int getBheight() {
-        return Bheight;
-    }
-
-    public void setBheight(int bheight) {
-        Bheight = bheight;
-    }
-
-    public int getBwidth() {
-        return Bwidth;
-    }
-
-    public void setBwidth(int bwidth) {
-        Bwidth = bwidth;
-    }
 }
+
+/*提醒
+selection为鼠标时应当设置GlassPane为顶部
+ */

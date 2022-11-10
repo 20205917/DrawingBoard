@@ -1,4 +1,4 @@
-package JPanels;
+package MyComponent;
 
 import javax.swing.*;
 import java.awt.*;
