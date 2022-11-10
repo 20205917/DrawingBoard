@@ -1,6 +1,4 @@
-package JPanels.Jline;
-
-import JPanels.MyPoint;
+package MyComponent.myLine;
 
 import java.awt.*;
 import java.util.Vector;

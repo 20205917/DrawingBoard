@@ -3,7 +3,6 @@ package window;
 import window.area.InterfaceAbove;
 import window.area.InterfaceLeft;
 import window.area.InterfaceRight;
-import window.area.part.USerGlassPane;
 import window.area.part.UserMenuBar;
 
 import javax.swing.*;
@@ -68,8 +67,7 @@ public class UserInterface extends JFrame {
 
         //主界面设计
 
-        USerGlassPane uSerGlassPane = new USerGlassPane();
-        setGlassPane(uSerGlassPane);
+
         setVisible(true);
 
     }

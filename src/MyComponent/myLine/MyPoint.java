@@ -1,4 +1,4 @@
-package JPanels;
+package MyComponent.myLine;
 
 public class MyPoint {
     public int px;
