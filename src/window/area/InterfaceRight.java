@@ -29,8 +29,8 @@ public class InterfaceRight extends JScrollPane {
                 //页面
                 if(board!=null)   {
 
-                    rightPane.setPreferredSize(new Dimension(board.getBwidth(),board.getBheight()));
-                    board.setBounds((rightPane.getWidth()-board.getBwidth())/2,(rightPane.getHeight()-board.getBheight())/2,board.getBwidth(),board.getBheight());
+                    rightPane.setPreferredSize(new Dimension(board.getWidth(),board.getHeight()));
+                    board.setBounds((rightPane.getWidth()-board.getWidth())/2,(rightPane.getHeight()-board.getHeight())/2,board.getWidth(),board.getHeight());
                 }
 
                 repaint();
