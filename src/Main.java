@@ -1,4 +1,5 @@
 import MyComponent.myLine.JDrawLine;
+import MyComponent.textarea.JMyTextArea;
 import window.area.part.Board;
 
 import javax.swing.*;
@@ -15,11 +16,11 @@ public class Main {
         Board board = new Board();
         board.setBounds(50,70,700,500);
 
-        JTextArea jTextArea = new JTextArea("1000000");
+        JMyTextArea jTextArea = new JMyTextArea();
+        JMyTextArea jTextArea1 = new JMyTextArea();
         jTextArea.setBounds(100,100,200,50);
         board.add(jTextArea,1,0);
         jTextArea.setOpaque(false);
-        JTextArea jTextArea1 = new JTextArea("1000000");
 
         jTextArea1.setBounds(100,200,200,50);
         board.add(jTextArea1,1,0);
@@ -29,15 +30,6 @@ public class Main {
             public void mouseClicked(MouseEvent e) {
                 System.out.println(jTextArea.getSelectedText());
                 System.out.println(jTextArea1.getSelectedText());
-            }
-        });
-
-        board.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                jTextArea1.dispatchEvent(SwingUtilities.convertMouseEvent(board,e,jTextArea1));
-                jTextArea.dispatchEvent(SwingUtilities.convertMouseEvent(board,e,jTextArea));
             }
         });
 

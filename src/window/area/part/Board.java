@@ -20,9 +20,11 @@ public class Board extends JLayeredPane{
 
     //控制图形创建
     protected int selection = 3;      //之后换枚举
+
     //图形颜色
     protected Color drawLineColor = Color.blue;
     protected BasicStroke drawLineStroke = new BasicStroke(3);
+
 
     //当前图形
     public MyComponent chooseGraph;
@@ -39,8 +41,7 @@ public class Board extends JLayeredPane{
         //处理生成图形时，截获鼠标事件
         BoardGlassPane boardGlassPane = new BoardGlassPane(this);
         //一般情况不截取
-        add(boardGlassPane,DRAG_LAYER,0);
-
+        add(boardGlassPane,FRAME_CONTENT_LAYER,0);
 
 
         addComponentListener(new ComponentAdapter() {

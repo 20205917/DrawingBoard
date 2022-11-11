@@ -1,5 +1,6 @@
 package window.area.part;
 
+import MyComponent.myGraph.JGraph;
 import MyComponent.myGraph.JLine;
 import MyComponent.myGraph.JOval;
 import MyComponent.myGraph.JRect;
@@ -49,7 +50,7 @@ public class BoardGlassPane extends JPanel implements MouseListener, MouseMotion
             case 2,3,4,5->{
                 isMake = true;
                 //创建图形
-                JComponent component = switch (board.selection){
+                board.chooseGraph  = switch (board.selection){
                     //矩形
                     case 2 -> new JRect(board.drawLineColor,board.drawLineStroke);
                     //圆形
@@ -58,7 +59,7 @@ public class BoardGlassPane extends JPanel implements MouseListener, MouseMotion
                     case 4 -> new JLine(board.drawLineColor,board.drawLineStroke);
                     //文本框
                     case 5 ->new JMyTextArea(board.drawLineColor,"宋体",Font.PLAIN,5);
-                    default -> new JPanel();//错误情况
+                    default -> new JGraph();//错误情况
                 };
 
                 board.chooseGraph.resize(mousePressedPoint,mousePressedPoint);
