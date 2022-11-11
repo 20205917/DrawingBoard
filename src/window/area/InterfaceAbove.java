@@ -56,19 +56,23 @@ public class InterfaceAbove extends JPanel {
         addComponent(toolsTable, bMouse, gbl, gbc);
 
         bPen.addActionListener(e -> {
-            rightArea.board.setSelection(selects.Pen);
+            if(rightArea.board != null)
+                rightArea.board.setSelection(selects.Pen);
         });
 
         bText.addActionListener(e -> {
-            rightArea.board.setSelection(selects.Text);
+            if(rightArea.board != null)
+                rightArea.board.setSelection(selects.Text);
         });
 
         bRubber.addActionListener(e -> {
-            rightArea.board.setSelection(selects.Rubber);
+            if(rightArea.board != null)
+                rightArea.board.setSelection(selects.Rubber);
         });
 
         bMouse.addActionListener(e -> {
-            rightArea.board.setSelection(selects.Mouse);
+            if(rightArea.board != null)
+                rightArea.board.setSelection(selects.Mouse);
         });
 
         return toolsTable;
@@ -111,28 +115,31 @@ public class InterfaceAbove extends JPanel {
         addComponent(textTable, bUnderline, gbl, gbc);
         cbTextFont.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                if (cbTextSize.getSelectedItem() != null)
+                if (cbTextSize.getSelectedItem() != null && rightArea.board != null)
                     rightArea.board.setTextStyle((String) cbTextFont.getSelectedItem());
             }
         });
 
         cbTextSize.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                if (cbTextSize.getSelectedItem() != null)
+                if (cbTextSize.getSelectedItem() != null && rightArea.board != null)
                     rightArea.board.setTextSize(Integer.parseInt((String) cbTextSize.getSelectedItem()));
             }
         });
 
         bBold.addActionListener(e -> {
-            rightArea.board.setIsBold();
+            if(rightArea.board != null)
+                rightArea.board.setIsBold();
         });
 
         bItalic.addActionListener(e -> {
-            rightArea.board.setIsItalic();
+            if(rightArea.board != null)
+                rightArea.board.setIsItalic();
         });
 
         bUnderline.addActionListener(e -> {
-            rightArea.board.setIsUnderline();
+            if(rightArea.board != null)
+                rightArea.board.setIsUnderline();
         });
 
 
@@ -164,19 +171,23 @@ public class InterfaceAbove extends JPanel {
         addComponent(shapeTable, bCurve, gbl, gbc);
 
         bRect.addActionListener(e -> {
-            rightArea.board.setSelection(selects.Rect);
+            if(rightArea.board != null)
+                rightArea.board.setSelection(selects.Rect);
         });
 
         bOval.addActionListener(e -> {
-            rightArea.board.setSelection(selects.Oval);
+            if(rightArea.board != null)
+                rightArea.board.setSelection(selects.Oval);
         });
 
         bLine.addActionListener(e -> {
-            rightArea.board.setSelection(selects.Line);
+            if(rightArea.board != null)
+                rightArea.board.setSelection(selects.Line);
         });
 
         bCurve.addActionListener(e -> {
-            rightArea.board.setSelection(selects.Pen);
+            if(rightArea.board != null)
+                rightArea.board.setSelection(selects.Pen);
         });
 
         return shapeTable;
@@ -288,7 +299,7 @@ public class InterfaceAbove extends JPanel {
         cbThickness.setSelectedItem(0);
         cbThickness.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                if (cbThickness.getSelectedItem() != null)
+                if (cbThickness.getSelectedItem() != null && rightArea.board != null)
                     rightArea.board.setDrawLineStroke(Integer.parseInt((String) cbThickness.getSelectedItem()));
             }
         });
@@ -334,7 +345,8 @@ public class InterfaceAbove extends JPanel {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 super.actionPerformed(actionEvent);
-                rightArea.board.setDrawLineColor(b.getBackground());
+                if(rightArea.board != null)
+                    rightArea.board.setDrawLineColor(b.getBackground());
             }
         });
     }
