@@ -36,7 +36,6 @@ public class InterfaceRight extends JScrollPane {
             }
         });
 
-
         rightPane.setBackground(Color.LIGHT_GRAY);
     }
 

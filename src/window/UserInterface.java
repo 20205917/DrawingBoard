@@ -103,5 +103,4 @@ public class UserInterface extends JFrame {
         setVisible(true);
 
     }
-
 }
