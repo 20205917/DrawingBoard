@@ -60,7 +60,7 @@ public class BoardGlassPane extends JPanel implements MouseListener, MouseMotion
                     case Line -> new JLine(board.drawLineColor,board.drawLineStroke);
                     //文本框
                     case Text ->new JMyTextArea(board.drawLineColor,"宋体",Font.PLAIN,5);
-                    default -> new JPanel();//错误情况
+                    default -> new JGraph();//错误情况
                 };
 
                 board.chooseGraph.resize(mousePressedPoint,mousePressedPoint);
@@ -68,6 +68,9 @@ public class BoardGlassPane extends JPanel implements MouseListener, MouseMotion
                 for (int i=0;i<100;i++){
                     if(!board.GraphSet.containsKey("图形"+i)){
                         board.GraphSet.put("图形"+i,board.chooseGraph);
+                        {
+                            if(i ==3) board.selection = selects.Mouse;
+                        }
                         break;}
                 }
             }

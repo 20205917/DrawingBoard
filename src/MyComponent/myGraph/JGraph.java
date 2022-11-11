@@ -25,7 +25,7 @@ public class JGraph extends JPanel implements MyComponent {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-                protectPoint = switch (getCursor().getType()){
+                switch (getCursor().getType()){
                     case Cursor.MOVE_CURSOR ->  new MyPoint(getX(),getY());
                     //左平移
                     case Cursor.W_RESIZE_CURSOR -> new MyPoint(getX()+getWidth(),getY());
@@ -54,27 +54,29 @@ public class JGraph extends JPanel implements MyComponent {
             public void mouseDragged(MouseEvent e) {
                 super.mouseDragged(e);
                 int moveX = e.getXOnScreen()-screenPoint.px;
+                int moveY = e.getYOnScreen()-screenPoint.py;
+                //screenPoint = new MyPoint(e.getXOnScreen(),e.getYOnScreen());
                 switch (getCursor().getType()){
                     //拖拽
                     case Cursor.MOVE_CURSOR -> {
-                        setLocation(protectPoint.px + e.getXOnScreen() - screenPoint.px, protectPoint.py + e.getYOnScreen() - screenPoint.py);
+                        setLocation(getX()+moveX, getY()+moveY);
                     }
                     //左扩展
-                    case Cursor.W_RESIZE_CURSOR ->setBounds(getX()+e.getXOnScreen(),getY(),,getHeight());
+                    case Cursor.W_RESIZE_CURSOR ->{setBounds(Math.min(protectPoint.px,Point.px),getY(),getWidth()-moveX,getHeight());System.out.println("W");}
                     //右扩展
-                    case Cursor.E_RESIZE_CURSOR ->setBounds();
+                    case Cursor.E_RESIZE_CURSOR ->{setBounds(getX(),getY(),getWidth()+moveX,getHeight());System.out.println("E");}
                     //上扩展
-                    case Cursor.N_RESIZE_CURSOR ->setBounds();
-                    //下扩展
-                    case Cursor.S_RESIZE_CURSOR ->setBounds();
+//                    case Cursor.N_RESIZE_CURSOR ->setBounds();
+//                    //下扩展
+//                    case Cursor.S_RESIZE_CURSOR ->setBounds();
                     //左上扩展
-                    case Cursor.NW_RESIZE_CURSOR ->setBounds();
-                    //右上扩展
-                    case Cursor.NE_RESIZE_CURSOR ->setBounds();
-                    //左下扩展
-                    case Cursor.SW_RESIZE_CURSOR ->setBounds();
-                    //右下扩展
-                    case Cursor.SE_RESIZE_CURSOR ->setBounds();
+                    case Cursor.NW_RESIZE_CURSOR ->resize(protectPoint,);
+//                    //右上扩展
+//                    case Cursor.NE_RESIZE_CURSOR ->setBounds();
+//                    //左下扩展
+//                    case Cursor.SW_RESIZE_CURSOR ->setBounds();
+//                    //右下扩展
+//                    case Cursor.SE_RESIZE_CURSOR ->setBounds();
                 }
             }
 

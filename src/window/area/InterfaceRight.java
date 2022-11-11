@@ -18,6 +18,8 @@ public class InterfaceRight extends JScrollPane {
         getViewport().setView(rightPane);
 
 
+        board.setBounds(50,70,400,400);
+        rightPane.add(board);
 
         //滚动页面
         addComponentListener(new ComponentAdapter() {

@@ -29,12 +29,11 @@ public class Board extends JLayeredPane {
     protected Boolean isItalic = false;
 
     //控制图形创建
-    protected selects selection = selects.Mouse;      //之后换枚举
+    protected selects selection = selects.Rect;      //之后换枚举
     //图形颜色
     protected Color drawLineColor = Color.blue;
     // 线条宽度
     protected BasicStroke drawLineStroke = new BasicStroke(1);
-
 
     //当前图形
     public MyComponent chooseGraph;
@@ -44,7 +43,7 @@ public class Board extends JLayeredPane {
         setLayout(null);
         //白色画板
         JPanel background = new JPanel();
-        background.setBackground(Color.white);
+        background.setBackground(Color.red);
         add(background,DEFAULT_LAYER,0);
 
 
