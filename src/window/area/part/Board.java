@@ -33,7 +33,7 @@ public class Board extends JLayeredPane {
     protected Boolean isItalic = false;
 
     //控制图形创建
-    protected selects selection = selects.Mouse;      //之后换枚举
+    protected selects selection = selects.Rect;      //之后换枚举
     //图形颜色
     protected Color drawLineColor = Color.blue;
     // 线条宽度
@@ -45,7 +45,6 @@ public class Board extends JLayeredPane {
 
 
     public Board() {
-
         setLayout(null);
         //白色画板
         JPanel background = new JPanel();
@@ -57,8 +56,7 @@ public class Board extends JLayeredPane {
         //处理生成图形时，截获鼠标事件
         BoardGlassPane boardGlassPane = new BoardGlassPane(this);
         //一般情况不截取
-        add(boardGlassPane, DRAG_LAYER, 0);
-
+        add(boardGlassPane,FRAME_CONTENT_LAYER,0);
 
         addComponentListener(new ComponentAdapter() {
             @Override
@@ -79,7 +77,7 @@ public class Board extends JLayeredPane {
     }
 
 
-    public String save() {
+    public String save(){
         StringBuilder logs = new StringBuilder();
 
         return logs.toString();
