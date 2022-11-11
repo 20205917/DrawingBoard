@@ -14,6 +14,10 @@ import java.util.HashMap;
 
 //单页画布
 public class Board extends JLayeredPane {
+    // 画布大小
+    protected static final int INITIAL_WIDTH = 500;
+    protected static final int INITIAL_HEIGHT = 450;
+
     //图形集合
     HashMap<String, MyComponent> GraphSet = new HashMap<>();
     //画图笔轨迹集合
@@ -41,10 +45,12 @@ public class Board extends JLayeredPane {
 
 
     public Board() {
+
         setLayout(null);
         //白色画板
         JPanel background = new JPanel();
         background.setBackground(Color.white);
+        // setForeground(Color.white);
         add(background, DEFAULT_LAYER, 0);
 
 
@@ -62,6 +68,7 @@ public class Board extends JLayeredPane {
                 boardGlassPane.setSize(getWidth(), getHeight());
             }
         });
+        setSize(INITIAL_WIDTH, INITIAL_HEIGHT);
     }
 
     @Override
