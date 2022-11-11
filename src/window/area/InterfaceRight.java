@@ -18,9 +18,6 @@ public class InterfaceRight extends JScrollPane {
         getViewport().setView(rightPane);
 
 
-        board.setBounds(50,70,400,400);
-        rightPane.add(board);
-
         //滚动页面
         addComponentListener(new ComponentAdapter() {
             //重设小窗口大小
@@ -40,5 +37,16 @@ public class InterfaceRight extends JScrollPane {
         });
 
         rightPane.setBackground(Color.LIGHT_GRAY);
+    }
+
+    // 当新建或切换page时，加入对应的board
+    public void updateBoard(Board b){
+        if(board != null)
+            rightPane.remove(board);
+        board = b;
+
+        board.setLocation((rightPane.getWidth()-board.getWidth())/2,(rightPane.getHeight()-board.getHeight())/2);
+        rightPane.add(board);
+        repaint();
     }
 }
