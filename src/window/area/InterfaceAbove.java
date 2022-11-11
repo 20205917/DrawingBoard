@@ -1,9 +1,18 @@
 package window.area;
 
+import window.area.part.Board;
+import window.area.part.selects;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 public class InterfaceAbove extends JPanel {
+
+    private InterfaceRight rightArea;
     private Insets inner = new Insets(2, 2, 2, 2);
     private Insets outer = new Insets(0, 2, 0, 2);
 
@@ -14,8 +23,6 @@ public class InterfaceAbove extends JPanel {
     public Insets getOuter() {
         return outer;
     }
-
-
 
 
     public static void addComponent(Container container, Component c, GridBagLayout gridBagLayout, GridBagConstraints gridBagConstraints) {
@@ -48,6 +55,22 @@ public class InterfaceAbove extends JPanel {
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         addComponent(toolsTable, bMouse, gbl, gbc);
 
+        bPen.addActionListener(e -> {
+            rightArea.board.setSelection(selects.Pen);
+        });
+
+        bText.addActionListener(e -> {
+            rightArea.board.setSelection(selects.Text);
+        });
+
+        bRubber.addActionListener(e -> {
+            rightArea.board.setSelection(selects.Rubber);
+        });
+
+        bMouse.addActionListener(e -> {
+            rightArea.board.setSelection(selects.Mouse);
+        });
+
         return toolsTable;
     }
 
@@ -58,15 +81,20 @@ public class InterfaceAbove extends JPanel {
         GridBagConstraints gbc = new GridBagConstraints();
 
         // 文字字体
-        JComboBox<Object> cbTextFont = new JComboBox<>();
+        String[] styleData = {"黑体", "宋体", "Times New Roman", "Arial"};
+        JComboBox<String> cbTextFont = new JComboBox<>(styleData);
+        cbTextFont.setSelectedItem(2);
 
         // 文字字号
-        JComboBox<Object> cbTextSize = new JComboBox<>();
+        String[] sizeData = {"5", "10", "15", "20", "25", "30", "35", "40", "45", "50"};
+        JComboBox<String> cbTextSize = new JComboBox<>(sizeData);
+        cbTextSize.setSelectedItem(4);
 
         // 字形设置
-        Button bThicken = new Button("Thicken");
-        Button bIncline = new Button("Incline");
+        Button bBold = new Button("Bold");
+        Button bItalic = new Button("Italic");
         Button bUnderline = new Button("Underline");
+
 
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = inner;
@@ -77,10 +105,36 @@ public class InterfaceAbove extends JPanel {
         addComponent(textTable, cbTextSize, gbl, gbc);
         gbc.gridwidth = 1;
         gbc.weightx = 1;
-        addComponent(textTable, bThicken, gbl, gbc);
-        addComponent(textTable, bIncline, gbl, gbc);
+        addComponent(textTable, bBold, gbl, gbc);
+        addComponent(textTable, bItalic, gbl, gbc);
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         addComponent(textTable, bUnderline, gbl, gbc);
+        cbTextFont.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                if (cbTextSize.getSelectedItem() != null)
+                    rightArea.board.setTextStyle((String) cbTextFont.getSelectedItem());
+            }
+        });
+
+        cbTextSize.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                if (cbTextSize.getSelectedItem() != null)
+                    rightArea.board.setTextSize(Integer.parseInt((String) cbTextSize.getSelectedItem()));
+            }
+        });
+
+        bBold.addActionListener(e -> {
+            rightArea.board.setIsBold();
+        });
+
+        bItalic.addActionListener(e -> {
+            rightArea.board.setIsItalic();
+        });
+
+        bUnderline.addActionListener(e -> {
+            rightArea.board.setIsUnderline();
+        });
+
 
         return textTable;
     }
@@ -108,6 +162,22 @@ public class InterfaceAbove extends JPanel {
         addComponent(shapeTable, bLine, gbl, gbc);
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         addComponent(shapeTable, bCurve, gbl, gbc);
+
+        bRect.addActionListener(e -> {
+            rightArea.board.setSelection(selects.Rect);
+        });
+
+        bOval.addActionListener(e -> {
+            rightArea.board.setSelection(selects.Oval);
+        });
+
+        bLine.addActionListener(e -> {
+            rightArea.board.setSelection(selects.Line);
+        });
+
+        bCurve.addActionListener(e -> {
+            rightArea.board.setSelection(selects.Pen);
+        });
 
         return shapeTable;
     }
@@ -159,10 +229,20 @@ public class InterfaceAbove extends JPanel {
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         addComponent(colorTable, bMore, gbl, gbc);
 
+        setColorButtonListener(bBlack);
+        setColorButtonListener(bGrey);
+        setColorButtonListener(bBrown);
+        setColorButtonListener(bRed);
+        setColorButtonListener(bOrange);
+        setColorButtonListener(bYellow);
+        setColorButtonListener(bGreen);
+        setColorButtonListener(bBlue);
+        setColorButtonListener(bPurple);
+
         return colorTable;
     }
 
-    public JPanel setSearchTable(){
+    public JPanel setSearchTable() {
         JPanel SearchTable = new JPanel();
         GridBagLayout gbl = new GridBagLayout();
         SearchTable.setLayout(gbl);
@@ -188,6 +268,7 @@ public class InterfaceAbove extends JPanel {
 
         return SearchTable;
     }
+
     public InterfaceAbove() {
         //测试
         setBackground(Color.white);
@@ -202,7 +283,15 @@ public class InterfaceAbove extends JPanel {
         JPanel searchTable = setSearchTable();
 
         // 粗细
-        JComboBox<Object> cbThickness = new JComboBox<>();
+        String[] thickness = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
+        JComboBox<Object> cbThickness = new JComboBox<>(thickness);
+        cbThickness.setSelectedItem(0);
+        cbThickness.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                if (cbThickness.getSelectedItem() != null)
+                    rightArea.board.setDrawLineStroke(Integer.parseInt((String) cbThickness.getSelectedItem()));
+            }
+        });
 
 
 
@@ -231,5 +320,26 @@ public class InterfaceAbove extends JPanel {
 
     public void setInner(Insets inner) {
         this.inner = inner;
+    }
+
+    class ButtonEvent implements ActionListener {
+
+        public void actionPerformed(ActionEvent actionEvent) {
+
+        }
+    }
+
+    public void setColorButtonListener(Button b) {
+        b.addActionListener(new ButtonEvent() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                super.actionPerformed(actionEvent);
+                rightArea.board.setDrawLineColor(b.getBackground());
+            }
+        });
+    }
+
+    public void setRightArea(InterfaceRight rightArea) {
+        this.rightArea = rightArea;
     }
 }

@@ -15,7 +15,7 @@ public class JLine extends JGraph {
         pointB.px = getX()+getWidth();
         pointB.py = getY()+getHeight();
     }
-    public JLine(Color color,Stroke stroke){
+    public JLine(Color color,BasicStroke stroke){
         super(color,stroke);
         pointA = new MyPoint(getX(),getY());
         pointB = new MyPoint(getX()+getWidth(),getY()+getHeight());

@@ -8,7 +8,7 @@ import java.awt.*;
 public class JRect extends JGraph {
 
     public JRect(){}
-    public JRect(Color color,Stroke stroke){
+    public JRect(Color color,BasicStroke stroke){
         super(color,stroke);
     }
 

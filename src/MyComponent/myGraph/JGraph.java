@@ -11,11 +11,11 @@ import java.awt.event.MouseMotionAdapter;
 
 public class JGraph extends JPanel implements MyComponent {
     protected Color color = Color.black;
-    protected Stroke stroke;
     private volatile  MyPoint screenPoint = new MyPoint(0,0);
     private volatile  MyPoint protectPoint = new MyPoint(0,0);
+    protected BasicStroke stroke;
     public JGraph(){}
-    public JGraph(Color color, Stroke stroke){
+    public JGraph(Color color, BasicStroke stroke){
         this.stroke = stroke;
         this.color = color;
         setOpaque(false);
