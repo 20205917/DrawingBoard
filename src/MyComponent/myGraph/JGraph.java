@@ -59,7 +59,7 @@ public class JGraph extends JPanel implements MyComponent {
                         setLocation(getX()+e.getXOnScreen()-movePoint.px, getY()+e.getYOnScreen()-movePoint.py);
                         movePoint = new MyPoint(e.getXOnScreen(),e.getYOnScreen());
                     }
-                    //左扩展
+                    //左右扩展
                     case Cursor.W_RESIZE_CURSOR, Cursor.E_RESIZE_CURSOR
                             ->resize(protectPoint, new MyPoint(getX()+e.getX(),getY()+getHeight()));
                     //上下扩展
@@ -74,11 +74,12 @@ public class JGraph extends JPanel implements MyComponent {
             @Override
             public void mouseMoved(MouseEvent e) {
                 super.mouseMoved(e);
-                //图形大小
+                //鼠标形状
                 setCursor(currentCursorStyle(getWidth(),getHeight(),e.getX(),e.getY()));
             }
         });
     }
+    //参数A，B：对角两点。
     public void resize(MyPoint A, MyPoint B){
         setBounds(Math.min(A.px,B.px),Math.min(A.py,B.py),Math.abs(A.px-B.px),Math.abs(A.py-B.py));
     }

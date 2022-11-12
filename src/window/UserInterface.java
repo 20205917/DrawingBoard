@@ -3,59 +3,60 @@ package window;
 import window.area.InterfaceAbove;
 import window.area.InterfaceLeft;
 import window.area.InterfaceRight;
-import window.area.part.Board;
-import window.area.part.Page;
 import window.area.part.UserMenuBar;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.HashMap;
 
 public class UserInterface extends JFrame {
+
     private static final int MinWith = 400;
     private static final int MinHeight = 250;
+    //控制系统
+    public Management ManagementSystem;
+    //
+    public String path;
+    //菜单栏
+    public UserMenuBar menuBar;
+    //工具栏
+    public InterfaceAbove aboveArea;
+    //操作窗口
+    public InterfaceRight rightArea;
+    //滚动界面，装左侧预览小窗口
+    public InterfaceLeft leftArea;
+    //画板集合
     HashMap<String, JPanel> allGraph = new HashMap<>();
 
-    public UserInterface() {
-    }
 
 
-    public UserInterface(String openFilepath) {
+
+    public UserInterface(Management parent) {
+        ManagementSystem = parent;
         //主界面格式设置
         setBounds(200, 200, MinWith * 2, MinHeight * 2);
         setBackground(Color.gray);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLayout(null);
 
-
         //菜单
-        JMenuBar menuBar = new UserMenuBar();
-        JMenu fileItem = new JMenu("文件");
-        JMenu plotItem = new JMenu("绘图");
-        JMenu insertItem = new JMenu("插入");
-        JMenuItem createPage = new JMenuItem("创建幻灯片");
-        menuBar.add(fileItem);
-        menuBar.add(insertItem).add(createPage);
-        menuBar.add(plotItem);
-        setJMenuBar(menuBar);
+        menuBar = new UserMenuBar(this);
 
-        //三个中间容器
-        {
-        }
         //工具栏
-        InterfaceAbove aboveArea = new InterfaceAbove();
+        aboveArea = new InterfaceAbove();
         add(aboveArea);
 
         //操作窗口
-        InterfaceRight rightArea = new InterfaceRight();
+        rightArea = new InterfaceRight();
         add(rightArea);
 
         // 将副本传入以控制board
         aboveArea.setRightArea(rightArea);
 
         //滚动界面，装左侧预览小窗口
-        InterfaceLeft leftArea = new InterfaceLeft();
+        leftArea = new InterfaceLeft();
         add(leftArea);
 
         //布局管理
@@ -78,29 +79,18 @@ public class UserInterface extends JFrame {
 
         // 菜单功能的实现
         // 创建新的page并添加到左侧
-        createPage.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Page page = leftArea.addPage(new Board(), leftArea.getPagesNum());
-                page.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        rightArea.updateBoard(page.board);
-                    }
-                });
-                leftArea.rePaint();
-                if(leftArea.getPagesNum() == 1){
-                    rightArea.updateBoard(page.board);
-                }
 
-            }
-        });
 
 
         //主界面设计
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+    }
+    public  void save(String Path){
+        path = Path;
 
+    }
 
-        setVisible(true);
-
+    public  void Load(String Path){
+        path = Path;
     }
 }
