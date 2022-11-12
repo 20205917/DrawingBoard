@@ -87,4 +87,3 @@ public class JGraph extends JPanel implements MyComponent {
         this.color = color;
     }
 }
-
