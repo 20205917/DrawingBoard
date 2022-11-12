@@ -1,16 +1,15 @@
 import MyComponent.myLine.JDrawLine;
-import window.area.part.Board;
+import window.Management;
+import window.UserInterface;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
-        Management m = new Management();
-
+        UserInterface userInterface = new UserInterface(new Management());
+        userInterface.setVisible(true);
     }
 }
 class JF extends JFrame{

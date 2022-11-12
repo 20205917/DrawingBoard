@@ -11,7 +11,7 @@ import java.awt.event.MouseMotionAdapter;
 
 public class JGraph extends JPanel implements MyComponent {
     protected Color color = Color.black;
-    private volatile  MyPoint screenPoint = new MyPoint(0,0);
+    private volatile  MyPoint movePoint = new MyPoint(0,0);
     private volatile  MyPoint protectPoint = new MyPoint(0,0);
     protected BasicStroke stroke;
     public JGraph(){}
@@ -25,7 +25,7 @@ public class JGraph extends JPanel implements MyComponent {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-                switch (getCursor().getType()){
+                protectPoint = switch (getCursor().getType()){
                     case Cursor.MOVE_CURSOR ->  new MyPoint(getX(),getY());
                     //左平移
                     case Cursor.W_RESIZE_CURSOR -> new MyPoint(getX()+getWidth(),getY());
@@ -45,7 +45,7 @@ public class JGraph extends JPanel implements MyComponent {
                     case Cursor.SE_RESIZE_CURSOR -> new MyPoint(getX(),getY());
                     default -> new MyPoint(0,0);
                 };
-                screenPoint = new MyPoint(e.getXOnScreen(),e.getYOnScreen());
+                movePoint = new MyPoint(e.getXOnScreen(),e.getYOnScreen());
 
             }
         });
@@ -53,41 +53,33 @@ public class JGraph extends JPanel implements MyComponent {
             @Override
             public void mouseDragged(MouseEvent e) {
                 super.mouseDragged(e);
-                int moveX = e.getXOnScreen()-screenPoint.px;
-                int moveY = e.getYOnScreen()-screenPoint.py;
-                //screenPoint = new MyPoint(e.getXOnScreen(),e.getYOnScreen());
                 switch (getCursor().getType()){
                     //拖拽
                     case Cursor.MOVE_CURSOR -> {
-                        setLocation(getX()+moveX, getY()+moveY);
+                        setLocation(getX()+e.getXOnScreen()-movePoint.px, getY()+e.getYOnScreen()-movePoint.py);
+                        movePoint = new MyPoint(e.getXOnScreen(),e.getYOnScreen());
                     }
-                    //左扩展
-                    case Cursor.W_RESIZE_CURSOR ->{setBounds(Math.min(protectPoint.px,Point.px),getY(),getWidth()-moveX,getHeight());System.out.println("W");}
-                    //右扩展
-                    case Cursor.E_RESIZE_CURSOR ->{setBounds(getX(),getY(),getWidth()+moveX,getHeight());System.out.println("E");}
-                    //上扩展
-//                    case Cursor.N_RESIZE_CURSOR ->setBounds();
-//                    //下扩展
-//                    case Cursor.S_RESIZE_CURSOR ->setBounds();
-                    //左上扩展
-                    case Cursor.NW_RESIZE_CURSOR ->resize(protectPoint,);
-//                    //右上扩展
-//                    case Cursor.NE_RESIZE_CURSOR ->setBounds();
-//                    //左下扩展
-//                    case Cursor.SW_RESIZE_CURSOR ->setBounds();
-//                    //右下扩展
-//                    case Cursor.SE_RESIZE_CURSOR ->setBounds();
+                    //左右扩展
+                    case Cursor.W_RESIZE_CURSOR, Cursor.E_RESIZE_CURSOR
+                            ->resize(protectPoint, new MyPoint(getX()+e.getX(),getY()+getHeight()));
+                    //上下扩展
+                    case Cursor.N_RESIZE_CURSOR,Cursor.S_RESIZE_CURSOR
+                            ->resize(protectPoint, new MyPoint(getX()+getWidth(),getY()+e.getY()));
+                    //角扩展
+                    case Cursor.NW_RESIZE_CURSOR, Cursor.NE_RESIZE_CURSOR, Cursor.SW_RESIZE_CURSOR, Cursor.SE_RESIZE_CURSOR
+                            ->resize(protectPoint, new MyPoint(getX()+e.getX(),getY()+e.getY()));
                 }
             }
 
             @Override
             public void mouseMoved(MouseEvent e) {
                 super.mouseMoved(e);
-                //图形大小
+                //鼠标形状
                 setCursor(currentCursorStyle(getWidth(),getHeight(),e.getX(),e.getY()));
             }
         });
     }
+    //参数A，B：对角两点。
     public void resize(MyPoint A, MyPoint B){
         setBounds(Math.min(A.px,B.px),Math.min(A.py,B.py),Math.abs(A.px-B.px),Math.abs(A.py-B.py));
     }
