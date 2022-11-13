@@ -85,36 +85,43 @@ public class UserInterface extends JFrame {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
-    public void addPage(){
+    public void addPage() {
         Page page = leftArea.addPage(new Board(), leftArea.getPagesNum());
         allBoard.add(page.board);
-        page.addActionListener(e1 -> rightArea.updateBoard(page.board));
-            leftArea.rePaint();
-            if(leftArea.getPagesNum() == 1){
+        page.addActionListener(e1 -> {
             rightArea.updateBoard(page.board);
+            leftArea.currentPage = page;
+        });
+        leftArea.rePaint();
+
+        if (leftArea.getPagesNum() == 1) {
+            rightArea.updateBoard(page.board);
+            leftArea.currentPage = page;
         }
     }
-    public  void save(String Path)  {
+
+    public void save(String Path) {
         path = Path;
         {
             System.out.print(allBoard.size());
             System.out.print(System.getProperty("line.separator"));
-            for(Board board : allBoard)
+            for (Board board : allBoard)
                 System.out.print(board.save());
         }
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))){
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
             writer.write(allBoard.size());
             writer.write(System.getProperty("line.separator"));
-            for(Board board : allBoard){
+            for (Board board : allBoard) {
                 writer.write(board.save());
             }
         } catch (IOException e) {
-            e.printStackTrace();}
+            e.printStackTrace();
+        }
 
     }
 
-    public  void Load(String Path){
+    public void Load(String Path) {
         path = Path;
     }
 }
