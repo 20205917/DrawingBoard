@@ -7,15 +7,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 //左侧滚动窗口
 public class InterfaceLeft extends JScrollPane {
     ArrayList<Page> pages = new ArrayList<>();
     public JPanel leftPane;                 //内容条(装Board内容块)
-
     public InterfaceLeft() {
         super();
         leftPane = new JPanel();
@@ -47,11 +44,7 @@ public class InterfaceLeft extends JScrollPane {
         //测试
         leftPane.setBackground(Color.green);
 
-//        Board []bs = new Board[10];
-//        for (int i = 0;i<10;i++){
-//            bs[i] = new Board();
-//            addPage(bs[i],i);
-//        }
+
     }
 
     // 增加页面(与主界面交互)
@@ -61,15 +54,6 @@ public class InterfaceLeft extends JScrollPane {
         pages.add(index, page);
         page.setPreferredSize(new Dimension(leftPane.getWidth(),leftPane.getHeight()/4));
         leftPane.add(page);
-
-        page.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-
-
-            }
-        });
         deploy();
         return page;
     }
@@ -80,7 +64,7 @@ public class InterfaceLeft extends JScrollPane {
         {
             pages.get(i).setText(" "+i);
             leftPane.add(pages.get(i));
-        }//pages.get(i).set(0, i * getWidth(), getWidth(), getWidth());
+        }
     }
 
     public int getPagesNum(){

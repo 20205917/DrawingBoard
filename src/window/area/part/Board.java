@@ -17,7 +17,8 @@ public class Board extends JLayeredPane {
     // 画布大小
     protected static final int INITIAL_WIDTH = 500;
     protected static final int INITIAL_HEIGHT = 450;
-
+    //背景
+    JPanel background;
     //图形集合
     HashMap<String, MyComponent> GraphSet = new HashMap<>();
     //画图笔轨迹集合
@@ -25,39 +26,43 @@ public class Board extends JLayeredPane {
 
     // 字体设置
     protected Font textFont;
-    protected HashMap<TextAttribute, Object> textAttribute = new HashMap<TextAttribute, Object>();
+    // 字体字典
+    protected HashMap<TextAttribute, Object> textAttribute = new HashMap<>();
+    // 文本框字体
     protected String textStyle = "Times New Roman";
+    // 默认字体大小
     protected int textSize = 25;
+
     protected Boolean isBold = false;
     protected Boolean isUnderline = false;
     protected Boolean isItalic = false;
 
     //控制图形创建
-    protected selects selection = selects.Rect;      //之后换枚举
+    protected selects selection = selects.Rect;
     //图形颜色
     protected Color drawLineColor = Color.blue;
     // 线条宽度
-    protected BasicStroke drawLineStroke = new BasicStroke(1);
+    protected BasicStroke drawLineStroke = new BasicStroke(2);
 
-
+                 
     //当前图形
-    public MyComponent chooseGraph;
-
+    protected MyComponent chooseGraph;
+   
 
     public Board() {
         setLayout(null);
         //白色画板
-        JPanel background = new JPanel();
+        background = new JPanel();
         background.setBackground(Color.white);
-        // setForeground(Color.white);
-        add(background, DEFAULT_LAYER, 0);
+        add(background, DEFAULT_LAYER-1, 0);
 
 
-        //处理生成图形时，截获鼠标事件
+        // 处理生成图形时，截获鼠标事件
         BoardGlassPane boardGlassPane = new BoardGlassPane(this);
-        //一般情况不截取
+        // 初始与底层，一般情况不截取
         add(boardGlassPane,FRAME_CONTENT_LAYER,0);
 
+        //大小改变的自适配
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -76,13 +81,25 @@ public class Board extends JLayeredPane {
             jDrawLine.drawLine(g);
     }
 
-
+    //文件保存
     public String save(){
-        StringBuilder logs = new StringBuilder();
+        StringBuffer log = new StringBuffer();
+        //保存尺寸和背景
+        log.append("board-width:").append(getWidth()).append(System.getProperty("line.separator"));
+        log.append("board-width:").append(getWidth()).append(System.getProperty("line.separator"));
+        log.append("background-color: ").append(background.getBackground()).append(System.getProperty("line.separator"));
 
-        return logs.toString();
+        //保存组件
+        for (MyComponent myComponent : GraphSet.values()){
+            log.append("Layer: ").append(getLayer((Component) myComponent)).append(System.getProperty("line.separator"));
+            log.append(myComponent.save()).append(System.getProperty("line.separator"));
+        }
+
+        return log.toString();
     }
 
+
+    //属性的设置与读取
     public void setDrawLineColor(Color drawLineColor) {
         this.drawLineColor = drawLineColor;
     }

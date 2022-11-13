@@ -30,4 +30,12 @@ public class JOval extends JGraph{
         g2d.dispose();
     }
 
+    @Override
+    public String save() {
+        String sup = super.save();
+        StringBuilder log =  new StringBuilder();
+        log.append("JOval").append(System.getProperty("line.separator"));
+        log.append(sup);
+        return log.toString();
+    }
 }

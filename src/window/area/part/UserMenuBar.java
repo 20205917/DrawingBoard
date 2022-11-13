@@ -30,14 +30,17 @@ public class UserMenuBar extends JMenuBar {
         newFile.addActionListener(e -> {
             FileDialog fileDialog = new FileDialog(parent,"选择要保存的位置",FileDialog.SAVE);
             fileDialog.setVisible(true);
-            String openFilePath = fileDialog.getDirectory();
+            String openFilePath = fileDialog.getDirectory()+fileDialog.getFile();
             /*
 
                 初始化配置文件
 
             */
+            System.out.println(openFilePath);
             parent.ManagementSystem.creatNewWindow(openFilePath);
         });
+
+
         //打开其他文件
         openFile.addActionListener(e -> {
             FileDialog fileDialog = new FileDialog(parent,"选择要打开的文件",FileDialog.LOAD);
@@ -45,8 +48,12 @@ public class UserMenuBar extends JMenuBar {
             //用户选择的文件路径
             parent.ManagementSystem.creatNewWindow(fileDialog.getDirectory());
         });
+
+
         //保存
         saveFile.addActionListener(e -> parent.save(parent.path));
+
+
         //另存为
         saveAsFile.addActionListener(e -> {
             FileDialog fileDialog = new FileDialog(parent,"选择保存的路径",FileDialog.SAVE);
@@ -62,13 +69,7 @@ public class UserMenuBar extends JMenuBar {
 
 
         createPage.addActionListener(e -> {
-            Page page = parent.leftArea.addPage(new Board(), parent.leftArea.getPagesNum());
-            page.addActionListener(e1 -> parent.rightArea.updateBoard(page.board));
-            parent.leftArea.rePaint();
-            if(parent.leftArea.getPagesNum() == 1){
-                parent.rightArea.updateBoard(page.board);
-            }
-
+            parent.addPage();
         });
 
 

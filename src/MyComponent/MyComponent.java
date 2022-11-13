@@ -8,6 +8,7 @@ public interface MyComponent {
     //边框判断间隔范围为，用于位移拉伸
     int gap = 5;
     void resize(MyPoint A, MyPoint B);
+    String save();
     default Cursor currentCursorStyle(int W,int H,int X,int Y){
 
         //靠左

@@ -17,6 +17,6 @@ public class Page extends JButton {
 //        jb.setText(null);//除去按钮的默认名称
 //        jb.setFocusPainted(false);//除去焦点的框
 //        setContentAreaFilled(false);//除去默认的背景填充
-        setText("点击");
+
     }
 }
