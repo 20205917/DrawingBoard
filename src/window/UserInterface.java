@@ -80,7 +80,6 @@ public class UserInterface extends JFrame {
             }
         });
 
-
         //主界面设计
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }

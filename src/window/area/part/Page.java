@@ -13,6 +13,7 @@ public class Page extends JButton {
     public Page(Board B){
         board = B;
         setBackground(Color.white);
+        setFocusable(false);
 //        setIconTextGap(0);//将标签中显示的文本和图标之间的间隔量设置为0
 //        setBorderPainted(false);//不打印边框
 //        setBorder(null);//除去边框

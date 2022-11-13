@@ -7,6 +7,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.font.TextAttribute;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,11 +21,10 @@ public class Board extends JLayeredPane {
     protected static final int INITIAL_HEIGHT = 450;
     //背景
     JPanel background;
-    //图形集合
-    HashMap<String, MyComponent> GraphSet = new HashMap<>();
     //画图笔轨迹集合
     public ArrayList<JDrawLine> jDrawLines = new ArrayList<>();
-
+    //最大层
+    static int maxLayer = 0;
     // 字体设置
     protected Font textFont;
     // 字体字典
@@ -37,28 +38,40 @@ public class Board extends JLayeredPane {
     protected Boolean isUnderline = false;
     protected Boolean isItalic = false;
 
+    // 处理生成图形时，截获鼠标事件
+    BoardGlassPane boardGlassPane;
+
+
+
     //控制图形创建
-    protected selects selection = selects.Rect;
+    private selects selection = selects.Rect;
     //图形颜色
     protected Color drawLineColor = Color.blue;
     // 线条宽度
     protected BasicStroke drawLineStroke = new BasicStroke(2);
 
-                 
+
+
     //当前图形
-    protected MyComponent chooseGraph;
-   
+    private MyComponent chooseGraph;
+    Integer frontLayer = 0;
 
     public Board() {
         setLayout(null);
         //白色画板
         background = new JPanel();
         background.setBackground(Color.white);
-        add(background, DEFAULT_LAYER-1, 0);
-
+        add(background, DEFAULT_LAYER-1);
+        background.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                if(e.getClickCount()==2) requestFocus();
+            }
+        });
 
         // 处理生成图形时，截获鼠标事件
-        BoardGlassPane boardGlassPane = new BoardGlassPane(this);
+        boardGlassPane = new BoardGlassPane(this);
         // 初始与底层，一般情况不截取
         add(boardGlassPane,FRAME_CONTENT_LAYER,0);
 
@@ -90,12 +103,43 @@ public class Board extends JLayeredPane {
         log.append("background-color: ").append(background.getBackground()).append(System.getProperty("line.separator"));
 
         //保存组件
-        for (MyComponent myComponent : GraphSet.values()){
-            log.append("Layer: ").append(getLayer((Component) myComponent)).append(System.getProperty("line.separator"));
-            log.append(myComponent.save()).append(System.getProperty("line.separator"));
+        for(int i = 1;i<400;i++){
+            if(getComponentCountInLayer(i)==0)break;
+            for(Component component :getComponentsInLayer(i)){
+                if(component instanceof MyComponent){
+                    log.append("Layer: ").append(i).append(System.getProperty("line.separator"));
+                    log.append(((MyComponent)component).save()).append(System.getProperty("line.separator"));
+                }
+            }
         }
 
+
         return log.toString();
+    }
+
+    //更换选中图形
+    public void changeChooseGraph(MyComponent next){
+        //前图形回到原来位置
+        if(chooseGraph != null)
+            setLayer((Component) chooseGraph,frontLayer);
+        if(next == null)
+            return;
+        //如果有新图形，将其放于拖动层
+        frontLayer = getLayer((Component) next);
+        setLayer((Component) next,DRAG_LAYER);
+        chooseGraph = next;
+    }
+    public void add(MyComponent myComponent){
+        add((Component) myComponent,maxLayer++);
+        addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                if(e.getClickCount()>=2 ){
+                    changeChooseGraph(myComponent);
+                }
+            }
+        });
+
     }
 
 
@@ -141,16 +185,21 @@ public class Board extends JLayeredPane {
     public void setTextFont() {
         this.textFont = new Font(textAttribute);
     }
-
     public void setSelection(selects selection) {
         this.selection = selection;
+        if(selection == selects.Mouse)
+            setLayer(boardGlassPane,FRAME_CONTENT_LAYER,0);
+        else
+            setLayer(boardGlassPane,MODAL_LAYER,0);
     }
-
+    public selects getSelection() {
+        return selection;
+    }
+    public MyComponent getChooseGraph() {
+        return chooseGraph;
+    }
     public void setDrawLineStroke(int thickness) {
         this.drawLineStroke = new BasicStroke(thickness);
     }
 }
 
-/*提醒
-selection为鼠标时应当设置GlassPane为顶部
- */

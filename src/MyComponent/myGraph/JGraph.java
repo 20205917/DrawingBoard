@@ -5,99 +5,68 @@ import MyComponent.myLine.MyPoint;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
 
 public class JGraph extends JPanel implements MyComponent {
     protected Color color = Color.black;
     protected BasicStroke stroke;
-
-
-    //用于移动的点
-    private volatile  MyPoint movePoint = new MyPoint(0,0);
-    private volatile  MyPoint protectPoint = new MyPoint(0,0);
+    protected MyGraphType type;
 
 
     public JGraph(){}
-    public JGraph(Color color, BasicStroke stroke){
+    public JGraph(Color color, BasicStroke stroke,MyGraphType type){
         this.stroke = stroke;
         this.color = color;
+        this.type = type;
+
         setOpaque(false);
+        addListener();
 
-        //图形的拖动和放大缩小
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                protectPoint = switch (getCursor().getType()){
-                    case Cursor.MOVE_CURSOR ->  new MyPoint(getX(),getY());
-                    //左平移
-                    case Cursor.W_RESIZE_CURSOR -> new MyPoint(getX()+getWidth(),getY());
-                    //右平移
-                    case Cursor.E_RESIZE_CURSOR -> new MyPoint(getX(),getY());
-                    //上平移
-                    case Cursor.N_RESIZE_CURSOR -> new MyPoint(getX(),getY()+getHeight());
-                    //下平移
-                    case Cursor.S_RESIZE_CURSOR -> new MyPoint(getX(),getY());
-                    //左上平移
-                    case Cursor.NW_RESIZE_CURSOR -> new MyPoint(getX()+getWidth(),getY()+getHeight());
-                    //右上平移
-                    case Cursor.NE_RESIZE_CURSOR -> new MyPoint(getX(),getY()+getHeight());
-                    //左下平移
-                    case Cursor.SW_RESIZE_CURSOR -> new MyPoint(getX()+getWidth(),getY());
-                    //右下平移
-                    case Cursor.SE_RESIZE_CURSOR -> new MyPoint(getX(),getY());
-                    default -> new MyPoint(0,0);
-                };
-                movePoint = new MyPoint(e.getXOnScreen(),e.getYOnScreen());
-
-            }
-        });
-        addMouseMotionListener(new MouseMotionAdapter() {
-            @Override
-            public void mouseDragged(MouseEvent e) {
-                super.mouseDragged(e);
-                switch (getCursor().getType()){
-                    //拖拽
-                    case Cursor.MOVE_CURSOR -> {
-                        setLocation(getX()+e.getXOnScreen()-movePoint.px, getY()+e.getYOnScreen()-movePoint.py);
-                        movePoint = new MyPoint(e.getXOnScreen(),e.getYOnScreen());
-                    }
-                    //左右扩展
-                    case Cursor.W_RESIZE_CURSOR, Cursor.E_RESIZE_CURSOR
-                            ->resize(protectPoint, new MyPoint(getX()+e.getX(),getY()+getHeight()));
-                    //上下扩展
-                    case Cursor.N_RESIZE_CURSOR,Cursor.S_RESIZE_CURSOR
-                            ->resize(protectPoint, new MyPoint(getX()+getWidth(),getY()+e.getY()));
-                    //角扩展
-                    case Cursor.NW_RESIZE_CURSOR, Cursor.NE_RESIZE_CURSOR, Cursor.SW_RESIZE_CURSOR, Cursor.SE_RESIZE_CURSOR
-                            ->resize(protectPoint, new MyPoint(getX()+e.getX(),getY()+e.getY()));
-                }
-            }
-            //鼠标形状的改变
-            @Override
-            public void mouseMoved(MouseEvent e) {
-                super.mouseMoved(e);
-                //鼠标形状
-                setCursor(currentCursorStyle(getWidth(),getHeight(),e.getX(),e.getY()));
-            }
-        });
     }
     //重设大小方位参数A，B：对角两点。
     public void resize(MyPoint A, MyPoint B){
         setBounds(Math.min(A.px,B.px),Math.min(A.py,B.py),Math.abs(A.px-B.px),Math.abs(A.py-B.py));
     }
 
+    //
+    @Override
+    public void paint(Graphics g) {
+        super.paint(g);
+        Graphics2D g2d = (Graphics2D) g.create();
+        //设置画笔
+        g2d.setBackground(null);
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.setColor(color);
+        g2d.setStroke(stroke);
+
+        switch (type){
+            case Line -> {}
+            case Oval -> g2d.drawOval(2,2,getWidth()-2,getHeight()-2);
+            case Rect -> g2d.drawRect(2,2,getWidth()-2,getHeight()-2);
+            case Triangle -> {
+                g2d.drawLine(getX(),getY()+getHeight(),getX()+getWidth(),getY()+getHeight());
+                g2d.drawLine(getX()+getWidth()/2,getY(),getX(),getY()+getHeight());
+                g2d.drawLine(getX()+getWidth()/2,getY(),getX()+getWidth(),getY()+getHeight());
+            }
+        }
+
+        g2d.dispose();
+    }
+
+
     @Override
     public String save() {
         StringBuilder log =  new StringBuilder();
-        log.append("color:").append(color.getRGB()).append("stroke:").append(stroke.getLineWidth())
-                .append(System.getProperty("line")).append(System.getProperty("line.separator"));
+        log.append(switch (type){
+            case Line -> null;
+            case Rect -> "Rect ";
+            case Oval -> "Oval ";
+            case Triangle -> "Triangle";
+        }).append(System.getProperty("line.separator"));
 
-        log.append("location: ").append(getX()).append(" ").append(getY()).append(System.getProperty("line.separator"));
-        log.append("size: ").append(getWidth()).append(" ").append(getHeight()).append(System.getProperty("line.separator"));
-        log.append("#####").append(System.getProperty("line.separator"));
+        log.append("color:").append(color.getRGB()).append(System.getProperty("line.separator"));
+        log.append("stroke:").append(stroke.getLineWidth()).append(System.getProperty("line.separator"));
+        log.append(saveBounds());
         return log.toString();
     }
+
 }
