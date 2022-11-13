@@ -4,11 +4,11 @@ import java.awt.*;
 import java.util.Vector;
 
 public class JDrawLine {
-    Stroke stroke;
+    BasicStroke stroke;
     Color color;
     Vector<MyPoint> myPoints =  new Vector<>();
 
-    public JDrawLine(Color color, Stroke stroke){
+    public JDrawLine(Color color, BasicStroke stroke){
         this.stroke = stroke;
         this.color = color;
     }
@@ -27,5 +27,21 @@ public class JDrawLine {
     }
     public void addPoint(int x,int y){
         myPoints.add(new MyPoint(x,y));
+    }
+
+    public String save(){
+        StringBuilder log = new StringBuilder();
+        log.append("JDrawLine").append(System.getProperty("line.separator"));
+        log.append("color:").append(color.getRGB()).append("stroke:").append(stroke.getLineWidth())
+                .append(System.getProperty("line")).append(System.getProperty("line.separator"));
+        int i=0;
+        for (MyPoint point : myPoints){
+            log.append(point.px).append(" ").append(point.py).append(" ");
+            if(++i==10){
+                i=0; log.append(System.getProperty("line.separator"));
+            }
+        }
+
+        return log.toString();
     }
 }

@@ -5,6 +5,8 @@ import window.area.part.Page;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.*;
 import java.util.ArrayList;
 
@@ -71,15 +73,6 @@ public class InterfaceLeft extends JScrollPane {
         pages.add(index, page);
         page.setPreferredSize(new Dimension(leftPane.getWidth(),leftPane.getHeight()/4));
         leftPane.add(page);
-
-        page.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-
-
-            }
-        });
         deploy();
         return page;
     }
@@ -90,7 +83,7 @@ public class InterfaceLeft extends JScrollPane {
         {
             pages.get(i).setText(" ");
             leftPane.add(pages.get(i));
-        }//pages.get(i).set(0, i * getWidth(), getWidth(), getWidth());
+        }
     }
 
     public int getPagesNum(){

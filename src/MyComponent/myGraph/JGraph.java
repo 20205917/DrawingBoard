@@ -11,16 +11,21 @@ import java.awt.event.MouseMotionAdapter;
 
 public class JGraph extends JPanel implements MyComponent {
     protected Color color = Color.black;
+    protected BasicStroke stroke;
+
+
+    //用于移动的点
     private volatile  MyPoint movePoint = new MyPoint(0,0);
     private volatile  MyPoint protectPoint = new MyPoint(0,0);
-    protected BasicStroke stroke;
+
+
     public JGraph(){}
     public JGraph(Color color, BasicStroke stroke){
         this.stroke = stroke;
         this.color = color;
         setOpaque(false);
 
-
+        //图形的拖动和放大缩小
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -70,7 +75,7 @@ public class JGraph extends JPanel implements MyComponent {
                             ->resize(protectPoint, new MyPoint(getX()+e.getX(),getY()+e.getY()));
                 }
             }
-
+            //鼠标形状的改变
             @Override
             public void mouseMoved(MouseEvent e) {
                 super.mouseMoved(e);
@@ -79,11 +84,20 @@ public class JGraph extends JPanel implements MyComponent {
             }
         });
     }
-    //参数A，B：对角两点。
+    //重设大小方位参数A，B：对角两点。
     public void resize(MyPoint A, MyPoint B){
         setBounds(Math.min(A.px,B.px),Math.min(A.py,B.py),Math.abs(A.px-B.px),Math.abs(A.py-B.py));
     }
-    public void setColor(Color color) {
-        this.color = color;
+
+    @Override
+    public String save() {
+        StringBuilder log =  new StringBuilder();
+        log.append("color:").append(color.getRGB()).append("stroke:").append(stroke.getLineWidth())
+                .append(System.getProperty("line")).append(System.getProperty("line.separator"));
+
+        log.append("location: ").append(getX()).append(" ").append(getY()).append(System.getProperty("line.separator"));
+        log.append("size: ").append(getWidth()).append(" ").append(getHeight()).append(System.getProperty("line.separator"));
+        log.append("#####").append(System.getProperty("line.separator"));
+        return log.toString();
     }
 }

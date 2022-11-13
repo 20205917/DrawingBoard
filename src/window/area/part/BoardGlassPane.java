@@ -68,9 +68,6 @@ public class BoardGlassPane extends JPanel implements MouseListener, MouseMotion
                 for (int i=0;i<100;i++){
                     if(!board.GraphSet.containsKey("图形"+i)){
                         board.GraphSet.put("图形"+i,board.chooseGraph);
-                        {
-                            if(i ==3) board.selection = selects.Mouse;
-                        }
                         break;}
                 }
             }
@@ -80,12 +77,12 @@ public class BoardGlassPane extends JPanel implements MouseListener, MouseMotion
     @Override
     public void mouseReleased(MouseEvent e) {
         if(isMake){
-                    isMake = false;
-                    switch (board.selection){
-                        case Pen->{board.jDrawLines.get(board.jDrawLines.size()-1).drawLine(getGraphics());}
-                        case Rect,Oval,Text->{}
-                    }
-                }
+            isMake = false;
+            switch (board.selection){
+                case Pen->{board.jDrawLines.get(board.jDrawLines.size()-1).drawLine(getGraphics());}
+                case Rect,Oval,Text->{}
+            }
+        }
     }
 
     @Override
@@ -105,7 +102,7 @@ public class BoardGlassPane extends JPanel implements MouseListener, MouseMotion
                 case Pen->{
                     board.jDrawLines.get(board.jDrawLines.size()-1).addPoint(e.getX(),e.getY());
                     board.jDrawLines.get(board.jDrawLines.size()-1).drawLine(getGraphics()); }
-                case Rect,Oval,Text->{
+                case Rect,Oval,Line,Text->{
                     board.chooseGraph.resize(mousePressedPoint,new MyPoint(e.getX(),e.getY()));
                 }
                 default -> {System.out.println( "创建失败"+board.selection);}
@@ -117,8 +114,4 @@ public class BoardGlassPane extends JPanel implements MouseListener, MouseMotion
     public void mouseMoved(MouseEvent e) {
         board.dispatchEvent(SwingUtilities.convertMouseEvent((BoardGlassPane)e.getSource(),e,board));
     }
-
-
-
-
 }
