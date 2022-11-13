@@ -67,4 +67,16 @@ public class JMyTextArea extends JTextArea implements MyComponent {
         setBounds(Math.min(A.px,B.px),Math.min(A.py,B.py),Math.abs(A.px-B.px),Math.abs(A.py-B.py));
     }
 
+    @Override
+    public String save() {
+        StringBuilder log =  new StringBuilder();
+
+        log.append("TextArea").append(System.getProperty("line.separator"));
+        log.append("Text-contain: ").append(getText());
+        log.append("location: ").append(getX()).append(" ").append(getY()).append(System.getProperty("line.separator"));
+        log.append("size: ").append(getWidth()).append(" ").append(getHeight()).append(System.getProperty("line.separator"));
+        log.append("#####").append(System.getProperty("line.separator"));
+        return log.toString();
+    }
+
 }

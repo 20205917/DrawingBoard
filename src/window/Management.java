@@ -6,12 +6,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.HashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class Management {
     HashMap<String , UserInterface> openedSet = new HashMap<>();
-    ExecutorService newCachedThreadPool = Executors.newCachedThreadPool();
 
     public Management(){
 
@@ -20,20 +17,24 @@ public class Management {
     public void creatNewWindow(String path){
         synchronized (this){
             Management management = this;
-            newCachedThreadPool.execute(() -> {
-                //文件已经打开
-                if(management.openedSet.containsKey(path)){
-                    JDialog  dialog = new ErrorDialog("该文件已经打开");
-                    dialog.setVisible(true);
-                }
-                //未打开创建线程以启动新窗口
-                else {
-                    UserInterface userInterface = new UserInterface(management);
-                    management.openedSet.put(path,userInterface);
-                    userInterface.Load(path);
-                    userInterface.setVisible(true);
-                }
-            });
+
+            if(management.openedSet.containsKey(path)){
+                JDialog  dialog = new ErrorDialog("该文件已经打开");
+                dialog.setVisible(true);
+            }
+            //未打开创建线程以启动新窗口
+            else {
+                java.awt.EventQueue.invokeLater(new Runnable() {
+                    public void run() {
+                        UserInterface userInterface = new UserInterface(management);
+                        management.openedSet.put(path,userInterface);
+                        userInterface.Load(path);
+                        userInterface.setVisible(true);
+                    }
+                });
+            }
+
+
         }
     }
     void openFile(){
