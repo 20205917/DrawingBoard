@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class UserMenuBar extends JMenuBar {
-    public UserMenuBar(UserInterface parent){
+    public UserMenuBar(UserInterface parent) {
         parent.setJMenuBar(this);
         JMenu fileOption = new JMenu("文件");
         JMenuItem newFile = new JMenuItem("新建");
@@ -20,7 +20,6 @@ public class UserMenuBar extends JMenuBar {
         fileOption.add(saveAsFile);
 
 
-
         JMenu plotItem = new JMenu("绘图");
         JMenu insertItem = new JMenu("插入");
         JMenuItem createPage = new JMenuItem("创建幻灯片");
@@ -28,7 +27,7 @@ public class UserMenuBar extends JMenuBar {
 
         //
         newFile.addActionListener(e -> {
-            FileDialog fileDialog = new FileDialog(parent,"选择要保存的位置",FileDialog.SAVE);
+            FileDialog fileDialog = new FileDialog(parent, "选择要保存的位置", FileDialog.SAVE);
             fileDialog.setVisible(true);
             String openFilePath = fileDialog.getDirectory()+fileDialog.getFile();
             /*
@@ -43,7 +42,7 @@ public class UserMenuBar extends JMenuBar {
 
         //打开其他文件
         openFile.addActionListener(e -> {
-            FileDialog fileDialog = new FileDialog(parent,"选择要打开的文件",FileDialog.LOAD);
+            FileDialog fileDialog = new FileDialog(parent, "选择要打开的文件", FileDialog.LOAD);
             fileDialog.setVisible(true);
             //用户选择的文件路径
             parent.ManagementSystem.creatNewWindow(fileDialog.getDirectory());
@@ -56,14 +55,13 @@ public class UserMenuBar extends JMenuBar {
 
         //另存为
         saveAsFile.addActionListener(e -> {
-            FileDialog fileDialog = new FileDialog(parent,"选择保存的路径",FileDialog.SAVE);
+            FileDialog fileDialog = new FileDialog(parent, "选择保存的路径", FileDialog.SAVE);
             fileDialog.setVisible(true);
             String openFilePath = fileDialog.getDirectory();
-            if(parent.ManagementSystem.isOpenfile(openFilePath)) {
-                JDialog jDialog= new ErrorDialog("文件已被占用无法覆盖");
+            if (parent.ManagementSystem.isOpenfile(openFilePath)) {
+                JDialog jDialog = new ErrorDialog("文件已被占用无法覆盖");
                 jDialog.setVisible(true);
-            }
-            else
+            } else
                 parent.save(openFilePath);
         });
 
