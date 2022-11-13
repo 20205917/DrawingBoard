@@ -7,12 +7,16 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.*;
 import java.util.ArrayList;
 
 //左侧滚动窗口
 public class InterfaceLeft extends JScrollPane {
     ArrayList<Page> pages = new ArrayList<>();
+
+    public Page currentPage;
     public JPanel leftPane;                 //内容条(装Board内容块)
+
     public InterfaceLeft() {
         super();
         leftPane = new JPanel();
@@ -30,7 +34,7 @@ public class InterfaceLeft extends JScrollPane {
 
                 //页面
                 leftPane.setPreferredSize(new Dimension(getWidth(),(int) (pages.size()*(getWidth()  *Page.AspectrRatio))));
-                FlowLayout fl = new FlowLayout(FlowLayout.CENTER,10,getWidth() / 15);
+                FlowLayout fl = new FlowLayout(FlowLayout.CENTER,10, getWidth() / 15);
                 leftPane.setLayout(fl);
 
                 //按钮
@@ -44,7 +48,22 @@ public class InterfaceLeft extends JScrollPane {
         //测试
         leftPane.setBackground(Color.green);
 
+        // 每隔一秒更新缩略图
+        int delay = 1000;
+        ActionListener draw =new ActionListener() {//创建一个监听事件
+            public void actionPerformed(ActionEvent evt) {
+                if(currentPage != null)
+                    currentPage.updateImage();
+            }
 
+        };
+        new Timer(delay,draw).start();//创建一个时间计数器，每一秒触发一次
+
+//        Board []bs = new Board[10];
+//        for (int i = 0;i<10;i++){
+//            bs[i] = new Board();
+//            addPage(bs[i],i);
+//        }
     }
 
     // 增加页面(与主界面交互)
@@ -62,7 +81,7 @@ public class InterfaceLeft extends JScrollPane {
     void deploy() {
         for (int i=0;i < pages.size();i++)
         {
-            pages.get(i).setText(" "+i);
+            pages.get(i).setText(" ");
             leftPane.add(pages.get(i));
         }
     }
