@@ -1,21 +1,17 @@
 package window.area.part;
 
-import MyComponent.myGraph.JGraph;
-import MyComponent.myGraph.JLine;
-import MyComponent.myGraph.JOval;
-import MyComponent.myGraph.JRect;
+import MyComponent.MyComponent;
+import MyComponent.myGraph.*;
 import MyComponent.myLine.JDrawLine;
 import MyComponent.myLine.MyPoint;
 import MyComponent.textarea.JMyTextArea;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.*;
 
 public class BoardGlassPane extends JPanel implements MouseListener, MouseMotionListener {
-    private Board board;
+    private final Board board;
 
     private boolean isMake = false;
     private MyPoint mousePressedPoint;
@@ -31,18 +27,17 @@ public class BoardGlassPane extends JPanel implements MouseListener, MouseMotion
 
     @Override
     public void mouseClicked(MouseEvent e) {
-
+        if(e.getClickCount()>=2 )
+            board.setSelection(selects.Mouse);
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
         mousePressedPoint = new MyPoint(e.getX(),e.getY());
-        switch (board.selection){
+        switch (board.getSelection()){
             //鼠标选择
 
-            case Mouse->{
-                 System.out.println("点到底部了");
-            }
+            case Mouse-> System.out.println("点到底部了");
             case Pen->{
                 isMake = true;
                 board.jDrawLines.add(new JDrawLine(board.drawLineColor,board.drawLineStroke));
@@ -51,20 +46,22 @@ public class BoardGlassPane extends JPanel implements MouseListener, MouseMotion
             case Rect, Oval, Line, Text->{
                 isMake = true;
                 //创建图形
-                board.chooseGraph  = switch (board.selection){
+                MyComponent myComponent= switch (board.getSelection()){
                     //矩形
-                    case Rect -> new JRect(board.drawLineColor,board.drawLineStroke);
+                    case Rect -> new JGraph(board.drawLineColor,board.drawLineStroke, MyGraphType.Rect);
                     //圆形
-                    case Oval -> new JOval(board.drawLineColor,board.drawLineStroke);
+                    case Oval -> new JGraph(board.drawLineColor,board.drawLineStroke, MyGraphType.Oval);
                     //线段
-                    case Line -> new JLine(board.drawLineColor,board.drawLineStroke);
+                    case Line -> new JLine(board.drawLineColor,board.drawLineStroke, MyGraphType.Line);
                     //文本框
-                    case Text ->new JMyTextArea(board.drawLineColor,"宋体",Font.PLAIN,5);
+                    case Text ->new JMyTextArea(board.textFont,board.drawLineColor);
                     default -> new JGraph();//错误情况
                 };
+                //添加组件
+                board.add(myComponent);
+                //选中当前组件
+                board.changeChooseGraph(myComponent);
 
-                board.chooseGraph.resize(mousePressedPoint,mousePressedPoint);
-                board.add((Component) board.chooseGraph,JLayeredPane.DEFAULT_LAYER,0);
             }
         }
     }
@@ -73,11 +70,19 @@ public class BoardGlassPane extends JPanel implements MouseListener, MouseMotion
     public void mouseReleased(MouseEvent e) {
         if(isMake){
             isMake = false;
-            switch (board.selection){
-                case Pen->{board.jDrawLines.get(board.jDrawLines.size()-1).drawLine(getGraphics());}
-                case Rect,Oval,Text->{}
+            switch (board.getSelection()){
+                case Pen-> board.jDrawLines.get(board.jDrawLines.size()-1).drawLine(getGraphics());
+                case Rect,Oval,Text->{
+                    //如果大小为零，则删除（防误触）
+                    MyComponent myComponent = board.getChooseGraph();
+                    if(myComponent!=null && (myComponent.getHeight()<0 || myComponent.getHeight()<0))
+                        board.remove((Component) myComponent);
+                    else if(myComponent!=null)
+                        myComponent.setEnabled(false);
+                }
             }
         }
+        board.changeChooseGraph(null);
     }
 
     @Override
@@ -93,14 +98,12 @@ public class BoardGlassPane extends JPanel implements MouseListener, MouseMotion
     @Override
     public void mouseDragged(MouseEvent e) {
         if(isMake){
-            switch (board.selection){
+            switch (board.getSelection()){
                 case Pen->{
                     board.jDrawLines.get(board.jDrawLines.size()-1).addPoint(e.getX(),e.getY());
                     board.jDrawLines.get(board.jDrawLines.size()-1).drawLine(getGraphics()); }
-                case Rect,Oval,Line,Text->{
-                    board.chooseGraph.resize(mousePressedPoint,new MyPoint(e.getX(),e.getY()));
-                }
-                default -> {System.out.println( "创建失败"+board.selection);}
+                case Rect,Oval,Line,Text-> board.getChooseGraph().resize(mousePressedPoint,new MyPoint(e.getX(),e.getY()));
+                default -> System.out.println( "创建失败"+board.getSelection());
             }
         }
     }

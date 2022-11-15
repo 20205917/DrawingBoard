@@ -5,18 +5,12 @@ import MyComponent.myLine.MyPoint;
 import java.awt.*;
 
 public class JLine extends JGraph {
-    private MyPoint pointA;
-    private MyPoint pointB;
+    protected MyPoint pointA;
+    protected MyPoint pointB;
 
 
-    public JLine(){
-        pointA.px = getX();
-        pointA.py = getY();
-        pointB.px = getX()+getWidth();
-        pointB.py = getY()+getHeight();
-    }
-    public JLine(Color color,BasicStroke stroke){
-        super(color,stroke);
+    public JLine(Color color,BasicStroke stroke,MyGraphType type){
+        super(color,stroke,type);
         pointA = new MyPoint(getX(),getY());
         pointB = new MyPoint(getX()+getWidth(),getY()+getHeight());
     }
