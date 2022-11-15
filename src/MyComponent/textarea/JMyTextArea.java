@@ -7,65 +7,40 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+
 
 public class JMyTextArea extends JTextArea implements MyComponent {
-    public JMyTextArea(){
-        addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusLost(FocusEvent e) {
-                super.focusLost(e);
-                setEditable(false);
-                System.out.println("lost");
-            }
-        });
+    //默认文字提示
+    private static final String hintText = "请输入";
 
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                if(e.getClickCount()==2)setEditable(true);
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                super.mouseEntered(e);
-                setCursor(new Cursor(Cursor.HAND_CURSOR));
-            }
-        });
-    }
-    public JMyTextArea(Color Fontcolor,String name,int style,int size){
-        setCaretColor(Fontcolor);
-        setFont(new Font(name,style,size));
+    public JMyTextArea(Font font,Color color){
+        super(hintText);
+        setFont(font);
+        //设置常态（未选中）时的颜色
+        setDisabledTextColor(color);
+        //移动变形所需监听器
+        addListener();
 
         addFocusListener(new FocusAdapter() {
+            public void focusGained(FocusEvent e) {
+                //获取焦点时，清空提示内容
+                if(getText().equals(hintText)) {
+                    setText("");
+                    setForeground(Color.BLACK);
+                }
+            }
             @Override
             public void focusLost(FocusEvent e) {
-                super.focusLost(e);
-                setEditable(false);
-                System.out.println("lost");
+                //失去焦点时，没有输入内容，显示提示内容
+                if(getText().equals(""))
+                    setText(hintText);
             }
         });
 
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                if(e.getClickCount()==2)setEditable(true);
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                super.mouseEntered(e);
-                setCursor(new Cursor(Cursor.HAND_CURSOR));
-            }
-        });
 
     }
     public void resize(MyPoint A, MyPoint B){
-        setBounds(Math.min(A.px,B.px),Math.min(A.py,B.py),Math.abs(A.px-B.px),Math.abs(A.py-B.py));
-    }
+        setBounds(Math.min(A.px,B.px),Math.min(A.py,B.py),Math.abs(A.px-B.px),Math.abs(A.py-B.py));}
 
     @Override
     public String save() {
@@ -73,9 +48,7 @@ public class JMyTextArea extends JTextArea implements MyComponent {
 
         log.append("TextArea").append(System.getProperty("line.separator"));
         log.append("Text-contain: ").append(getText());
-        log.append("location: ").append(getX()).append(" ").append(getY()).append(System.getProperty("line.separator"));
-        log.append("size: ").append(getWidth()).append(" ").append(getHeight()).append(System.getProperty("line.separator"));
-        log.append("#####").append(System.getProperty("line.separator"));
+        log.append(saveBounds());
         return log.toString();
     }
 
