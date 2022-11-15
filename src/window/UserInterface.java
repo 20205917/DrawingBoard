@@ -11,10 +11,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.Vector;
 
 public class UserInterface extends JFrame {
 
@@ -43,6 +43,7 @@ public class UserInterface extends JFrame {
         setBackground(Color.gray);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLayout(null);
+
 
         //菜单
         menuBar = new UserMenuBar(this);
@@ -100,28 +101,73 @@ public class UserInterface extends JFrame {
         }
     }
 
+    public void addPage(Board board) {
+        Page page = leftArea.addPage(board, leftArea.getPagesNum());
+        allBoard.add(page.board);
+        page.addActionListener(e1 -> {
+            rightArea.updateBoard(page.board);
+            leftArea.currentPage = page;
+        });
+        leftArea.rePaint();
+
+        if (leftArea.getPagesNum() == 1) {
+            rightArea.updateBoard(page.board);
+            leftArea.currentPage = page;
+        }
+    }
+
     public void save(String Path) {
         path = Path;
         {
-            System.out.print(allBoard.size());
-            System.out.print(System.getProperty("line.separator"));
+            // System.out.print(allBoard.size());
+            // System.out.print(System.getProperty("line.separator"));
             for (Board board : allBoard)
                 System.out.print(board.save());
         }
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
-            writer.write(allBoard.size());
-            writer.write(System.getProperty("line.separator"));
+            // writer.write(allBoard.size());
+            // writer.write(System.getProperty("line.separator"));
             for (Board board : allBoard) {
                 writer.write(board.save());
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
-    public void Load(String Path) {
+    public void readFile(String filePath, UserInterface userInterface) {
+        path = filePath;
+        try {
+            BufferedReader in = new BufferedReader(new InputStreamReader(
+                    new FileInputStream(filePath)));
+            String inData = null;
+            StringBuilder allData = new StringBuilder();
+            while ((inData = in.readLine()) != null)
+                allData.append(inData).append('\n');
+            // System.out.println(allData);
+            String[] boardsData = (allData.toString()).split("\n\n");
+
+            for (String board : boardsData) {
+
+                String[] boardData = board.split("#####\n");
+
+                Board newBoard = new Board(boardData[0]);
+                for (int i = 1; i < boardData.length; i++) {
+                    newBoard.addGraphic(boardData[i]);
+                }
+                userInterface.addPage(newBoard);
+            }
+
+            in.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void load(String Path, UserInterface userInterface) {
         path = Path;
+        setTitle(path.substring(path.lastIndexOf('\\') + 1, path.indexOf('.')));
+        readFile(path, userInterface);
     }
 }

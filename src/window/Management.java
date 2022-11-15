@@ -28,8 +28,16 @@ public class Management {
                     public void run() {
                         UserInterface userInterface = new UserInterface(management);
                         management.openedSet.put(path,userInterface);
-                        userInterface.Load(path);
+                        userInterface.load(path, userInterface);
                         userInterface.setVisible(true);
+                        // 关闭时将窗口信息从openSet中移除
+                        userInterface.addWindowListener(new WindowAdapter() {
+                            @Override
+                            public void windowClosed(WindowEvent e) {
+                                super.windowClosed(e);
+                                management.openedSet.remove(path, userInterface);
+                            }
+                        });
                     }
                 });
             }

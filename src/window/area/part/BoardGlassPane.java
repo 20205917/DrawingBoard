@@ -65,11 +65,6 @@ public class BoardGlassPane extends JPanel implements MouseListener, MouseMotion
 
                 board.chooseGraph.resize(mousePressedPoint,mousePressedPoint);
                 board.add((Component) board.chooseGraph,JLayeredPane.DEFAULT_LAYER,0);
-                for (int i=0;i<100;i++){
-                    if(!board.GraphSet.containsKey("图形"+i)){
-                        board.GraphSet.put("图形"+i,board.chooseGraph);
-                        break;}
-                }
             }
         }
     }

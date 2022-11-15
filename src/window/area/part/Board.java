@@ -1,6 +1,7 @@
 package window.area.part;
 
 import MyComponent.MyComponent;
+import MyComponent.myGraph.JRect;
 import MyComponent.myLine.JDrawLine;
 
 import javax.swing.*;
@@ -10,6 +11,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.font.TextAttribute;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 
 //单页画布
@@ -19,8 +21,6 @@ public class Board extends JLayeredPane {
     protected static final int INITIAL_HEIGHT = 450;
     //背景
     JPanel background;
-    //图形集合
-    HashMap<String, MyComponent> GraphSet = new HashMap<>();
     //画图笔轨迹集合
     public ArrayList<JDrawLine> jDrawLines = new ArrayList<>();
 
@@ -44,23 +44,23 @@ public class Board extends JLayeredPane {
     // 线条宽度
     protected BasicStroke drawLineStroke = new BasicStroke(2);
 
-                 
+
     //当前图形
     protected MyComponent chooseGraph;
-   
+
 
     public Board() {
         setLayout(null);
         //白色画板
         background = new JPanel();
         background.setBackground(Color.white);
-        add(background, DEFAULT_LAYER-1, 0);
+        add(background, DEFAULT_LAYER - 1, 0);
 
 
         // 处理生成图形时，截获鼠标事件
         BoardGlassPane boardGlassPane = new BoardGlassPane(this);
         // 初始与底层，一般情况不截取
-        add(boardGlassPane,FRAME_CONTENT_LAYER,0);
+        add(boardGlassPane, FRAME_CONTENT_LAYER, 0);
 
         //大小改变的自适配
         addComponentListener(new ComponentAdapter() {
@@ -74,6 +74,36 @@ public class Board extends JLayeredPane {
         setSize(INITIAL_WIDTH, INITIAL_HEIGHT);
     }
 
+    public Board(String data) {
+        // 只有画板大小与画布颜色需要读取
+        String[] settings = data.split("\n");
+        int width = Integer.parseInt(settings[0].substring(settings[0].indexOf(':') + 1));
+        int height = Integer.parseInt(settings[1].substring(settings[1].indexOf(':') + 1));
+        int rgb = Integer.parseInt(settings[2].substring(settings[2].indexOf(':') + 1));
+        setLayout(null);
+        //白色画板
+        background = new JPanel();
+        background.setBackground(new Color(rgb));
+        add(background, DEFAULT_LAYER - 1, 0);
+
+
+        // 处理生成图形时，截获鼠标事件
+        BoardGlassPane boardGlassPane = new BoardGlassPane(this);
+        // 初始与底层，一般情况不截取
+        add(boardGlassPane, FRAME_CONTENT_LAYER, 0);
+
+        //大小改变的自适配
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                super.componentResized(e);
+                background.setSize(getWidth(), getHeight());
+                boardGlassPane.setSize(getWidth(), getHeight());
+            }
+        });
+        setSize(width, height);
+    }
+
     @Override
     public void paint(Graphics g) {
         super.paint(g);
@@ -82,18 +112,26 @@ public class Board extends JLayeredPane {
     }
 
     //文件保存
-    public String save(){
+    public String save() {
         StringBuffer log = new StringBuffer();
         //保存尺寸和背景
         log.append("board-width:").append(getWidth()).append(System.getProperty("line.separator"));
-        log.append("board-width:").append(getWidth()).append(System.getProperty("line.separator"));
-        log.append("background-color: ").append(background.getBackground()).append(System.getProperty("line.separator"));
+        log.append("board-height:").append(getHeight()).append(System.getProperty("line.separator"));
+        log.append("background-color:").append(background.getBackground().getRGB()).append(System.getProperty("line.separator"));
 
         //保存组件
-        for (MyComponent myComponent : GraphSet.values()){
-            log.append("Layer: ").append(getLayer((Component) myComponent)).append(System.getProperty("line.separator"));
-            log.append(myComponent.save()).append(System.getProperty("line.separator"));
+        for (int i = 1; i < 400; i++) {
+            if (getComponentCountInLayer(i) == 0) break;
+            for (Component component : getComponentsInLayer(i)) {
+                if (component instanceof MyComponent) {
+                    log.append("#####").append(System.getProperty("line.separator"));
+                    log.append("Layer:").append(i).append(System.getProperty("line.separator"));
+                    log.append(((MyComponent) component).save());
+                }
+            }
         }
+
+        log.append(System.getProperty("line.separator"));
 
         return log.toString();
     }
@@ -148,6 +186,26 @@ public class Board extends JLayeredPane {
 
     public void setDrawLineStroke(int thickness) {
         this.drawLineStroke = new BasicStroke(thickness);
+    }
+
+    public void addGraphic(String graphicData) {
+        System.out.println(graphicData);
+        String[] info = graphicData.split("\n");
+        String type = info[1];
+        // graph
+        if (Objects.equals(type, "Rect")) {
+            int layer = Integer.parseInt(info[0].substring(info[0].indexOf(':') + 1));
+            int rgb = Integer.parseInt(info[2].substring(info[2].indexOf(':') + 1));
+            float stroke = Float.parseFloat(info[3].substring(info[3].indexOf(':') + 1));
+            String temp = info[4].substring(info[4].indexOf(':') + 1);
+            int x = Integer.parseInt(temp.substring(0, temp.indexOf(' ')));
+            int y = Integer.parseInt(temp.substring(temp.indexOf(' ') + 1));
+            temp = info[5].substring(info[5].indexOf(':') + 1);
+            int width = Integer.parseInt(temp.substring(0, temp.indexOf(' ')));
+            int height = Integer.parseInt(temp.substring(temp.indexOf(' ') + 1));
+            // TODO
+            // add(new JRect(new Color(rgb), new BasicStroke(stroke)), layer, 0);
+        }
     }
 }
 
