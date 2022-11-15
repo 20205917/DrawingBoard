@@ -11,6 +11,8 @@ import java.util.HashMap;
 public interface MyComponent {
     //边框判断间隔范围为，用于位移拉伸
     int gap = 5;
+    int boarderSize = 4;
+    int drawGap = 2;
 
     HashMap<MyComponent,MyPoint> protectPoints = new HashMap<>();
     HashMap<MyComponent,MyPoint> movePoints = new HashMap<>();
@@ -178,7 +180,7 @@ public interface MyComponent {
             @Override
             public void focusGained(FocusEvent e) {
                 super.focusGained(e);
-                setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, Color.black));
+                setBorder(BorderFactory.createMatteBorder(boarderSize, boarderSize, boarderSize, boarderSize, Color.black));
             }
             @Override
             public void focusLost(FocusEvent e) {

@@ -1,14 +1,16 @@
-package window.area.part;
+package window.area;
 
 import window.ErrorDialog;
 import window.UserInterface;
+import window.area.part.Board;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class UserMenuBar extends JMenuBar {
-    public UserMenuBar(UserInterface parent) {
+public class InterfaceMenuBar extends JMenuBar {
+    public InterfaceMenuBar(UserInterface parent) {
         parent.setJMenuBar(this);
+
         JMenu fileOption = new JMenu("文件");
         JMenuItem newFile = new JMenuItem("新建");
         JMenuItem openFile = new JMenuItem("打开");
@@ -20,10 +22,23 @@ public class UserMenuBar extends JMenuBar {
         fileOption.add(saveAsFile);
 
 
-        JMenu plotItem = new JMenu("绘图");
-        JMenu insertItem = new JMenu("插入");
-        JMenuItem createPage = new JMenuItem("创建幻灯片");
 
+
+        JMenu beginOption = new JMenu("开始");
+        JMenuItem createPage = new JMenuItem("创建新幻灯片");
+        JMenuItem deletePage = new JMenuItem("删除当期幻灯片");
+        JMenuItem upPage = new JMenuItem("前移当前幻灯片");
+        JMenuItem downPage = new JMenuItem("后移当前幻灯片");
+        JMenuItem designPage = new JMenuItem("页面设计");
+        beginOption.add(createPage);
+        beginOption.add(deletePage);
+        beginOption.addSeparator();
+        beginOption.add(upPage);
+        beginOption.add(downPage);
+        beginOption.addSeparator();
+        beginOption.add(designPage);
+
+        JMenu plotItem = new JMenu("绘图");
 
         // 创建新文件
         newFile.addActionListener(e -> {
@@ -76,12 +91,25 @@ public class UserMenuBar extends JMenuBar {
 
 
         createPage.addActionListener(e -> {
-            parent.addPage();
+            parent.addPage(new Board());
+        });
+        deletePage.addActionListener(e ->{
+            parent.deletePage();
         });
 
+        upPage.addActionListener(e ->{
+            parent.upPage();
+        });
+        downPage.addActionListener(e ->{
+            parent.downPage();
+        });
+
+        designPage.addActionListener(e ->{
+
+        });
 
         add(fileOption);
-        add(insertItem).add(createPage);
+        add(beginOption);
         add(plotItem);
     }
 }
