@@ -56,16 +56,11 @@ public class JGraph extends JPanel implements MyComponent {
     @Override
     public String save() {
         StringBuilder log =  new StringBuilder();
-        log.append(switch (type){
-            case Line -> null;
-            case Rect -> "Rect ";
-            case Oval -> "Oval ";
-            case Triangle -> "Triangle";
-        }).append(System.getProperty("line.separator"));
+        log.append("color:").append(color.getRGB()).append(System.getProperty("line.separator"))
+                .append("stroke:").append(stroke.getLineWidth()).append(System.getProperty("line.separator"));
 
-        log.append("color:").append(color.getRGB()).append(System.getProperty("line.separator"));
-        log.append("stroke:").append(stroke.getLineWidth()).append(System.getProperty("line.separator"));
-        log.append(saveBounds());
+        log.append("location:").append(getX()).append(" ").append(getY()).append(System.getProperty("line.separator"));
+        log.append("size:").append(getWidth()).append(" ").append(getHeight()).append(System.getProperty("line.separator"));
         return log.toString();
     }
 

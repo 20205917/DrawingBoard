@@ -25,10 +25,13 @@ public class UserMenuBar extends JMenuBar {
         JMenuItem createPage = new JMenuItem("创建幻灯片");
 
 
-        //
+        // 创建新文件
         newFile.addActionListener(e -> {
             FileDialog fileDialog = new FileDialog(parent, "选择要保存的位置", FileDialog.SAVE);
             fileDialog.setVisible(true);
+            if(fileDialog.getFile() == null){
+                return;
+            }
             String openFilePath = fileDialog.getDirectory()+fileDialog.getFile();
             /*
 
@@ -37,15 +40,19 @@ public class UserMenuBar extends JMenuBar {
             */
             System.out.println(openFilePath);
             parent.ManagementSystem.creatNewWindow(openFilePath);
+
         });
 
 
-        //打开其他文件
+        // 打开其他文件
         openFile.addActionListener(e -> {
             FileDialog fileDialog = new FileDialog(parent, "选择要打开的文件", FileDialog.LOAD);
             fileDialog.setVisible(true);
-            //用户选择的文件路径
-            parent.ManagementSystem.creatNewWindow(fileDialog.getDirectory());
+            // 用户选择的文件路径
+            String openFilePath = fileDialog.getDirectory() + fileDialog.getFile();
+            parent.ManagementSystem.creatNewWindow(openFilePath);
+            // parent.readFile(openFilePath);
+
         });
 
 
@@ -57,12 +64,14 @@ public class UserMenuBar extends JMenuBar {
         saveAsFile.addActionListener(e -> {
             FileDialog fileDialog = new FileDialog(parent, "选择保存的路径", FileDialog.SAVE);
             fileDialog.setVisible(true);
-            String openFilePath = fileDialog.getDirectory();
+            String openFilePath = fileDialog.getDirectory() + fileDialog.getFile();
             if (parent.ManagementSystem.isOpenfile(openFilePath)) {
                 JDialog jDialog = new ErrorDialog("文件已被占用无法覆盖");
                 jDialog.setVisible(true);
-            } else
+            } else{
                 parent.save(openFilePath);
+                System.out.println(openFilePath);
+            }
         });
 
 

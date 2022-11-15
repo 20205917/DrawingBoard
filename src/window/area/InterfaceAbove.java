@@ -5,14 +5,14 @@ import window.area.part.selects;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.awt.event.*;
+import java.util.Vector;
+import java.util.regex.Pattern;
 
 public class InterfaceAbove extends JPanel {
 
     private InterfaceRight rightArea;
+
     private Insets inner = new Insets(2, 2, 2, 2);
     private Insets outer = new Insets(0, 2, 0, 2);
 
@@ -56,22 +56,22 @@ public class InterfaceAbove extends JPanel {
         addComponent(toolsTable, bMouse, gbl, gbc);
 
         bPen.addActionListener(e -> {
-            if(rightArea.board != null)
+            if (rightArea.board != null)
                 rightArea.board.setSelection(selects.Pen);
         });
 
         bText.addActionListener(e -> {
-            if(rightArea.board != null)
+            if (rightArea.board != null)
                 rightArea.board.setSelection(selects.Text);
         });
 
         bRubber.addActionListener(e -> {
-            if(rightArea.board != null)
+            if (rightArea.board != null)
                 rightArea.board.setSelection(selects.Rubber);
         });
 
         bMouse.addActionListener(e -> {
-            if(rightArea.board != null)
+            if (rightArea.board != null)
                 rightArea.board.setSelection(selects.Mouse);
         });
 
@@ -128,17 +128,17 @@ public class InterfaceAbove extends JPanel {
         });
 
         bBold.addActionListener(e -> {
-            if(rightArea.board != null)
+            if (rightArea.board != null)
                 rightArea.board.setIsBold();
         });
 
         bItalic.addActionListener(e -> {
-            if(rightArea.board != null)
+            if (rightArea.board != null)
                 rightArea.board.setIsItalic();
         });
 
         bUnderline.addActionListener(e -> {
-            if(rightArea.board != null)
+            if (rightArea.board != null)
                 rightArea.board.setIsUnderline();
         });
 
@@ -155,7 +155,10 @@ public class InterfaceAbove extends JPanel {
         Button bRect = new Button("Rect");
         Button bOval = new Button("Oval");
         Button bLine = new Button("Line");
-        Button bCurve = new Button("Curve");
+        String[] shapes = {"Rect", "Oval", "Line"};
+        SearchComboBox cbSearch = new SearchComboBox(shapes);
+//        JComboBox<Object> cbSearch = new JComboBox<>(shapes);
+//        Button bMore = new Button("More");
 
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = inner;
@@ -168,27 +171,25 @@ public class InterfaceAbove extends JPanel {
         gbc.weightx = 1;
         addComponent(shapeTable, bLine, gbl, gbc);
         gbc.gridwidth = GridBagConstraints.REMAINDER;
-        addComponent(shapeTable, bCurve, gbl, gbc);
+        addComponent(shapeTable, cbSearch, gbl, gbc);
 
         bRect.addActionListener(e -> {
-            if(rightArea.board != null)
+            if (rightArea.board != null)
                 rightArea.board.setSelection(selects.Rect);
         });
 
         bOval.addActionListener(e -> {
-            if(rightArea.board != null)
+            if (rightArea.board != null)
                 rightArea.board.setSelection(selects.Oval);
         });
 
         bLine.addActionListener(e -> {
-            if(rightArea.board != null)
+            if (rightArea.board != null)
                 rightArea.board.setSelection(selects.Line);
         });
 
-        bCurve.addActionListener(e -> {
-            if(rightArea.board != null)
-                rightArea.board.setSelection(selects.Pen);
-        });
+        cbSearch.addItemListener(new SearchComboBoxListener(cbSearch));
+
 
         return shapeTable;
     }
@@ -218,7 +219,7 @@ public class InterfaceAbove extends JPanel {
         bBlue.setBackground(Color.blue);
         Button bPurple = new Button();
         bPurple.setBackground(Color.magenta);
-        Button bMore = new Button("...");
+        Button bMore = new Button("More");
 
 
         gbc.fill = GridBagConstraints.BOTH;
@@ -291,7 +292,7 @@ public class InterfaceAbove extends JPanel {
         JPanel textTable = setTextTable();
         JPanel shapeTable = setShapeTable();
         JPanel colorTable = setColorTable();
-        JPanel searchTable = setSearchTable();
+        // JPanel searchTable = setSearchTable();
 
         // 粗细
         String[] thickness = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
@@ -305,7 +306,6 @@ public class InterfaceAbove extends JPanel {
         });
 
 
-
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = outer;
         gbc.weightx = 1;
@@ -315,7 +315,7 @@ public class InterfaceAbove extends JPanel {
         addComponent(this, shapeTable, gbl, gbc);
         addComponent(this, cbThickness, gbl, gbc);
         addComponent(this, colorTable, gbl, gbc);
-        addComponent(this, searchTable, gbl, gbc);
+        //addComponent(this, searchTable, gbl, gbc);
 
 
     }
@@ -340,12 +340,117 @@ public class InterfaceAbove extends JPanel {
         }
     }
 
+    class SearchComboBox extends JComboBox {
+        private final ComboBoxModel allItems;
+
+        public SearchComboBox(String[] items) {
+            super(items);
+            allItems = getModel();
+            setEditable(true);
+        }
+
+        public SearchComboBox(JComboBox jcb) {
+            super((ComboBoxModel) jcb);
+            allItems = getModel();
+            setEditable(true);
+        }
+
+        public String getText() {
+            return ((JTextField) (getEditor().getEditorComponent())).getText();
+        }
+
+        public void setText(String s) {
+            ((JTextField) (getEditor().getEditorComponent())).setText(s);
+        }
+
+        public Boolean isInItems(String input) {
+            String toSearch = ".*" + input + ".*";
+            for (int i = 0; i < getModel().getSize(); i++) {
+                if (Pattern.matches(toSearch, (String) getModel().getElementAt(i))) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+    class SearchComboBoxListener implements KeyListener, ItemListener {
+
+        private JTextField editor;
+        private ComboBoxModel items;
+        private SearchComboBox parent;
+
+        public SearchComboBoxListener(SearchComboBox jcb) {
+            parent = jcb;
+            parent.addItemListener(this);
+            items = jcb.getModel();
+            editor = (JTextField) jcb.getEditor().getEditorComponent();
+            editor.addKeyListener(this);
+        }
+
+        @Override
+        public void keyTyped(KeyEvent e) {
+
+        }
+
+        @Override
+        public void keyPressed(KeyEvent e) {
+
+        }
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+            char ch = e.getKeyChar();
+            String input = editor.getText();
+            showResult(input);
+        }
+
+        public void showResult(String input) {
+            Vector<String> opts;
+            opts = getResult(input);
+            if (parent != null && opts != null) {
+                items = new DefaultComboBoxModel(opts);
+                parent.setModel(items);
+                parent.showPopup();
+                parent.setText(input);
+            } else if (opts == null) {
+                assert parent != null;
+                items = parent.allItems;
+                parent.setModel(items);
+                parent.showPopup();
+                parent.setText(input);
+            }
+
+        }
+
+        public Vector<String> getResult(String input) {
+            Vector<String> res = new Vector<>();
+            String pattern = "^.*(?i)" + input + ".*$";
+            for (int i = 0; i < parent.allItems.getSize(); i++) {
+                Object itemObj = parent.allItems.getElementAt(i);
+                if (itemObj != null) {
+                    String item = itemObj.toString();
+                    if (Pattern.matches(pattern, item))
+                        res.add(item);
+                }
+            }
+            return res;
+        }
+
+        @Override
+        public void itemStateChanged(ItemEvent e) {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                System.out.println("ok");
+            }
+        }
+    }
+
     public void setColorButtonListener(Button b) {
         b.addActionListener(new ButtonEvent() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 super.actionPerformed(actionEvent);
-                if(rightArea.board != null)
+                if (rightArea.board != null)
                     rightArea.board.setDrawLineColor(b.getBackground());
             }
         });
