@@ -1,7 +1,6 @@
 package window.area.part;
 
 import MyComponent.MyComponent;
-
 import MyComponent.myGraph.JGraph;
 import MyComponent.myGraph.JLine;
 import MyComponent.myGraph.MyGraphType;
@@ -18,7 +17,6 @@ import java.awt.event.MouseEvent;
 import java.awt.font.TextAttribute;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 
 
 //单页画布
@@ -31,7 +29,7 @@ public class Board extends JLayeredPane {
     //画图笔轨迹集合
     public ArrayList<JDrawLine> jDrawLines = new ArrayList<>();
     //最大层
-    static int maxLayer = 0;
+    public int maxLayer = 0;
     // 字体设置
     protected Font textFont;
     // 字体字典
@@ -167,9 +165,8 @@ public class Board extends JLayeredPane {
         setLayer((Component) next, DRAG_LAYER);
         chooseGraph = next;
     }
-
-    public void add(MyComponent myComponent) {
-        add((Component) myComponent, maxLayer++, 0);
+    public void add(MyComponent myComponent,int Layer){
+        add((Component) myComponent,Layer,0);
         addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
@@ -178,7 +175,6 @@ public class Board extends JLayeredPane {
                 }
             }
         });
-
     }
 
 
@@ -297,9 +293,7 @@ public class Board extends JLayeredPane {
                         graph.resize(a, b);
                     }
                 }
-                add((MyComponent) graph);
-                setLayer(graph, layer, 0);
-
+                add((MyComponent) graph,layer);
             }
             case "TextArea" ->{
                 String content = info[8];
@@ -312,17 +306,12 @@ public class Board extends JLayeredPane {
                 JMyTextArea textArea = new JMyTextArea(new Font(Font.SERIF, Font.BOLD, Font.ITALIC) ,Color.blue);
                 textArea.setText(content);
                 textArea.setBounds(x, y, width, height);
-                add((MyComponent) textArea);
-                setLayer(textArea, layer, 0);
-
+                add((MyComponent) textArea,0);
             }
             default -> System.out.println("error");
         }
 
 
-        // TODO ADD
-
-        // add(new JRect(new Color(rgb), new BasicStroke(stroke)), layer, 0);
     }
 }
 

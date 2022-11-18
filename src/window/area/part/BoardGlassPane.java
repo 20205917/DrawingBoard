@@ -58,7 +58,7 @@ public class BoardGlassPane extends JPanel implements MouseListener, MouseMotion
                     default -> new JGraph();//错误情况
                 };
                 //添加组件
-                board.add(myComponent);
+                board.add(myComponent,board.maxLayer++);
                 //选中当前组件
                 board.changeChooseGraph(myComponent);
 

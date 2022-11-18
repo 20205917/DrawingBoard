@@ -19,8 +19,8 @@ public class JGraph extends JPanel implements MyComponent {
         this.type = type;
 
         setOpaque(false);
+        //移动变形所需监听器
         addListener();
-
     }
     //重设大小方位参数A，B：对角两点。
     public void resize(MyPoint A, MyPoint B){
@@ -39,14 +39,22 @@ public class JGraph extends JPanel implements MyComponent {
         g2d.setStroke(stroke);
 
         switch (type){
-            case Line -> {}
-            case Oval -> g2d.drawOval(2,2,getWidth()-2,getHeight()-2);
-            case Rect -> g2d.drawRect(2,2,getWidth()-2,getHeight()-2);
-            case Triangle -> {
-                g2d.drawLine(getX(),getY()+getHeight(),getX()+getWidth(),getY()+getHeight());
+            case Line -> {}                                                                                                          //线段
+            case Oval -> g2d.drawOval(drawGap,drawGap,getWidth()-drawGap,getHeight()-drawGap);                          //椭圆形
+            case Rect -> g2d.drawRect(drawGap,drawGap,getWidth()-drawGap,getHeight()-drawGap);                          //长方形
+            case Square -> g2d.drawRect(drawGap,drawGap,Math.min(getWidth(),getHeight())-2,Math.min(getWidth(),getHeight()));  //正方形
+            case Triangle -> {                                                                                                       //等腰三角形
+                g2d.drawLine(getX(),getY()+getHeight()+drawGap,getX()+getWidth(),getY()+getHeight()+drawGap);
                 g2d.drawLine(getX()+getWidth()/2,getY(),getX(),getY()+getHeight());
                 g2d.drawLine(getX()+getWidth()/2,getY(),getX()+getWidth(),getY()+getHeight());
             }
+            case IsoscelesLadder ->{                                                                                                 //等腰梯型
+                g2d.drawLine(getX(),getY()+getHeight()+drawGap,getX()+getWidth(),getY()+getHeight()+drawGap);
+                g2d.drawLine(getX(),getY()+getHeight()+drawGap,getX()+getWidth(),getY()+getHeight()+drawGap);
+                g2d.drawLine(getX()+getWidth()/4,getY(),getX(),getY()+getHeight());
+                g2d.drawLine(getX()+getWidth()*3/4,getY(),getX()+getWidth(),getY()+getHeight());
+            }
+
         }
 
         g2d.dispose();

@@ -5,16 +5,14 @@ import window.area.InterfaceLeft;
 import window.area.InterfaceRight;
 import window.area.part.Board;
 import window.area.part.Page;
-import window.area.part.UserMenuBar;
+import window.area.InterfaceMenuBar;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.io.*;
-import java.util.Collections;
 import java.util.HashSet;
-import java.util.Vector;
 
 public class UserInterface extends JFrame {
 
@@ -25,7 +23,7 @@ public class UserInterface extends JFrame {
     //文件路径
     public String path;
     //菜单栏
-    public UserMenuBar menuBar;
+    public InterfaceMenuBar menuBar;
     //工具栏
     public InterfaceAbove aboveArea;
     //操作窗口
@@ -44,9 +42,8 @@ public class UserInterface extends JFrame {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLayout(null);
 
-
         //菜单
-        menuBar = new UserMenuBar(this);
+        menuBar = new InterfaceMenuBar(this);
 
         //工具栏
         aboveArea = new InterfaceAbove();
@@ -85,34 +82,41 @@ public class UserInterface extends JFrame {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
-    public void addPage() {
-        Page page = leftArea.addPage(new Board(), leftArea.getPagesNum());
+
+
+    public void addPage(Board board) {              //新建幻灯片
+        if(leftArea.getPagesNum()>50)
+            return;
+        Page page = leftArea.addPage(board, leftArea.getPagesNum());
         allBoard.add(page.board);
+
+        //点击切换监听器
         page.addActionListener(e1 -> {
             rightArea.updateBoard(page.board);
-            leftArea.currentPage = page;
+            leftArea.setShowPage(page);
         });
-        leftArea.rePaint();
+        leftArea.repaint();
 
+        //如果是最后一张，新增即刻选中
         if (leftArea.getPagesNum() == 1) {
             rightArea.updateBoard(page.board);
-            leftArea.currentPage = page;
+            leftArea.setShowPage(page);
         }
     }
 
-    public void addPage(Board board) {
-        Page page = leftArea.addPage(board, leftArea.getPagesNum());
-        allBoard.add(page.board);
-        page.addActionListener(e1 -> {
-            rightArea.updateBoard(page.board);
-            leftArea.currentPage = page;
-        });
-        leftArea.rePaint();
+    public void deletePage(){
+        if(leftArea.getPagesNum() == 0) return;
+        Page page = leftArea.deletePage();
+        allBoard.remove(page.board);
+        leftArea.repaint();
+    }
 
-        if (leftArea.getPagesNum() == 1) {
-            rightArea.updateBoard(page.board);
-            leftArea.currentPage = page;
-        }
+    public void upPage(){
+        leftArea.upPage();
+    }
+
+    public void downPage(){
+        leftArea.downPage();
     }
 
     public void save(String Path) {
@@ -140,7 +144,7 @@ public class UserInterface extends JFrame {
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(
                     new FileInputStream(filePath)));
-            String inData = null;
+            String inData;
             StringBuilder allData = new StringBuilder();
             while ((inData = in.readLine()) != null)
                 allData.append(inData).append('\n');
