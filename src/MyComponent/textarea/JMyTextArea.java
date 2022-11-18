@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.font.TextAttribute;
 
 
 public class JMyTextArea extends JTextArea implements MyComponent {
@@ -45,9 +46,14 @@ public class JMyTextArea extends JTextArea implements MyComponent {
     @Override
     public String save() {
         StringBuilder log =  new StringBuilder();
-
         log.append("TextArea").append(System.getProperty("line.separator"));
-        log.append("Text-contain: ").append(getText());
+        log.append("color:").append(getDisabledTextColor().getRGB()).append(System.getProperty("line.separator"));
+        log.append("TextStyle:").append(getFont().getFamily()).append(System.getProperty("line.separator"));
+        log.append("TextSize:").append(getFont().getSize()).append(System.getProperty("line.separator"));
+        log.append("IsBold:").append(getFont().isBold()).append(System.getProperty("line.separator"));
+        log.append("IsItalic:").append(getFont().isItalic()).append(System.getProperty("line.separator"));
+        log.append("IsUnderline:").append(System.getProperty("line.separator"));
+        log.append("Text-contain:").append(getText()).append(System.getProperty("line.separator"));
         log.append(saveBounds());
         return log.toString();
     }

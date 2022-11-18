@@ -2,6 +2,8 @@ package window.area.part;
 
 import MyComponent.MyComponent;
 import MyComponent.myLine.JDrawLine;
+import MyComponent.myLine.MyPoint;
+import MyComponent.textarea.JMyTextArea;
 
 import javax.swing.*;
 import java.awt.*;
@@ -64,7 +66,7 @@ public class Board extends JLayeredPane {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                if(e.getClickCount()==2) requestFocus();
+                if (e.getClickCount() == 2) requestFocus();
             }
         });
         add(background, DEFAULT_LAYER - 1, 0);
@@ -150,15 +152,15 @@ public class Board extends JLayeredPane {
     }
 
     //更换选中图形
-    public void changeChooseGraph(MyComponent next){
+    public void changeChooseGraph(MyComponent next) {
         //前图形回到原来位置
-        if(chooseGraph != null)
-            setLayer((Component) chooseGraph,frontLayer);
-        if(next == null)
+        if (chooseGraph != null)
+            setLayer((Component) chooseGraph, frontLayer);
+        if (next == null)
             return;
         //如果有新图形，将其放于拖动层
         frontLayer = getLayer((Component) next);
-        setLayer((Component) next,DRAG_LAYER);
+        setLayer((Component) next, DRAG_LAYER);
         chooseGraph = next;
     }
     public void add(MyComponent myComponent,int Layer){
@@ -166,7 +168,7 @@ public class Board extends JLayeredPane {
         addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                if(e.getClickCount()>=2 ){
+                if (e.getClickCount() >= 2) {
                     changeChooseGraph(myComponent);
                 }
             }
@@ -182,11 +184,13 @@ public class Board extends JLayeredPane {
     public void setTextStyle(String textStyle) {
         this.textStyle = textStyle;
         this.textAttribute.put(TextAttribute.FAMILY, textStyle);
+        setTextFont();
     }
 
     public void setTextSize(int textSize) {
         this.textSize = textSize;
         this.textAttribute.put(TextAttribute.SIZE, textSize);
+        setTextFont();
     }
 
     public void setIsBold() {
@@ -195,6 +199,7 @@ public class Board extends JLayeredPane {
             this.textAttribute.put(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
         else
             this.textAttribute.put(TextAttribute.WEIGHT, TextAttribute.WEIGHT_REGULAR);
+        setTextFont();
     }
 
     public void setIsItalic() {
@@ -203,6 +208,7 @@ public class Board extends JLayeredPane {
             this.textAttribute.put(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE);
         else
             this.textAttribute.put(TextAttribute.POSTURE, TextAttribute.POSTURE_REGULAR);
+        setTextFont();
     }
 
     public void setIsUnderline() {
@@ -211,6 +217,7 @@ public class Board extends JLayeredPane {
             this.textAttribute.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
         else
             this.textAttribute.remove(TextAttribute.UNDERLINE);
+        setTextFont();
     }
 
     public void setTextFont() {
@@ -219,17 +226,20 @@ public class Board extends JLayeredPane {
 
     public void setSelection(selects selection) {
         this.selection = selection;
-        if(selection == selects.Mouse)
-            setLayer(boardGlassPane,FRAME_CONTENT_LAYER,0);
+        if (selection == selects.Mouse)
+            setLayer(boardGlassPane, FRAME_CONTENT_LAYER, 0);
         else
-            setLayer(boardGlassPane,MODAL_LAYER,0);
+            setLayer(boardGlassPane, MODAL_LAYER, 0);
     }
+
     public selects getSelection() {
         return selection;
     }
+
     public MyComponent getChooseGraph() {
         return chooseGraph;
     }
+
     public void setDrawLineStroke(int thickness) {
         this.drawLineStroke = new BasicStroke(thickness);
     }
@@ -237,21 +247,76 @@ public class Board extends JLayeredPane {
     public void addGraphic(String graphicData) {
         System.out.println(graphicData);
         String[] info = graphicData.split("\n");
+
+        int layer = Integer.parseInt(info[0].substring(info[0].indexOf(':') + 1));
         String type = info[1];
+
         // graph
-        if (Objects.equals(type, "Rect")) {
-            int layer = Integer.parseInt(info[0].substring(info[0].indexOf(':') + 1));
-            int rgb = Integer.parseInt(info[2].substring(info[2].indexOf(':') + 1));
-            float stroke = Float.parseFloat(info[3].substring(info[3].indexOf(':') + 1));
-            String temp = info[4].substring(info[4].indexOf(':') + 1);
-            int x = Integer.parseInt(temp.substring(0, temp.indexOf(' ')));
-            int y = Integer.parseInt(temp.substring(temp.indexOf(' ') + 1));
-            temp = info[5].substring(info[5].indexOf(':') + 1);
-            int width = Integer.parseInt(temp.substring(0, temp.indexOf(' ')));
-            int height = Integer.parseInt(temp.substring(temp.indexOf(' ') + 1));
-            // TODO
-            // add(new JRect(new Color(rgb), new BasicStroke(stroke)), layer, 0);
+        switch (type) {
+            case "Rect", "Oval", "Line", "Triangle" -> {
+                int rgb = Integer.parseInt(info[2].substring(info[2].indexOf(':') + 1));
+                float stroke = Float.parseFloat(info[3].substring(info[3].indexOf(':') + 1));
+                String temp = info[4].substring(info[4].indexOf(':') + 1);
+                int x = Integer.parseInt(temp.substring(0, temp.indexOf(' ')));
+                int y = Integer.parseInt(temp.substring(temp.indexOf(' ') + 1));
+                temp = info[5].substring(info[5].indexOf(':') + 1);
+                int width = Integer.parseInt(temp.substring(0, temp.indexOf(' ')));
+                int height = Integer.parseInt(temp.substring(temp.indexOf(' ') + 1));
+                JGraph graph = null;
+                switch (type) {
+                    case "Rect" -> {
+                        graph = new JGraph(new Color(rgb), new BasicStroke(stroke), MyGraphType.Rect);
+                        graph.setBounds(x, y, width, height);
+                    }
+                    case "Oval" -> {
+                        graph = new JGraph(new Color(rgb), new BasicStroke(stroke), MyGraphType.Oval);
+                        graph.setBounds(x, y, width, height);
+                    }
+                    case "Triangle" -> {
+                        graph = new JGraph(new Color(rgb), new BasicStroke(stroke), MyGraphType.Triangle);
+                        graph.setBounds(x, y, width, height);
+                    }
+                    case "Line" -> {
+                        String direction = info[6];
+                        graph = new JLine(new Color(rgb), new BasicStroke(stroke), MyGraphType.Line);
+                        MyPoint a, b;
+                        if(direction.equals("JLine-WN")){
+                            a = new MyPoint(x, y);
+                            b = new MyPoint(x + width, y + height);
+                        }
+                        else {
+                            a = new MyPoint(x, y + height);
+                            b = new MyPoint(x + width, y);
+                        }
+                        graph.resize(a, b);
+                    }
+                }
+                add((MyComponent) graph);
+                setLayer(graph, layer, 0);
+
+            }
+            case "TextArea" ->{
+                String content = info[8];
+                String temp = info[9].substring(info[9].indexOf(':') + 1);
+                int x = Integer.parseInt(temp.substring(0, temp.indexOf(' ')));
+                int y = Integer.parseInt(temp.substring(temp.indexOf(' ') + 1));
+                temp = info[10].substring(info[10].indexOf(':') + 1);
+                int width = Integer.parseInt(temp.substring(0, temp.indexOf(' ')));
+                int height = Integer.parseInt(temp.substring(temp.indexOf(' ') + 1));
+                JMyTextArea textArea = new JMyTextArea(new Font(Font.SERIF, Font.BOLD, Font.ITALIC) ,Color.blue);
+                textArea.setText(content);
+                textArea.setBounds(x, y, width, height);
+                add((MyComponent) textArea);
+                setLayer(textArea, layer, 0);
+
+            }
+            default -> System.out.println("error");
         }
+
+
+        // TODO ADD
+
+        // add(new JRect(new Color(rgb), new BasicStroke(stroke)), layer, 0);
     }
 }
 

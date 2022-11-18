@@ -18,6 +18,7 @@ public interface MyComponent {
     HashMap<MyComponent,MyPoint> movePoints = new HashMap<>();
 
     void resize(MyPoint A, MyPoint B);
+
     String save();
 
     int getX();
@@ -46,9 +47,9 @@ public interface MyComponent {
     default String saveBounds(){
         StringBuilder log =  new StringBuilder();
 
-        log.append("location: ").append(getX()).append(" ").append(getY()).append(System.getProperty("line.separator"));
-        log.append("size: ").append(getWidth()).append(" ").append(getHeight()).append(System.getProperty("line.separator"));
-        log.append("#####").append(System.getProperty("line.separator"));
+        log.append("location:").append(getX()).append(" ").append(getY()).append(System.getProperty("line.separator"));
+        log.append("size:").append(getWidth()).append(" ").append(getHeight()).append(System.getProperty("line.separator"));
+        // log.append("#####").append(System.getProperty("line.separator"));
         return log.toString();
     }
 
