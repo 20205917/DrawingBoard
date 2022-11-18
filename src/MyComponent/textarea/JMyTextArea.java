@@ -16,6 +16,8 @@ public class JMyTextArea extends JTextArea implements MyComponent {
 
     public JMyTextArea(Font font,Color color){
         super(hintText);
+        setOpaque(false);
+        //设置设定字形
         setFont(font);
         //设置常态（未选中）时的颜色
         setDisabledTextColor(color);
@@ -37,8 +39,6 @@ public class JMyTextArea extends JTextArea implements MyComponent {
                     setText(hintText);
             }
         });
-
-
     }
     public void resize(MyPoint A, MyPoint B){
         setBounds(Math.min(A.px,B.px),Math.min(A.py,B.py),Math.abs(A.px-B.px),Math.abs(A.py-B.py));}
