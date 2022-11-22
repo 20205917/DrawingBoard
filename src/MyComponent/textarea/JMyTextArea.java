@@ -48,11 +48,16 @@ public class JMyTextArea extends JTextArea implements MyComponent {
         StringBuilder log =  new StringBuilder();
         log.append("TextArea").append(System.getProperty("line.separator"));
         log.append("color:").append(getDisabledTextColor().getRGB()).append(System.getProperty("line.separator"));
-        log.append("TextStyle:").append(getFont().getFamily()).append(System.getProperty("line.separator"));
+        log.append("TextStyle:").append(getFont().getAttributes().get(TextAttribute.FAMILY)).append(System.getProperty("line.separator"));
         log.append("TextSize:").append(getFont().getSize()).append(System.getProperty("line.separator"));
         log.append("IsBold:").append(getFont().isBold()).append(System.getProperty("line.separator"));
         log.append("IsItalic:").append(getFont().isItalic()).append(System.getProperty("line.separator"));
-        log.append("IsUnderline:").append(System.getProperty("line.separator"));
+        String isUnderline;
+        if(getFont().getAttributes().get(TextAttribute.UNDERLINE) != null)
+            isUnderline = "true";
+        else
+            isUnderline = "false";
+        log.append("IsUnderline:").append(isUnderline).append(System.getProperty("line.separator"));
         log.append("Text-contain:").append(getText()).append(System.getProperty("line.separator"));
         log.append(saveBounds());
         return log.toString();
