@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
 
 //小窗口包含白板和按钮
 public class Page extends JButton {
-    public static  double AspectrRatio = 3/4.0;
+    public static  double AspectrRatio = 4/5.0;
     public Board board;
     // 缩略图
     public Image thumbnail;
@@ -14,7 +14,6 @@ public class Page extends JButton {
         board = B;
         setBackground(Color.white);
         setFocusable(false);
-
     }
 
     public void updateImage(){
@@ -25,4 +24,5 @@ public class Page extends JButton {
         ImageIcon icon = new ImageIcon(thumbnail);
         setIcon(icon);
     }
+
 }

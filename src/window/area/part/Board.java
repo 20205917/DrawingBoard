@@ -47,7 +47,7 @@ public class Board extends JLayeredPane {
     BoardGlassPane boardGlassPane;
 
     //控制图形创建
-    private selects selection = selects.Rect;
+    private selects selection = selects.CreatJGraph;
     //图形颜色
     protected Color drawLineColor = Color.blue;
     // 线条宽度
@@ -71,7 +71,6 @@ public class Board extends JLayeredPane {
             }
         });
         add(background, DEFAULT_LAYER - 1, 0);
-
 
         // 处理生成图形时，截获鼠标事件
         boardGlassPane = new BoardGlassPane(this);
