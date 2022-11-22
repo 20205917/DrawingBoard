@@ -177,7 +177,6 @@ public interface MyComponent {
 
         //失去焦点时，进入不可编辑状态
         addFocusListener(new FocusAdapter() {
-
             @Override
             public void focusGained(FocusEvent e) {
                 super.focusGained(e);

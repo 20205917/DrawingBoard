@@ -70,6 +70,7 @@ public class JGraph extends JPanel implements MyComponent {
             case Rect -> log.append("Rect");
             case Oval -> log.append("Oval");
             case Triangle -> log.append("Triangle");
+
             default -> log.append("Error");
         }
         log.append(System.getProperty("line.separator"));

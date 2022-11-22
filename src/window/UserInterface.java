@@ -93,24 +93,24 @@ public class UserInterface extends JFrame {
         //点击切换监听器
         page.addActionListener(e1 -> {
             rightArea.updateBoard(page.board);
-            leftArea.setShowPage(page);
+            leftArea.setCurrentPage(page);
         });
-        leftArea.repaint();
 
         //如果是最后一张，新增即刻选中
         if (leftArea.getPagesNum() == 1) {
             rightArea.updateBoard(page.board);
-            leftArea.setShowPage(page);
+            leftArea.setCurrentPage(page);
         }
     }
 
     public void deletePage(){
         //幻灯片数量大于0时可删除
-        if(leftArea.getPagesNum() == 0) return;
+        if(leftArea.getPagesNum() <= 0) return;
 
         Page page = leftArea.deletePage();
         allBoard.remove(page.board);
-        leftArea.repaint();
+
+        rightArea.updateBoard(leftArea.getCurrentPage().board);
     }
 
     public void upPage(){
@@ -124,8 +124,6 @@ public class UserInterface extends JFrame {
     public void save(String Path) {
         path = Path;
         {
-            // System.out.print(allBoard.size());
-            // System.out.print(System.getProperty("line.separator"));
             for (Board board : allBoard)
                 System.out.print(board.save());
         }

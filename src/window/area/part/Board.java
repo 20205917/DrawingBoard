@@ -47,7 +47,7 @@ public class Board extends JLayeredPane {
     BoardGlassPane boardGlassPane;
 
     //控制图形创建
-    private selects selection = selects.Rect;
+    private selects selection = selects.CreatJGraph;
     //图形颜色
     protected Color drawLineColor = Color.blue;
     // 线条宽度
@@ -63,7 +63,6 @@ public class Board extends JLayeredPane {
         //白色画板
         background = new JPanel();
         background.setBackground(Color.white);
-        add(background, DEFAULT_LAYER - 1);
         background.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -72,7 +71,6 @@ public class Board extends JLayeredPane {
             }
         });
         add(background, DEFAULT_LAYER - 1, 0);
-
 
         // 处理生成图形时，截获鼠标事件
         boardGlassPane = new BoardGlassPane(this);
@@ -105,7 +103,7 @@ public class Board extends JLayeredPane {
 
 
         // 处理生成图形时，截获鼠标事件
-        BoardGlassPane boardGlassPane = new BoardGlassPane(this);
+        boardGlassPane = new BoardGlassPane(this);
         // 初始与底层，一般情况不截取
         add(boardGlassPane, FRAME_CONTENT_LAYER, 0);
 
