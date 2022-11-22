@@ -5,8 +5,6 @@ import window.area.part.Page;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
@@ -15,6 +13,7 @@ import java.util.ArrayList;
 public class InterfaceLeft extends JScrollPane {
     ArrayList<Page> pages = new ArrayList<>();
 
+    //当前页面，无选中为-1
     private int currentPage = -1;
     public JPanel leftPane;                 //内容条(装Board内容块)
 
@@ -33,6 +32,7 @@ public class InterfaceLeft extends JScrollPane {
             @Override
             public void componentResized(ComponentEvent e) {
                 super.componentResized(e);
+
                 //页面
                 leftPane.setPreferredSize(new Dimension(getWidth(),(int) (pages.size()*(getWidth()  *Page.AspectrRatio))));
                 FlowLayout fl = new FlowLayout(FlowLayout.CENTER,10, getWidth() / 15);
@@ -48,21 +48,12 @@ public class InterfaceLeft extends JScrollPane {
 
         // 每隔一秒更新缩略图
         int delay = 1000;
-        new Timer(delay, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(getCurrentPage() != null)
-                    getCurrentPage().updateImage();
-            }
+        new Timer(delay, e -> {
+            if(getCurrentPage() != null)
+                getCurrentPage().updateImage();
         }).start();//创建一个时间计数器，每一秒触发一次
     }
 
-
-
-    //重新排布小窗口顺序
-    void deploy() {
-        for (Page page : pages) leftPane.add(page);
-    }
 
     //对Pages的操作
     public int getPagesNum(){
@@ -85,13 +76,14 @@ public class InterfaceLeft extends JScrollPane {
     public Page getPage(int index){
         return pages.get(index);
     }
+
     // 增加页面(与主界面交互)
     public Page addPage(Board B, int index) {
         Page page = new Page(B);
         pages.add(index, page);
         page.setPreferredSize(new Dimension(leftPane.getWidth(),leftPane.getHeight()/4));
         leftPane.add(page);
-        rePaint();
+        repaint();
         return page;
     }
 
@@ -104,8 +96,7 @@ public class InterfaceLeft extends JScrollPane {
         if(currentPage == pages.size())
             currentPage--;
         leftPane.remove(page);
-        System.out.println(leftPane.getComponentCount());
-        deploy();
+        //deploy();
         return page;
     }
 
@@ -115,7 +106,8 @@ public class InterfaceLeft extends JScrollPane {
         Page page = pages.get(currentPage);
         pages.remove(currentPage);
         pages.add(--currentPage,page);
-        deploy();
+        //重新排布小窗口顺序
+        //leftPane.add();
     }
 
     public void downPage(){
@@ -124,21 +116,7 @@ public class InterfaceLeft extends JScrollPane {
         Page page = pages.get(currentPage);
         pages.remove(currentPage);
         pages.add(++currentPage,page);
-        deploy();
-    }
-
-    public void rePaint(){
-
-        //页面
-        leftPane.setPreferredSize(new Dimension(getWidth(),(int) (pages.size()*(getWidth()  *Page.AspectrRatio))));
-        FlowLayout fl = new FlowLayout(FlowLayout.CENTER,10, getWidth() / 15);
-        leftPane.setLayout(fl);
-
-        //按钮
-        for (Page page : pages)
-            page.setPreferredSize(new Dimension(getWidth() * 4 / 5, (int) (getWidth() * 4 / 5 *Page.AspectrRatio)));
-
-        repaint();
+        //deploy();
     }
 }
 

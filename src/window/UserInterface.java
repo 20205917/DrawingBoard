@@ -90,21 +90,18 @@ public class UserInterface extends JFrame {
         Page page = leftArea.addPage(board, leftArea.getPagesNum());
         allBoard.add(page.board);
 
-
         //点击切换监听器
         page.addActionListener(e1 -> {
             rightArea.updateBoard(page.board);
             leftArea.setShowPage(page);
         });
-
+        leftArea.repaint();
 
         //如果是最后一张，新增即刻选中
         if (leftArea.getPagesNum() == 1) {
-
             rightArea.updateBoard(page.board);
             leftArea.setShowPage(page);
         }
-        leftArea.rePaint();
     }
 
     public void deletePage(){

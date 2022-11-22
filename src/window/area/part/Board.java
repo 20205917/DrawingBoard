@@ -17,7 +17,6 @@ import java.awt.event.MouseEvent;
 import java.awt.font.TextAttribute;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 
 
 //单页画布
@@ -294,9 +293,7 @@ public class Board extends JLayeredPane {
                         graph.resize(a, b);
                     }
                 }
-                add((MyComponent) graph, layer);
-
-
+                add((MyComponent) graph,layer);
             }
             case "TextArea" ->{
                 String content = info[8];
@@ -309,11 +306,12 @@ public class Board extends JLayeredPane {
                 JMyTextArea textArea = new JMyTextArea(new Font(Font.SERIF, Font.BOLD, Font.ITALIC) ,Color.blue);
                 textArea.setText(content);
                 textArea.setBounds(x, y, width, height);
-                add((MyComponent) textArea, 0);
-
+                add((MyComponent) textArea,0);
             }
             default -> System.out.println("error");
         }
+
+
     }
 }
 
