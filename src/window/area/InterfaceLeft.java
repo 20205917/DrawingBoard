@@ -65,7 +65,7 @@ public class InterfaceLeft extends JScrollPane {
             return null;
         return pages.get(currentPage);
     }
-
+    //设置展示幻灯片
     public void setShowPage(Page page){
         if(page ==null)
             currentPage = -1;
@@ -77,26 +77,39 @@ public class InterfaceLeft extends JScrollPane {
         return pages.get(index);
     }
 
-    // 增加页面(与主界面交互)
+    // 增加幻灯片(与主界面交互)
     public Page addPage(Board B, int index) {
+
         Page page = new Page(B);
+        page.setPreferredSize(new Dimension(getWidth() * 4 / 5, (int) (getWidth() * 4 / 5 *Page.AspectrRatio)));
+
         pages.add(index, page);
-        page.setPreferredSize(new Dimension(leftPane.getWidth(),leftPane.getHeight()/4));
+
+        //滚动窗口调整
         leftPane.add(page);
-        repaint();
+        leftPane.setPreferredSize(new Dimension(getWidth(),(int) (pages.size()*(getWidth()  *Page.AspectrRatio))));
+
+        revalidate();
         return page;
     }
 
     //删除幻灯片
     public Page deletePage(){
-        if(currentPage == -1)
+        if(currentPage < 0)
             return null;
+
         Page page = getCurrentPage();
         pages.remove(currentPage);
+
+        //滚动窗口调整
+        leftPane.remove(page);
+        leftPane.setPreferredSize(new Dimension(getWidth(),(int) (pages.size()*(getWidth()  *Page.AspectrRatio))));
+
+        //如果删除最后一张则指向前一张幻灯片
         if(currentPage == pages.size())
             currentPage--;
-        leftPane.remove(page);
-        //deploy();
+
+        revalidate();
         return page;
     }
 
@@ -104,19 +117,30 @@ public class InterfaceLeft extends JScrollPane {
         if(currentPage <= 0)
             return;
         Page page = pages.get(currentPage);
-        pages.remove(currentPage);
-        pages.add(--currentPage,page);
+
+        //更换数组位置
+        pages.remove(currentPage--);
+        pages.add(currentPage,page);
+
         //重新排布小窗口顺序
-        //leftPane.add();
+        leftPane.add(page,currentPage);
+
+        revalidate();
     }
 
     public void downPage(){
         if(currentPage >= pages.size())
             return;
         Page page = pages.get(currentPage);
-        pages.remove(currentPage);
-        pages.add(++currentPage,page);
-        //deploy();
+
+        //更换数组位置
+        pages.remove(currentPage++);
+        pages.add(currentPage,page);
+
+        //重新排布小窗口顺序
+        leftPane.add(page,currentPage);
+
+        revalidate();
     }
 }
 
