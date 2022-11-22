@@ -1,6 +1,9 @@
 package window.area.part;
 
 import MyComponent.MyComponent;
+import MyComponent.myGraph.JGraph;
+import MyComponent.myGraph.JLine;
+import MyComponent.myGraph.MyGraphType;
 import MyComponent.myLine.JDrawLine;
 import MyComponent.myLine.MyPoint;
 import MyComponent.textarea.JMyTextArea;
@@ -14,7 +17,6 @@ import java.awt.event.MouseEvent;
 import java.awt.font.TextAttribute;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 
 
 //单页画布
@@ -291,9 +293,7 @@ public class Board extends JLayeredPane {
                         graph.resize(a, b);
                     }
                 }
-                add((MyComponent) graph);
-                setLayer(graph, layer, 0);
-
+                add((MyComponent) graph,layer);
             }
             case "TextArea" ->{
                 String content = info[8];
@@ -306,17 +306,12 @@ public class Board extends JLayeredPane {
                 JMyTextArea textArea = new JMyTextArea(new Font(Font.SERIF, Font.BOLD, Font.ITALIC) ,Color.blue);
                 textArea.setText(content);
                 textArea.setBounds(x, y, width, height);
-                add((MyComponent) textArea);
-                setLayer(textArea, layer, 0);
-
+                add((MyComponent) textArea,0);
             }
             default -> System.out.println("error");
         }
 
 
-        // TODO ADD
-
-        // add(new JRect(new Color(rgb), new BasicStroke(stroke)), layer, 0);
     }
 }
 

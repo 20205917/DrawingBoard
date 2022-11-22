@@ -95,7 +95,7 @@ public class UserInterface extends JFrame {
             rightArea.updateBoard(page.board);
             leftArea.setShowPage(page);
         });
-        leftArea.rePaint();
+        leftArea.repaint();
 
         //如果是最后一张，新增即刻选中
         if (leftArea.getPagesNum() == 1) {

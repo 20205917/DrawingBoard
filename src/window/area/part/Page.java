@@ -21,7 +21,7 @@ public class Page extends JButton {
         BufferedImage temp = new BufferedImage(board.getWidth(),board.getHeight(),BufferedImage.TYPE_3BYTE_BGR);
         Graphics2D g2d = temp.createGraphics();
         board.paintAll(g2d);
-        thumbnail = temp.getScaledInstance(getBounds().width, getBounds().height, Image.SCALE_AREA_AVERAGING);
+        thumbnail = temp.getScaledInstance(getParent().getWidth() * 4 / 5, (int) (getParent().getWidth() * 4 / 5 *Page.AspectrRatio), Image.SCALE_AREA_AVERAGING);
         ImageIcon icon = new ImageIcon(thumbnail);
         setIcon(icon);
     }
