@@ -1,5 +1,6 @@
 package window.area;
 
+import MyComponent.myGraph.MyGraphType;
 import window.area.part.Board;
 import window.area.part.selects;
 
@@ -62,7 +63,7 @@ public class InterfaceAbove extends JPanel {
 
         bText.addActionListener(e -> {
             if (rightArea.board != null)
-                rightArea.board.setSelection(selects.Text);
+                rightArea.board.setSelection(selects.CreateTextArea);
         });
 
         bRubber.addActionListener(e -> {
@@ -174,18 +175,24 @@ public class InterfaceAbove extends JPanel {
         addComponent(shapeTable, cbSearch, gbl, gbc);
 
         bRect.addActionListener(e -> {
-            if (rightArea.board != null)
-                rightArea.board.setSelection(selects.Rect);
+            if (rightArea.board != null) {
+                rightArea.board.setSelection(selects.CreateJGraph);
+                rightArea.board.setGraphType(MyGraphType.Rect);
+            }
         });
 
         bOval.addActionListener(e -> {
-            if (rightArea.board != null)
-                rightArea.board.setSelection(selects.Oval);
+            if (rightArea.board != null){
+                rightArea.board.setSelection(selects.CreateJGraph);
+                rightArea.board.setGraphType(MyGraphType.Oval);
+            }
         });
 
         bLine.addActionListener(e -> {
-            if (rightArea.board != null)
-                rightArea.board.setSelection(selects.Line);
+            if (rightArea.board != null){
+                rightArea.board.setSelection(selects.CreateJGraph);
+                rightArea.board.setGraphType(MyGraphType.Line);
+            }
         });
 
         cbSearch.addItemListener(new SearchComboBoxListener(cbSearch));
@@ -440,7 +447,23 @@ public class InterfaceAbove extends JPanel {
         @Override
         public void itemStateChanged(ItemEvent e) {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                // TODO
+                rightArea.board.setSelection(selects.CreateJGraph);
+                MyGraphType myGraphType = null;
+                switch ((String)e.getItem()){
+                    case "Rect"->
+                            myGraphType = MyGraphType.Rect;
+                    case "Oval"->
+                            myGraphType = MyGraphType.Oval;
+                    case "Line"->
+                            myGraphType = MyGraphType.Line;
+                    case "Triangle"->
+                            myGraphType = MyGraphType.Triangle;
+                    case "Square"->
+                            myGraphType = MyGraphType.Square;
+                    case "IsoscelesLadder"->
+                            myGraphType = MyGraphType.IsoscelesLadder;
+                }
+                rightArea.board.setGraphType(myGraphType);
             }
         }
     }

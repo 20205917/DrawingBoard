@@ -47,7 +47,9 @@ public class Board extends JLayeredPane {
     BoardGlassPane boardGlassPane;
 
     //控制图形创建
-    private selects selection = selects.CreatJGraph;
+    private selects selection = selects.CreateJGraph;
+    // 图形选项
+    private MyGraphType graphType = MyGraphType.Rect;
     //图形颜色
     protected Color drawLineColor = Color.blue;
     // 线条宽度
@@ -251,6 +253,15 @@ public class Board extends JLayeredPane {
 
     public MyComponent getChooseGraph() {
         return chooseGraph;
+    }
+
+    public MyGraphType getGraphType() {
+        return graphType;
+    }
+
+    public void setGraphType(MyGraphType graphType) {
+        if(graphType != null)
+            this.graphType = graphType;
     }
 
     public void setDrawLineStroke(int thickness) {
