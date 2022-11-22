@@ -63,7 +63,6 @@ public class Board extends JLayeredPane {
         //白色画板
         background = new JPanel();
         background.setBackground(Color.white);
-        add(background, DEFAULT_LAYER - 1);
         background.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -89,6 +88,9 @@ public class Board extends JLayeredPane {
             }
         });
         setSize(INITIAL_WIDTH, INITIAL_HEIGHT);
+
+        // 初始化字体
+        setTextFont();
     }
 
     public Board(String data) {
@@ -101,11 +103,18 @@ public class Board extends JLayeredPane {
         //白色画板
         background = new JPanel();
         background.setBackground(new Color(rgb));
+        background.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                if (e.getClickCount() == 2) requestFocus();
+            }
+        });
         add(background, DEFAULT_LAYER - 1, 0);
 
 
         // 处理生成图形时，截获鼠标事件
-        BoardGlassPane boardGlassPane = new BoardGlassPane(this);
+        boardGlassPane = new BoardGlassPane(this);
         // 初始与底层，一般情况不截取
         add(boardGlassPane, FRAME_CONTENT_LAYER, 0);
 
@@ -119,6 +128,9 @@ public class Board extends JLayeredPane {
             }
         });
         setSize(width, height);
+
+        // 初始化字体
+        setTextFont();
     }
 
     @Override
@@ -137,7 +149,7 @@ public class Board extends JLayeredPane {
         log.append("background-color:").append(background.getBackground().getRGB()).append(System.getProperty("line.separator"));
 
         //保存组件
-        for (int i = 1; i < 400; i++) {
+        for (int i = 0; i < 400; i++) {
             if (getComponentCountInLayer(i) == 0) break;
             for (Component component : getComponentsInLayer(i)) {
                 if (component instanceof MyComponent) {
@@ -252,11 +264,12 @@ public class Board extends JLayeredPane {
 
         int layer = Integer.parseInt(info[0].substring(info[0].indexOf(':') + 1));
         String type = info[1];
+        int rgb = Integer.parseInt(info[2].substring(info[2].indexOf(':') + 1));
 
         // graph
+        MyComponent myComponent = null;
         switch (type) {
-            case "Rect", "Oval", "Line", "Triangle" -> {
-                int rgb = Integer.parseInt(info[2].substring(info[2].indexOf(':') + 1));
+            case "Rect", "Oval", "Line", "Triangle", "Square", "IsoscelesLadder" -> {
                 float stroke = Float.parseFloat(info[3].substring(info[3].indexOf(':') + 1));
                 String temp = info[4].substring(info[4].indexOf(':') + 1);
                 int x = Integer.parseInt(temp.substring(0, temp.indexOf(' ')));
@@ -278,6 +291,14 @@ public class Board extends JLayeredPane {
                         graph = new JGraph(new Color(rgb), new BasicStroke(stroke), MyGraphType.Triangle);
                         graph.setBounds(x, y, width, height);
                     }
+                    case "Square" -> {
+                        graph = new JGraph(new Color(rgb), new BasicStroke(stroke), MyGraphType.Square);
+                        graph.setBounds(x, y, width, height);
+                    }
+                    case "IsoscelesLadder" -> {
+                        graph = new JGraph(new Color(rgb), new BasicStroke(stroke), MyGraphType.IsoscelesLadder);
+                        graph.setBounds(x, y, width, height);
+                    }
                     case "Line" -> {
                         String direction = info[6];
                         graph = new JLine(new Color(rgb), new BasicStroke(stroke), MyGraphType.Line);
@@ -293,23 +314,43 @@ public class Board extends JLayeredPane {
                         graph.resize(a, b);
                     }
                 }
-                add((MyComponent) graph,layer);
+                myComponent = graph;
             }
             case "TextArea" ->{
-                String content = info[8];
+                String content = info[8].substring(info[8].indexOf(':') + 1);
                 String temp = info[9].substring(info[9].indexOf(':') + 1);
                 int x = Integer.parseInt(temp.substring(0, temp.indexOf(' ')));
                 int y = Integer.parseInt(temp.substring(temp.indexOf(' ') + 1));
                 temp = info[10].substring(info[10].indexOf(':') + 1);
                 int width = Integer.parseInt(temp.substring(0, temp.indexOf(' ')));
                 int height = Integer.parseInt(temp.substring(temp.indexOf(' ') + 1));
-                JMyTextArea textArea = new JMyTextArea(new Font(Font.SERIF, Font.BOLD, Font.ITALIC) ,Color.blue);
+
+                HashMap<TextAttribute, Object> newTextAttribute = new HashMap<>();
+                String textStyle = info[3].substring(info[3].indexOf(':') + 1);
+                int textSize = Integer.parseInt(info[4].substring(info[4].indexOf(':') + 1));
+                boolean isBold = Boolean.parseBoolean(info[5].substring(info[5].indexOf(':') + 1));
+                boolean isItalic = Boolean.parseBoolean(info[6].substring(info[6].indexOf(':') + 1));
+                boolean isUnderline = Boolean.parseBoolean(info[7].substring(info[7].indexOf(':') + 1));
+                newTextAttribute.put(TextAttribute.FAMILY, textStyle);
+                newTextAttribute.put(TextAttribute.SIZE, textSize);
+                if(isBold)
+                    newTextAttribute.put(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
+                if(isItalic)
+                    newTextAttribute.put(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE);
+                if(isUnderline)
+                    newTextAttribute.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+
+                Font newFont = new Font(newTextAttribute);
+                JMyTextArea textArea = new JMyTextArea(newFont, new Color(rgb));
                 textArea.setText(content);
                 textArea.setBounds(x, y, width, height);
-                add((MyComponent) textArea,0);
+                myComponent = textArea;
+
             }
             default -> System.out.println("error");
         }
+        add(myComponent, layer);
+        changeChooseGraph(myComponent);
 
 
     }

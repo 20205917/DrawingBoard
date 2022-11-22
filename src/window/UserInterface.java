@@ -151,6 +151,9 @@ public class UserInterface extends JFrame {
             while ((inData = in.readLine()) != null)
                 allData.append(inData).append('\n');
             // System.out.println(allData);
+            if (allData.toString().equals("")) {
+                return;
+            }
             String[] boardsData = (allData.toString()).split("\n\n");
 
             for (String board : boardsData) {

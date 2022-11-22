@@ -155,7 +155,7 @@ public class InterfaceAbove extends JPanel {
         Button bRect = new Button("Rect");
         Button bOval = new Button("Oval");
         Button bLine = new Button("Line");
-        String[] shapes = {"Rect", "Oval", "Line"};
+        String[] shapes = {"Rect", "Oval", "Line", "Triangle", "Square", "IsoscelesLadder"};
         SearchComboBox cbSearch = new SearchComboBox(shapes);
 //        JComboBox<Object> cbSearch = new JComboBox<>(shapes);
 //        Button bMore = new Button("More");
@@ -440,7 +440,7 @@ public class InterfaceAbove extends JPanel {
         @Override
         public void itemStateChanged(ItemEvent e) {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                System.out.println("ok");
+                // TODO
             }
         }
     }
