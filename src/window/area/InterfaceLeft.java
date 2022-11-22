@@ -33,7 +33,6 @@ public class InterfaceLeft extends JScrollPane {
             @Override
             public void componentResized(ComponentEvent e) {
                 super.componentResized(e);
-
                 //页面
                 leftPane.setPreferredSize(new Dimension(getWidth(),(int) (pages.size()*(getWidth()  *Page.AspectrRatio))));
                 FlowLayout fl = new FlowLayout(FlowLayout.CENTER,10, getWidth() / 15);
@@ -71,7 +70,7 @@ public class InterfaceLeft extends JScrollPane {
     }
 
     public Page getCurrentPage() {
-        if(currentPage <= 0)
+        if(currentPage < 0)
             return null;
         return pages.get(currentPage);
     }
@@ -129,10 +128,13 @@ public class InterfaceLeft extends JScrollPane {
     }
 
     public void rePaint(){
+
+        //页面
         leftPane.setPreferredSize(new Dimension(getWidth(),(int) (pages.size()*(getWidth()  *Page.AspectrRatio))));
-        FlowLayout fl = new FlowLayout(FlowLayout.CENTER,10,getWidth() / 15);
+        FlowLayout fl = new FlowLayout(FlowLayout.CENTER,10, getWidth() / 15);
         leftPane.setLayout(fl);
-        //按钮重排
+
+        //按钮
         for (Page page : pages)
             page.setPreferredSize(new Dimension(getWidth() * 4 / 5, (int) (getWidth() * 4 / 5 *Page.AspectrRatio)));
 
