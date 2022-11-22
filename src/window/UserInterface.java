@@ -105,7 +105,9 @@ public class UserInterface extends JFrame {
     }
 
     public void deletePage(){
+        //幻灯片数量大于0时可删除
         if(leftArea.getPagesNum() == 0) return;
+
         Page page = leftArea.deletePage();
         allBoard.remove(page.board);
         leftArea.repaint();
