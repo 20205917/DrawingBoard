@@ -6,6 +6,9 @@ import window.area.part.Board;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class InterfaceMenuBar extends JMenuBar {
     public InterfaceMenuBar(UserInterface parent) {
@@ -47,7 +50,15 @@ public class InterfaceMenuBar extends JMenuBar {
             if(fileDialog.getFile() == null){
                 return;
             }
-            String openFilePath = fileDialog.getDirectory()+fileDialog.getFile();
+            String openFilePath = fileDialog.getDirectory() + fileDialog.getFile();
+            try {
+                BufferedWriter writer = new BufferedWriter(new FileWriter(openFilePath));
+                writer.close();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+
+
             /*
 
                 初始化配置文件
