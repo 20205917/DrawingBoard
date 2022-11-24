@@ -1,13 +1,16 @@
 package MyComponent.myLine;
 
 import java.awt.*;
+import java.security.KeyPair;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Vector;
 
 public class JDrawLine {
     final BasicStroke stroke;
     final Color color;
-    final Vector<MyPoint> myPoints =  new Vector<>();
-
+    HashMap<Integer, HashSet<MyPoint>> myLines;
+    MyPoint frontPoint = null;
     public JDrawLine(Color color, BasicStroke stroke){
         this.stroke = stroke;
         this.color = color;
@@ -25,10 +28,24 @@ public class JDrawLine {
         }
         g2d.dispose();
     }
-    public void addPoint(int x,int y){
-        myPoints.add(new MyPoint(x,y));
+    public void addPoint(MyPoint newPoint){
+        if(frontPoint == null){
+            frontPoint = newPoint;
+            myLines = new HashMap<>();
+            myLines.put(newPoint.toInt(),new HashSet<>());
+            return;
+        }
+        myLines.get(frontPoint.toInt()).add(newPoint);
+        if(!myLines.containsKey(newPoint.toInt())){
+            myLines.put(newPoint.toInt(),new HashSet<>());
+        }
+        frontPoint = newPoint;
     }
-
+    //返回 0 代表无线条
+    public int deletePoint(MyPoint point){
+        for(MyPoint myPoint : myLines.get(point))
+        return myLines.size();
+    }
     public String save(){
         StringBuilder log = new StringBuilder();
         log.append("JDrawLine").append(System.getProperty("line.separator"));

@@ -1,10 +1,10 @@
 package window.area.part;
 
 import MyComponent.MyComponent;
-import MyComponent.myGraph.JGraph;
 import MyComponent.myGraph.JGraphFactory;
 import MyComponent.myGraph.MyGraphType;
 import MyComponent.myLine.JDrawLine;
+import MyComponent.myLine.MyPoint;
 import MyComponent.textarea.JMyTextArea;
 import window.area.ToolBox;
 
@@ -148,16 +148,14 @@ public class Board extends JLayeredPane {
         });
     }
 
-    public void setSelection(selects selection) {
-        toolBox.setSelection(selection);
-        if (selection == selects.Mouse)
-            setLayer(boardGlassPane, FRAME_CONTENT_LAYER, 0);
-        else
-            setLayer(boardGlassPane, MODAL_LAYER, 0);
-    }
-
-    public MyComponent getChooseGraph() {
-        return chooseGraph;
+    //重设鼠标拦截面位置
+    public void resetBoardGlassPane() {
+        switch (toolBox.getSelection()) {
+            case Mouse,Rubber ->
+                setLayer(boardGlassPane, FRAME_CONTENT_LAYER, 0);
+            default ->
+                setLayer(boardGlassPane, MODAL_LAYER, 0);
+        }
     }
 
     //文件保存
@@ -185,7 +183,6 @@ public class Board extends JLayeredPane {
     }
 
 
-
     public void addGraphic(String graphicData) {
         // System.out.println(graphicData);
         String[] info = graphicData.split("\n");
@@ -205,37 +202,20 @@ public class Board extends JLayeredPane {
                 temp = info[5].substring(info[5].indexOf(':') + 1);
                 int width = Integer.parseInt(temp.substring(0, temp.indexOf(' ')));
                 int height = Integer.parseInt(temp.substring(temp.indexOf(' ') + 1));
-                JGraph graph = null;
 
                 toolBox.setDrawLineStroke((int) stroke);
                 toolBox.setDrawLineColor(new Color(rgb));
                 myComponent = JGraphFactory.creatJGraph(toolBox,MyGraphType.valueOf(type));
 
                 myComponent.setBounds(x,y,width,height);
-
-//                switch (type) {
-//                    case "Rect" ->          graph =  JGraphFactory.creatJGraph(toolBox,MyGraphType.Rect);
-//                    case "Oval" ->          graph = JGraphFactory.creatJGraph(toolBox,MyGraphType.Oval);
-//                    case "Triangle" ->      graph = JGraphFactory.creatJGraph(toolBox,MyGraphType.Triangle);
-//                    case "Square" ->        graph =  JGraphFactory.creatJGraph(toolBox,MyGraphType.Square);
-//                    case "IsoscelesLadder" -> graph =  JGraphFactory.creatJGraph(toolBox,MyGraphType.IsoscelesLadder);
-//
-//                    case "Line" -> {
-//                        String direction = info[6];
-//                        graph = new JLine(new Color(rgb), new BasicStroke(stroke),toolBox);
-//                        MyPoint a, b;
-//                        if(direction.equals("JLine-WN")){
-//                            a = new MyPoint(x, y);
-//                            b = new MyPoint(x + width, y + height);
-//                        }
-//                        else {
-//                            a = new MyPoint(x, y + height);
-//                            b = new MyPoint(x + width, y);
-//                        }
-//                        graph.resize(a, b);
-//                    }
-                //myComponent = graph;
-            }
+                if("Line".equals(type)){
+                    String direction = info[6];
+                    if(direction.equals("JLine-WN"))
+                        myComponent.resize(new MyPoint(x, y),new MyPoint(x + width, y + height));
+                    else
+                        myComponent.resize(new MyPoint(x, y + height),new MyPoint(x + width, y));
+                }
+                }
             case "TextArea" ->{
                 String content = info[8].substring(info[8].indexOf(':') + 1);
                 String temp = info[9].substring(info[9].indexOf(':') + 1);
@@ -272,5 +252,10 @@ public class Board extends JLayeredPane {
         add(myComponent, layer);
         changeChooseGraph(myComponent);
     }
+
+    public MyComponent getChooseGraph() {
+        return chooseGraph;
+    }
+
 }
 
