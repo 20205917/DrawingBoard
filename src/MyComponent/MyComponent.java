@@ -21,6 +21,8 @@ public interface MyComponent {
 
     String save();
 
+    MyComponent clone();
+
     int getX();
     int getY();
     int getWidth();

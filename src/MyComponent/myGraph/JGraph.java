@@ -13,6 +13,14 @@ public class JGraph extends JPanel implements MyComponent {
     protected final MyGraphType type;
 
 
+    protected JGraph(Color color, BasicStroke stroke, MyGraphType type){
+        this.color = color;
+        this.stroke = stroke;
+        this.type = type;
+        setOpaque(false);
+        //移动变形所需监听器
+        addListener();
+    }
     protected JGraph(MyGraphType type, ToolBox toolbox){
         this.stroke = toolbox.getDrawLineStroke();
         this.color = toolbox.getDrawLineColor();
@@ -88,6 +96,13 @@ public class JGraph extends JPanel implements MyComponent {
         log.append("location:").append(getX()).append(" ").append(getY()).append(System.getProperty("line.separator"));
         log.append("size:").append(getWidth()).append(" ").append(getHeight()).append(System.getProperty("line.separator"));
         return log.toString();
+    }
+
+    @Override
+    public MyComponent clone() {
+        JGraph clone = new JGraph(this.color, this.stroke, this.type);
+        clone.setBounds(getX(), getY(), getWidth(), getHeight());
+        return clone;
     }
 
 }

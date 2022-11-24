@@ -23,9 +23,9 @@ public class JDrawLine {
         g2d.setColor(color);
         g2d.setStroke(stroke);
 
-        for(int i = 0; i< myPoints.size()-1; i++){
-            g2d.drawLine(myPoints.get(i).px, myPoints.get(i).py, myPoints.get(i+1).px, myPoints.get(i+1).py);
-        }
+//        for(int i = 0; i< myPoints.size()-1; i++){
+//            g2d.drawLine(myPoints.get(i).px, myPoints.get(i).py, myPoints.get(i+1).px, myPoints.get(i+1).py);
+//        }
         g2d.dispose();
     }
     public void addPoint(MyPoint newPoint){
@@ -42,22 +42,22 @@ public class JDrawLine {
         frontPoint = newPoint;
     }
     //返回 0 代表无线条
-    public int deletePoint(MyPoint point){
-        for(MyPoint myPoint : myLines.get(point))
-        return myLines.size();
-    }
+//    public int deletePoint(MyPoint point){
+//        for(MyPoint myPoint : myLines.get(point))
+//        return myLines.size();
+//    }
     public String save(){
         StringBuilder log = new StringBuilder();
         log.append("JDrawLine").append(System.getProperty("line.separator"));
         log.append("color:").append(color.getRGB()).append("stroke:").append(stroke.getLineWidth())
                 .append(System.getProperty("line")).append(System.getProperty("line.separator"));
         int i=0;
-        for (MyPoint point : myPoints){
-            log.append(point.px).append(" ").append(point.py).append(" ");
-            if(++i==10){
-                i=0; log.append(System.getProperty("line.separator"));
-            }
-        }
+//        for (MyPoint point : myPoints){
+//            log.append(point.px).append(" ").append(point.py).append(" ");
+//            if(++i==10){
+//                i=0; log.append(System.getProperty("line.separator"));
+//            }
+//        }
 
         return log.toString();
     }

@@ -8,9 +8,7 @@ import MyComponent.textarea.JMyTextArea;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.*;
 
 public class BoardGlassPane extends JPanel implements MouseListener, MouseMotionListener {
     private final Board board;
@@ -23,14 +21,17 @@ public class BoardGlassPane extends JPanel implements MouseListener, MouseMotion
         setLayout(null);
         setOpaque(false);
 
+
         addMouseMotionListener(this);
         addMouseListener(this);
+
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
         if(e.getClickCount()>=2 )
             board.toolBox.setSelection(selects.Mouse);
+
     }
 
     @Override
@@ -83,6 +84,7 @@ public class BoardGlassPane extends JPanel implements MouseListener, MouseMotion
             }
         }
         board.changeChooseGraph(null);
+
     }
 
     @Override
@@ -104,10 +106,12 @@ public class BoardGlassPane extends JPanel implements MouseListener, MouseMotion
                 default -> System.out.println( "创建失败"+board.toolBox.getSelection());
             }
         }
+
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
         board.dispatchEvent(SwingUtilities.convertMouseEvent((BoardGlassPane)e.getSource(),e,board));
     }
+
 }
