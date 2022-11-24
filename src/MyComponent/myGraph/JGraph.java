@@ -2,22 +2,33 @@ package MyComponent.myGraph;
 
 import MyComponent.MyComponent;
 import MyComponent.myLine.MyPoint;
+import window.area.ToolBox;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class JGraph extends JPanel implements MyComponent {
+    //
+    private final ToolBox toolbox;
     protected Color color = Color.black;
-    protected BasicStroke stroke;
-    protected MyGraphType type;
+    protected final BasicStroke stroke;
+    protected final MyGraphType type;
 
 
-    public JGraph(){}
-    public JGraph(Color color, BasicStroke stroke,MyGraphType type){
+    public JGraph(Color color, BasicStroke stroke, MyGraphType type, ToolBox toolbox){
         this.stroke = stroke;
         this.color = color;
         this.type = type;
-
+        this.toolbox = toolbox;
+        setOpaque(false);
+        //移动变形所需监听器
+        addListener();
+    }
+    public JGraph(MyGraphType type, ToolBox toolbox){
+        this.stroke = toolbox.getDrawLineStroke();
+        this.color = toolbox.getDrawLineColor();
+        this.type = type;
+        this.toolbox = toolbox;
         setOpaque(false);
         //移动变形所需监听器
         addListener();
@@ -54,7 +65,6 @@ public class JGraph extends JPanel implements MyComponent {
                 g2d.drawLine(getX()+getWidth()/4,getY(),getX(),getY()+getHeight());
                 g2d.drawLine(getX()+getWidth()*3/4,getY(),getX()+getWidth(),getY()+getHeight());
             }
-
         }
 
         g2d.dispose();

@@ -4,9 +4,9 @@ import java.awt.*;
 import java.util.Vector;
 
 public class JDrawLine {
-    BasicStroke stroke;
-    Color color;
-    Vector<MyPoint> myPoints =  new Vector<>();
+    final BasicStroke stroke;
+    final Color color;
+    final Vector<MyPoint> myPoints =  new Vector<>();
 
     public JDrawLine(Color color, BasicStroke stroke){
         this.stroke = stroke;

@@ -2,11 +2,11 @@ package window.area.part;
 
 import MyComponent.MyComponent;
 import MyComponent.myGraph.JGraph;
-import MyComponent.myGraph.JLine;
+import MyComponent.myGraph.JGraphFactory;
 import MyComponent.myGraph.MyGraphType;
 import MyComponent.myLine.JDrawLine;
-import MyComponent.myLine.MyPoint;
 import MyComponent.textarea.JMyTextArea;
+import window.area.ToolBox;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,40 +25,24 @@ public class Board extends JLayeredPane {
     protected static final int INITIAL_WIDTH = 500;
     protected static final int INITIAL_HEIGHT = 450;
     //背景
-    JPanel background;
+    final JPanel background;
     //画图笔轨迹集合
-    public ArrayList<JDrawLine> jDrawLines = new ArrayList<>();
+    public final ArrayList<JDrawLine> jDrawLines = new ArrayList<>();
     //最大层
     public int maxLayer = 0;
-    // 字体设置
-    protected Font textFont;
-    // 字体字典
-    protected HashMap<TextAttribute, Object> textAttribute = new HashMap<>();
-    // 文本框字体
-    protected String textStyle = "Times New Roman";
-    // 默认字体大小
-    protected int textSize = 25;
-
-    protected Boolean isBold = false;
-    protected Boolean isUnderline = false;
-    protected Boolean isItalic = false;
-
+    //选择层
+    Integer frontLayer = 0;
     // 处理生成图形时，截获鼠标事件
-    BoardGlassPane boardGlassPane;
-
-    //控制图形创建
-    private selects selection = selects.CreatJGraph;
-    //图形颜色
-    protected Color drawLineColor = Color.blue;
-    // 线条宽度
-    protected BasicStroke drawLineStroke = new BasicStroke(2);
-
-
+    final BoardGlassPane boardGlassPane;
+    //工具盒
+    public ToolBox toolBox;
     //当前图形
     private MyComponent chooseGraph;
-    Integer frontLayer = 0;
 
-    public Board() {
+
+    public Board(ToolBox toolBox) {
+        //加载工具栏
+        this.toolBox = toolBox;
         setLayout(null);
         //白色画板
         background = new JPanel();
@@ -89,15 +73,17 @@ public class Board extends JLayeredPane {
         setSize(INITIAL_WIDTH, INITIAL_HEIGHT);
 
         // 初始化字体
-        setTextFont();
     }
 
-    public Board(String data) {
+    public Board(String data,ToolBox toolBox) {
         // 只有画板大小与画布颜色需要读取
         String[] settings = data.split("\n");
         int width = Integer.parseInt(settings[0].substring(settings[0].indexOf(':') + 1));
         int height = Integer.parseInt(settings[1].substring(settings[1].indexOf(':') + 1));
         int rgb = Integer.parseInt(settings[2].substring(settings[2].indexOf(':') + 1));
+
+        //加载工具栏
+        this.toolBox = toolBox;
         setLayout(null);
         //白色画板
         background = new JPanel();
@@ -115,7 +101,7 @@ public class Board extends JLayeredPane {
         // 处理生成图形时，截获鼠标事件
         boardGlassPane = new BoardGlassPane(this);
         // 初始与底层，一般情况不截取
-        add(boardGlassPane, FRAME_CONTENT_LAYER, 0);
+        add(boardGlassPane, MODAL_LAYER, 0);
 
         //大小改变的自适配
         addComponentListener(new ComponentAdapter() {
@@ -128,8 +114,6 @@ public class Board extends JLayeredPane {
         });
         setSize(width, height);
 
-        // 初始化字体
-        setTextFont();
     }
 
     @Override
@@ -137,6 +121,45 @@ public class Board extends JLayeredPane {
         super.paint(g);
         for (JDrawLine jDrawLine : jDrawLines)
             jDrawLine.drawLine(g);
+    }
+
+    //更换选中图形
+    public void changeChooseGraph(MyComponent next) {
+        //前图形回到原来位置
+        if (chooseGraph != null)
+            setLayer((Component) chooseGraph, frontLayer);
+        if (next == null)
+            return;
+        //如果有新图形，将其放于拖动层
+        frontLayer = getLayer((Component) next);
+        setLayer((Component) next, DRAG_LAYER);
+        chooseGraph = next;
+    }
+
+    //添加图形
+    public void add(MyComponent myComponent,int Layer){
+        add((Component) myComponent,Layer,0);
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                if (e.getClickCount() >= 2) {
+                    changeChooseGraph(myComponent);
+                }
+            }
+        });
+    }
+
+    public void setSelection(selects selection) {
+        toolBox.setSelection(selection);
+        if (selection == selects.Mouse)
+            setLayer(boardGlassPane, FRAME_CONTENT_LAYER, 0);
+        else
+            setLayer(boardGlassPane, MODAL_LAYER, 0);
+    }
+
+    public MyComponent getChooseGraph() {
+        return chooseGraph;
     }
 
     //文件保存
@@ -158,104 +181,12 @@ public class Board extends JLayeredPane {
                 }
             }
         }
-
-        log.append(System.getProperty("line.separator"));
+        log.append("\n");
 
         return log.toString();
     }
 
-    //更换选中图形
-    public void changeChooseGraph(MyComponent next) {
-        //前图形回到原来位置
-        if (chooseGraph != null)
-            setLayer((Component) chooseGraph, frontLayer);
-        if (next == null)
-            return;
-        //如果有新图形，将其放于拖动层
-        frontLayer = getLayer((Component) next);
-        setLayer((Component) next, DRAG_LAYER);
-        chooseGraph = next;
-    }
-    public void add(MyComponent myComponent,int Layer){
-        add((Component) myComponent,Layer,0);
-        addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                if (e.getClickCount() >= 2) {
-                    changeChooseGraph(myComponent);
-                }
-            }
-        });
-    }
 
-
-    //属性的设置与读取
-    public void setDrawLineColor(Color drawLineColor) {
-        this.drawLineColor = drawLineColor;
-    }
-
-    public void setTextStyle(String textStyle) {
-        this.textStyle = textStyle;
-        this.textAttribute.put(TextAttribute.FAMILY, textStyle);
-        setTextFont();
-    }
-
-    public void setTextSize(int textSize) {
-        this.textSize = textSize;
-        this.textAttribute.put(TextAttribute.SIZE, textSize);
-        setTextFont();
-    }
-
-    public void setIsBold() {
-        this.isBold = !this.isBold;
-        if (isBold)
-            this.textAttribute.put(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
-        else
-            this.textAttribute.put(TextAttribute.WEIGHT, TextAttribute.WEIGHT_REGULAR);
-        setTextFont();
-    }
-
-    public void setIsItalic() {
-        this.isItalic = !this.isItalic;
-        if (isItalic)
-            this.textAttribute.put(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE);
-        else
-            this.textAttribute.put(TextAttribute.POSTURE, TextAttribute.POSTURE_REGULAR);
-        setTextFont();
-    }
-
-    public void setIsUnderline() {
-        this.isUnderline = !this.isUnderline;
-        if (isUnderline)
-            this.textAttribute.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
-        else
-            this.textAttribute.remove(TextAttribute.UNDERLINE);
-        setTextFont();
-    }
-
-    public void setTextFont() {
-        this.textFont = new Font(textAttribute);
-    }
-
-    public void setSelection(selects selection) {
-        this.selection = selection;
-        if (selection == selects.Mouse)
-            setLayer(boardGlassPane, FRAME_CONTENT_LAYER, 0);
-        else
-            setLayer(boardGlassPane, MODAL_LAYER, 0);
-    }
-
-    public selects getSelection() {
-        return selection;
-    }
-
-    public MyComponent getChooseGraph() {
-        return chooseGraph;
-    }
-
-    public void setDrawLineStroke(int thickness) {
-        this.drawLineStroke = new BasicStroke(thickness);
-    }
 
     public void addGraphic(String graphicData) {
         System.out.println(graphicData);
@@ -277,43 +208,37 @@ public class Board extends JLayeredPane {
                 int width = Integer.parseInt(temp.substring(0, temp.indexOf(' ')));
                 int height = Integer.parseInt(temp.substring(temp.indexOf(' ') + 1));
                 JGraph graph = null;
-                switch (type) {
-                    case "Rect" -> {
-                        graph = new JGraph(new Color(rgb), new BasicStroke(stroke), MyGraphType.Rect);
-                        graph.setBounds(x, y, width, height);
-                    }
-                    case "Oval" -> {
-                        graph = new JGraph(new Color(rgb), new BasicStroke(stroke), MyGraphType.Oval);
-                        graph.setBounds(x, y, width, height);
-                    }
-                    case "Triangle" -> {
-                        graph = new JGraph(new Color(rgb), new BasicStroke(stroke), MyGraphType.Triangle);
-                        graph.setBounds(x, y, width, height);
-                    }
-                    case "Square" -> {
-                        graph = new JGraph(new Color(rgb), new BasicStroke(stroke), MyGraphType.Square);
-                        graph.setBounds(x, y, width, height);
-                    }
-                    case "IsoscelesLadder" -> {
-                        graph = new JGraph(new Color(rgb), new BasicStroke(stroke), MyGraphType.IsoscelesLadder);
-                        graph.setBounds(x, y, width, height);
-                    }
-                    case "Line" -> {
-                        String direction = info[6];
-                        graph = new JLine(new Color(rgb), new BasicStroke(stroke), MyGraphType.Line);
-                        MyPoint a, b;
-                        if(direction.equals("JLine-WN")){
-                            a = new MyPoint(x, y);
-                            b = new MyPoint(x + width, y + height);
-                        }
-                        else {
-                            a = new MyPoint(x, y + height);
-                            b = new MyPoint(x + width, y);
-                        }
-                        graph.resize(a, b);
-                    }
-                }
-                myComponent = graph;
+
+                toolBox.setDrawLineStroke((int) stroke);
+                toolBox.setDrawLineColor(new Color(rgb));
+                myComponent = JGraphFactory.creatJGraph(toolBox,MyGraphType.valueOf(type));
+
+                myComponent.setBounds(x,y,width,height);
+
+//                switch (type) {
+//                    case "Rect" ->          graph =  JGraphFactory.creatJGraph(toolBox,MyGraphType.Rect);
+//                    case "Oval" ->          graph = JGraphFactory.creatJGraph(toolBox,MyGraphType.Oval);
+//                    case "Triangle" ->      graph = JGraphFactory.creatJGraph(toolBox,MyGraphType.Triangle);
+//                    case "Square" ->        graph =  JGraphFactory.creatJGraph(toolBox,MyGraphType.Square);
+//                    case "IsoscelesLadder" -> graph =  JGraphFactory.creatJGraph(toolBox,MyGraphType.IsoscelesLadder);
+//
+//                    case "Line" -> {
+//                        String direction = info[6];
+//                        graph = new JLine(new Color(rgb), new BasicStroke(stroke),toolBox);
+//                        MyPoint a, b;
+//                        if(direction.equals("JLine-WN")){
+//                            a = new MyPoint(x, y);
+//                            b = new MyPoint(x + width, y + height);
+//                        }
+//                        else {
+//                            a = new MyPoint(x, y + height);
+//                            b = new MyPoint(x + width, y);
+//                        }
+//                        graph.resize(a, b);
+//                    }
+
+                setBounds(x,y,width,height);
+                //myComponent = graph;
             }
             case "TextArea" ->{
                 String content = info[8].substring(info[8].indexOf(':') + 1);
@@ -350,8 +275,6 @@ public class Board extends JLayeredPane {
         }
         add(myComponent, layer);
         changeChooseGraph(myComponent);
-
-
     }
 }
 

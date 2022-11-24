@@ -78,7 +78,7 @@ public class Management {
         });
     }
 
-    public boolean isOpenfile(String filepath){
+    public boolean isOpenFile(String filepath){
         return openedSet.containsKey(filepath);
     }
 }
