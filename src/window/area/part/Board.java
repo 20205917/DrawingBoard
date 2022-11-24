@@ -81,7 +81,6 @@ public class Board extends JLayeredPane {
         int width = Integer.parseInt(settings[0].substring(settings[0].indexOf(':') + 1));
         int height = Integer.parseInt(settings[1].substring(settings[1].indexOf(':') + 1));
         int rgb = Integer.parseInt(settings[2].substring(settings[2].indexOf(':') + 1));
-
         //加载工具栏
         this.toolBox = toolBox;
         setLayout(null);
@@ -101,7 +100,7 @@ public class Board extends JLayeredPane {
         // 处理生成图形时，截获鼠标事件
         boardGlassPane = new BoardGlassPane(this);
         // 初始与底层，一般情况不截取
-        add(boardGlassPane, MODAL_LAYER, 0);
+        add(boardGlassPane, FRAME_CONTENT_LAYER, 0);
 
         //大小改变的自适配
         addComponentListener(new ComponentAdapter() {
@@ -113,7 +112,6 @@ public class Board extends JLayeredPane {
             }
         });
         setSize(width, height);
-
     }
 
     @Override
@@ -189,7 +187,7 @@ public class Board extends JLayeredPane {
 
 
     public void addGraphic(String graphicData) {
-        System.out.println(graphicData);
+        // System.out.println(graphicData);
         String[] info = graphicData.split("\n");
 
         int layer = Integer.parseInt(info[0].substring(info[0].indexOf(':') + 1));
@@ -236,8 +234,6 @@ public class Board extends JLayeredPane {
 //                        }
 //                        graph.resize(a, b);
 //                    }
-
-                setBounds(x,y,width,height);
                 //myComponent = graph;
             }
             case "TextArea" ->{
