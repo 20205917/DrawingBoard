@@ -75,7 +75,8 @@ public class UserInterface extends JFrame {
                 rightArea.setBounds((int) (x * 0.25), (int) (y * 0.2), (int) (x * 0.75), (int) (y * 0.8));
             }
         });
-
+        //对工具箱经行监听，更新board状态
+        toolBox.addToolBoxUpdateListener(e->{if(rightArea.board!=null)rightArea.board.resetBoardGlassPane();});
         //主界面设计
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }

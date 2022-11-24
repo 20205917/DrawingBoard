@@ -1,16 +1,18 @@
 package window.area.part;
 
 import MyComponent.MyComponent;
-import MyComponent.myGraph.JGraph;
+import MyComponent.myGraph.JGraphFactory;
 import MyComponent.myLine.JDrawLine;
 import MyComponent.myLine.MyPoint;
 import MyComponent.textarea.JMyTextArea;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 
-public class BoardGlassPane extends JPanel implements MouseListener, MouseMotionListener, KeyListener {
+public class BoardGlassPane extends JPanel implements MouseListener, MouseMotionListener {
     private final Board board;
 
     private boolean isMake = false;
@@ -20,22 +22,15 @@ public class BoardGlassPane extends JPanel implements MouseListener, MouseMotion
         board = b;
         setLayout(null);
         setOpaque(false);
-        setFocusable(true);
-        requestFocus();
-        requestFocusInWindow();
 
         addMouseMotionListener(this);
         addMouseListener(this);
-        addKeyListener(this);
-
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
         if(e.getClickCount()>=2 )
-            board.setSelection(selects.Mouse);
-        System.out.println("OK");
-        this.requestFocus();
+            board.toolBox.setSelection(selects.Mouse);
     }
 
     @Override
@@ -58,7 +53,7 @@ public class BoardGlassPane extends JPanel implements MouseListener, MouseMotion
                 if(board.toolBox.getSelection() == selects.CreatTextArea)
                     myComponent = new JMyTextArea(board.toolBox.getTextFont(),board.toolBox.getDrawLineColor());
                 else
-          /*?*/     myComponent = new JGraph(board.toolBox.getDrawLineColor(),board.toolBox.getDrawLineStroke(), board.toolBox.getGraphType(), board.toolBox);
+          /*?*/     myComponent = JGraphFactory.creatJGraph(board.toolBox,board.toolBox.getGraphType());
                 //添加组件
                 board.add(myComponent,board.maxLayer++);
                 //选中当前组件
@@ -88,7 +83,6 @@ public class BoardGlassPane extends JPanel implements MouseListener, MouseMotion
             }
         }
         board.changeChooseGraph(null);
-        this.requestFocus();
     }
 
     @Override
@@ -104,40 +98,16 @@ public class BoardGlassPane extends JPanel implements MouseListener, MouseMotion
         if(isMake){
             switch (board.toolBox.getSelection()){
                 case Pen->{
-                    board.jDrawLines.get(board.jDrawLines.size()-1).addPoint(e.getX(),e.getY());
+                    board.jDrawLines.get(board.jDrawLines.size()-1).addPoint(new MyPoint(e.getX(),e.getY()));
                     board.jDrawLines.get(board.jDrawLines.size()-1).drawLine(getGraphics()); }
                 case CreatJGraph,CreatTextArea-> board.getChooseGraph().resize(mousePressedPoint,new MyPoint(e.getX(),e.getY()));
                 default -> System.out.println( "创建失败"+board.toolBox.getSelection());
             }
         }
-        this.requestFocus();
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
         board.dispatchEvent(SwingUtilities.convertMouseEvent((BoardGlassPane)e.getSource(),e,board));
-        this.requestFocus();
-    }
-
-    // 打算实现ctrl-z ctrl-c ctrl-v delete
-    @Override
-    public void keyTyped(KeyEvent e) {
-
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-        // delete
-        if(e.getKeyCode() == KeyEvent.VK_DELETE){
-            board.remove((Component) board.getChooseGraph());
-            repaint();
-            System.out.println("press delete");
-        }
-        System.out.println(e.getKeyCode());
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-
     }
 }

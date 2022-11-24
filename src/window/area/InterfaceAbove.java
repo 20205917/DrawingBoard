@@ -1,13 +1,15 @@
 package window.area;
 
 import MyComponent.myGraph.MyGraphType;
-import MyComponent.myGraph.MyGraphType;
-import window.area.part.Board;
+import window.area.part.SearchComboBox;
 import window.area.part.selects;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.Vector;
 import java.util.regex.Pattern;
 
@@ -74,7 +76,8 @@ public class InterfaceAbove extends JPanel {
 
         bMouse.addActionListener(e -> {
             if (rightArea.board != null)
-                rightArea.board.setSelection(selects.Mouse);
+                toolBox.setSelection(selects.Mouse);
+
         });
 
         return toolsTable;
@@ -303,11 +306,6 @@ public class InterfaceAbove extends JPanel {
 
     }
 
-
-    public InterfaceAbove(int width, int height) {
-
-    }
-
     public void setOuter(Insets outer) {
         this.outer = outer;
     }
@@ -316,46 +314,9 @@ public class InterfaceAbove extends JPanel {
         this.inner = inner;
     }
 
-    class ButtonEvent implements ActionListener {
 
-        public void actionPerformed(ActionEvent actionEvent) {
 
-        }
-    }
 
-    class SearchComboBox extends JComboBox {
-        private final ComboBoxModel allItems;
-
-        public SearchComboBox(String[] items) {
-            super(items);
-            allItems = getModel();
-            setEditable(true);
-        }
-
-        public SearchComboBox(JComboBox jcb) {
-            super((ComboBoxModel) jcb);
-            allItems = getModel();
-            setEditable(true);
-        }
-
-        public String getText() {
-            return ((JTextField) (getEditor().getEditorComponent())).getText();
-        }
-
-        public void setText(String s) {
-            ((JTextField) (getEditor().getEditorComponent())).setText(s);
-        }
-
-        public Boolean isInItems(String input) {
-            String toSearch = ".*" + input + ".*";
-            for (int i = 0; i < getModel().getSize(); i++) {
-                if (Pattern.matches(toSearch, (String) getModel().getElementAt(i))) {
-                    return true;
-                }
-            }
-            return false;
-        }
-    }
 
     class SearchComboBoxListener implements KeyListener, ItemListener {
 
@@ -383,7 +344,6 @@ public class InterfaceAbove extends JPanel {
 
         @Override
         public void keyReleased(KeyEvent e) {
-            char ch = e.getKeyChar();
             String input = editor.getText();
             showResult(input);
         }
@@ -423,35 +383,16 @@ public class InterfaceAbove extends JPanel {
         @Override
         public void itemStateChanged(ItemEvent e) {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                rightArea.board.setSelection(selects.CreatJGraph);
-                MyGraphType myGraphType = null;
-                switch ((String)e.getItem()){
-                    case "Rect"->
-                            myGraphType = MyGraphType.Rect;
-                    case "Oval"->
-                            myGraphType = MyGraphType.Oval;
-                    case "Line"->
-                            myGraphType = MyGraphType.Line;
-                    case "Triangle"->
-                            myGraphType = MyGraphType.Triangle;
-                    case "Square"->
-                            myGraphType = MyGraphType.Square;
-                    case "IsoscelesLadder"->
-                            myGraphType = MyGraphType.IsoscelesLadder;
-                }
-                toolBox.setGraphType(myGraphType);
+                toolBox.setSelection(selects.CreatJGraph);
+                toolBox.setGraphType(MyGraphType.valueOf((String)e.getItem()));
             }
         }
     }
 
     public void setColorButtonListener(Button b) {
-        b.addActionListener(new ButtonEvent() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                super.actionPerformed(actionEvent);
-                if (rightArea.board != null)
-                    toolBox.setDrawLineColor(b.getBackground());
-            }
+        b.addActionListener(actionEvent -> {
+            if (rightArea.board != null)
+                toolBox.setDrawLineColor(b.getBackground());
         });
     }
 

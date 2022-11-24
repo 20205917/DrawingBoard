@@ -10,12 +10,8 @@ public class JLine extends JGraph {
     protected MyPoint pointB;
 
 
-    public JLine(Color color, BasicStroke stroke, ToolBox toolBox){
-        super(color,stroke,MyGraphType.Line,toolBox);
-        pointA = new MyPoint(getX(),getY());
-        pointB = new MyPoint(getX()+getWidth(),getY()+getHeight());
-    }
-    public JLine(ToolBox toolBox){
+
+    protected JLine(ToolBox toolBox){
         super(MyGraphType.Line,toolBox);
         pointA = new MyPoint(getX(),getY());
         pointB = new MyPoint(getX()+getWidth(),getY()+getHeight());

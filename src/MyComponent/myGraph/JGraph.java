@@ -8,28 +8,15 @@ import javax.swing.*;
 import java.awt.*;
 
 public class JGraph extends JPanel implements MyComponent {
-    //
-    private final ToolBox toolbox;
     protected Color color = Color.black;
     protected final BasicStroke stroke;
     protected final MyGraphType type;
 
 
-    public JGraph(Color color, BasicStroke stroke, MyGraphType type, ToolBox toolbox) {
-        this.stroke = stroke;
-        this.color = color;
-        this.type = type;
-        this.toolbox = toolbox;
-        setOpaque(false);
-        //移动变形所需监听器
-        addListener();
-    }
-
-    public JGraph(MyGraphType type, ToolBox toolbox) {
+    protected JGraph(MyGraphType type, ToolBox toolbox){
         this.stroke = toolbox.getDrawLineStroke();
         this.color = toolbox.getDrawLineColor();
         this.type = type;
-        this.toolbox = toolbox;
         setOpaque(false);
         //移动变形所需监听器
         addListener();
