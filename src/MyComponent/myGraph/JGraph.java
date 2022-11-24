@@ -51,6 +51,8 @@ public class JGraph extends JPanel implements MyComponent {
             }                                                                                                          //线段
             case Oval ->
                     g2d.drawOval(drawGap, drawGap, getWidth() - 2 * drawGap, getHeight() -  2 * drawGap);                          //椭圆形
+            case roundRect ->
+                    g2d.drawRoundRect(drawGap, drawGap, getWidth() -  2 * drawGap, getHeight() -  2 * drawGap, gap, gap);
             case Rect ->
                     g2d.drawRect(drawGap, drawGap, getWidth() -  2 * drawGap, getHeight() -  2 * drawGap);                          //长方形
             case Circle ->
@@ -62,15 +64,16 @@ public class JGraph extends JPanel implements MyComponent {
 //                g2d.drawLine(getX()+getWidth()/2,getY(),getX(),getY()+getHeight());
 //                g2d.drawLine(getX()+getWidth()/2,getY(),getX()+getWidth(),getY()+getHeight());
                 // System.out.println("Tri");
-                g2d.drawLine(g2d.getClipBounds().x, g2d.getClipBounds().y + getHeight() -  2 * drawGap, g2d.getClipBounds().x + getWidth(), g2d.getClipBounds().y + getHeight() -  2 * drawGap);
+
+                g2d.drawLine(g2d.getClipBounds().x, g2d.getClipBounds().y + getHeight() - drawGap, g2d.getClipBounds().x + getWidth(), g2d.getClipBounds().y + getHeight() - drawGap);
                 g2d.drawLine(g2d.getClipBounds().x + getWidth() / 2, g2d.getClipBounds().y, g2d.getClipBounds().x, g2d.getClipBounds().y + getHeight());
                 g2d.drawLine(g2d.getClipBounds().x + getWidth() / 2, g2d.getClipBounds().y, g2d.getClipBounds().x + getWidth(), g2d.getClipBounds().y + getHeight());
             }
             case IsoscelesLadder -> {                                                                                                 //等腰梯型
                 g2d.drawLine(g2d.getClipBounds().x + getWidth() / 4, g2d.getClipBounds().y + drawGap, g2d.getClipBounds().x + getWidth() * 3 / 4, g2d.getClipBounds().y + drawGap);
                 g2d.drawLine(g2d.getClipBounds().x, g2d.getClipBounds().y + getHeight() - drawGap, g2d.getClipBounds().x + getWidth(), g2d.getClipBounds().y + getHeight() - drawGap);
-                g2d.drawLine(g2d.getClipBounds().x + getWidth() / 4, g2d.getClipBounds().y + drawGap, g2d.getClipBounds().x, g2d.getClipBounds().y + getHeight() - drawGap);
-                g2d.drawLine(g2d.getClipBounds().x + getWidth() * 3 / 4, g2d.getClipBounds().y + drawGap, g2d.getClipBounds().x + getWidth(), g2d.getClipBounds().y + getHeight() - drawGap);
+                g2d.drawLine(g2d.getClipBounds().x + getWidth() / 4, g2d.getClipBounds().y + drawGap, g2d.getClipBounds().x, g2d.getClipBounds().y + getHeight() + drawGap);
+                g2d.drawLine(g2d.getClipBounds().x + getWidth() * 3 / 4, g2d.getClipBounds().y + drawGap, g2d.getClipBounds().x + getWidth(), g2d.getClipBounds().y + getHeight() + drawGap);
             }
         }
 

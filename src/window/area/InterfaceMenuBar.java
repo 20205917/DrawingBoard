@@ -1,5 +1,6 @@
 package window.area;
 
+import MyComponent.myGraph.MyGraphType;
 import window.ErrorDialog;
 import window.UserInterface;
 import window.area.part.Board;
@@ -42,6 +43,28 @@ public class InterfaceMenuBar extends JMenuBar {
         beginOption.add(designPage);
 
         JMenu plotItem = new JMenu("绘图");
+        JMenu polygon = new JMenu("多边形");
+        JMenuItem triangle = new JMenuItem("三角形");
+        JMenuItem rect = new JMenuItem("矩形");
+        JMenuItem square = new JMenuItem("正方形");
+        JMenuItem isoscelesLadder = new JMenuItem("梯形");
+        JMenu nonPolygon = new JMenu("非多边形");
+        JMenuItem circle = new JMenuItem("圆形");
+        JMenuItem oval = new JMenuItem("椭圆形");
+        JMenuItem roundRect = new JMenuItem("圆角矩形");
+        JMenu linear = new JMenu("线形");
+        JMenuItem line = new JMenuItem("线条");
+        polygon.add(triangle);
+        polygon.add(rect);
+        polygon.add(square);
+        polygon.add(isoscelesLadder);
+        plotItem.add(polygon);
+        nonPolygon.add(circle);
+        nonPolygon.add(oval);
+        nonPolygon.add(roundRect);
+        plotItem.add(nonPolygon);
+        linear.add(line);
+        plotItem.add(linear);
 
         JMenu operatorOption = new JMenu("操作");
         JMenuItem copy = new JMenuItem("复制");
@@ -125,6 +148,39 @@ public class InterfaceMenuBar extends JMenuBar {
 
         designPage.addActionListener(e ->{
 
+        });
+
+        // 绘制
+        triangle.addActionListener(e -> {
+            parent.toolBox.setGraphType(MyGraphType.Triangle);
+        });
+
+        square.addActionListener(e->{
+            parent.toolBox.setGraphType(MyGraphType.Square);
+        });
+
+        rect.addActionListener(e->{
+            parent.toolBox.setGraphType(MyGraphType.Rect);
+        });
+
+        isoscelesLadder.addActionListener(e->{
+            parent.toolBox.setGraphType(MyGraphType.IsoscelesLadder);
+        });
+
+        circle.addActionListener(e->{
+            parent.toolBox.setGraphType(MyGraphType.Circle);
+        });
+
+        oval.addActionListener(e->{
+            parent.toolBox.setGraphType(MyGraphType.Oval);
+        });
+
+        roundRect.addActionListener(e->{
+            parent.toolBox.setGraphType(MyGraphType.roundRect);
+        });
+
+        line.addActionListener(e->{
+            parent.toolBox.setGraphType(MyGraphType.Line);
         });
 
         // 复制
