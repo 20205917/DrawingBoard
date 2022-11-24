@@ -21,6 +21,8 @@ public interface MyComponent {
 
     String save();
 
+    MyComponent clone();
+
     int getX();
     int getY();
     int getWidth();
@@ -164,6 +166,7 @@ public interface MyComponent {
                     case Cursor.NW_RESIZE_CURSOR, Cursor.NE_RESIZE_CURSOR, Cursor.SW_RESIZE_CURSOR, Cursor.SE_RESIZE_CURSOR
                             ->resize(protectPoint, new MyPoint(getX()+e.getX(),getY()+e.getY()));
                 }
+
             }
 
             //鼠标形状的改变
