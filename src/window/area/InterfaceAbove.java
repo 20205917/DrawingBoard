@@ -1,6 +1,8 @@
 package window.area;
 
 import MyComponent.myGraph.MyGraphType;
+import MyComponent.myGraph.MyGraphType;
+import window.area.part.Board;
 import window.area.part.selects;
 
 import javax.swing.*;
