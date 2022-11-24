@@ -37,6 +37,7 @@ public interface MyComponent {
 
     void setBorder(Border border);
     void setLocation(int a,int b);
+    void setBounds(int a,int b,int c,int d);
 
     void addMouseListener(MouseListener l);
     void addMouseMotionListener(MouseMotionListener l);

@@ -91,7 +91,7 @@ public class InterfaceMenuBar extends JMenuBar {
             FileDialog fileDialog = new FileDialog(parent, "选择保存的路径", FileDialog.SAVE);
             fileDialog.setVisible(true);
             String openFilePath = fileDialog.getDirectory() + fileDialog.getFile();
-            if (parent.ManagementSystem.isOpenfile(openFilePath)) {
+            if (parent.ManagementSystem.isOpenFile(openFilePath)) {
                 JDialog jDialog = new ErrorDialog("文件已被占用无法覆盖");
                 jDialog.setVisible(true);
             } else{
@@ -102,7 +102,7 @@ public class InterfaceMenuBar extends JMenuBar {
 
 
         createPage.addActionListener(e -> {
-            parent.addPage(new Board());
+            parent.addPage(new Board(parent.toolBox));
         });
         deletePage.addActionListener(e ->{
             parent.deletePage();

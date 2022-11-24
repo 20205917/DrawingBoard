@@ -1,11 +1,8 @@
 package window;
 
-import window.area.InterfaceAbove;
-import window.area.InterfaceLeft;
-import window.area.InterfaceRight;
+import window.area.*;
 import window.area.part.Board;
 import window.area.part.Page;
-import window.area.InterfaceMenuBar;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,7 +29,8 @@ public class UserInterface extends JFrame {
     public InterfaceLeft leftArea;
     //画板集合
     HashSet<Board> allBoard = new HashSet<>();
-
+    //工具盒
+    public ToolBox toolBox = new ToolBox();
 
     public UserInterface(Management parent) {
         ManagementSystem = parent;
@@ -46,7 +44,7 @@ public class UserInterface extends JFrame {
         menuBar = new InterfaceMenuBar(this);
 
         //工具栏
-        aboveArea = new InterfaceAbove();
+        aboveArea = new InterfaceAbove(toolBox);
         add(aboveArea);
 
         //操作窗口
@@ -129,8 +127,6 @@ public class UserInterface extends JFrame {
         }
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
-            // writer.write(allBoard.size());
-            // writer.write(System.getProperty("line.separator"));
             for (Board board : allBoard) {
                 writer.write(board.save());
             }
@@ -158,7 +154,7 @@ public class UserInterface extends JFrame {
 
                 String[] boardData = board.split("#####\n");
 
-                Board newBoard = new Board(boardData[0]);
+                Board newBoard = new Board(boardData[0],toolBox);
                 for (int i = 1; i < boardData.length; i++) {
                     newBoard.addGraphic(boardData[i]);
                 }

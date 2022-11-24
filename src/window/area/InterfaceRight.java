@@ -8,7 +8,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
 public class InterfaceRight extends JScrollPane {
-    JPanel rightPane;
+    final JPanel rightPane;
 
     public Board board;
     public InterfaceRight() {
@@ -44,7 +44,7 @@ public class InterfaceRight extends JScrollPane {
         if(board != null)
             rightPane.remove(board);
         board = b;
-
+        board.setSelection(b.toolBox.selection);
         board.setLocation((rightPane.getWidth()-board.getWidth())/2,(rightPane.getHeight()-board.getHeight())/2);
         rightPane.add(board);
         repaint();

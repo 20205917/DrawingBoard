@@ -1,6 +1,7 @@
 package window.area;
 
 import MyComponent.myGraph.MyGraphType;
+import MyComponent.myGraph.MyGraphType;
 import window.area.part.Board;
 import window.area.part.selects;
 
@@ -11,7 +12,7 @@ import java.util.Vector;
 import java.util.regex.Pattern;
 
 public class InterfaceAbove extends JPanel {
-
+    ToolBox toolBox;
     private InterfaceRight rightArea;
 
     private Insets inner = new Insets(2, 2, 2, 2);
@@ -58,17 +59,17 @@ public class InterfaceAbove extends JPanel {
 
         bPen.addActionListener(e -> {
             if (rightArea.board != null)
-                rightArea.board.setSelection(selects.Pen);
+                toolBox.setSelection(selects.Pen);
         });
 
         bText.addActionListener(e -> {
             if (rightArea.board != null)
-                rightArea.board.setSelection(selects.CreateTextArea);
+                toolBox.setSelection(selects.CreatTextArea);
         });
 
         bRubber.addActionListener(e -> {
             if (rightArea.board != null)
-                rightArea.board.setSelection(selects.Rubber);
+                toolBox.setSelection(selects.Rubber);
         });
 
         bMouse.addActionListener(e -> {
@@ -117,30 +118,30 @@ public class InterfaceAbove extends JPanel {
         cbTextFont.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 if (cbTextSize.getSelectedItem() != null && rightArea.board != null)
-                    rightArea.board.setTextStyle((String) cbTextFont.getSelectedItem());
+                    toolBox.setTextStyle((String) cbTextFont.getSelectedItem());
             }
         });
 
         cbTextSize.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 if (cbTextSize.getSelectedItem() != null && rightArea.board != null)
-                    rightArea.board.setTextSize(Integer.parseInt((String) cbTextSize.getSelectedItem()));
+                    toolBox.setTextSize(Integer.parseInt((String) cbTextSize.getSelectedItem()));
             }
         });
 
         bBold.addActionListener(e -> {
             if (rightArea.board != null)
-                rightArea.board.setIsBold();
+                toolBox.setIsBold();
         });
 
         bItalic.addActionListener(e -> {
             if (rightArea.board != null)
-                rightArea.board.setIsItalic();
+                toolBox.setIsItalic();
         });
 
         bUnderline.addActionListener(e -> {
             if (rightArea.board != null)
-                rightArea.board.setIsUnderline();
+                toolBox.setIsUnderline();
         });
 
 
@@ -158,8 +159,7 @@ public class InterfaceAbove extends JPanel {
         Button bLine = new Button("Line");
         String[] shapes = {"Rect", "Oval", "Line", "Triangle", "Square", "IsoscelesLadder"};
         SearchComboBox cbSearch = new SearchComboBox(shapes);
-//        JComboBox<Object> cbSearch = new JComboBox<>(shapes);
-//        Button bMore = new Button("More");
+
 
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = inner;
@@ -176,22 +176,22 @@ public class InterfaceAbove extends JPanel {
 
         bRect.addActionListener(e -> {
             if (rightArea.board != null) {
-                rightArea.board.setSelection(selects.CreateJGraph);
-                rightArea.board.setGraphType(MyGraphType.Rect);
+                toolBox.setSelection(selects.CreatJGraph);
+                toolBox.setGraphType(MyGraphType.Rect);
             }
         });
 
         bOval.addActionListener(e -> {
-            if (rightArea.board != null){
-                rightArea.board.setSelection(selects.CreateJGraph);
-                rightArea.board.setGraphType(MyGraphType.Oval);
+            if (rightArea.board != null) {
+                toolBox.setSelection(selects.CreatJGraph);
+                toolBox.setGraphType(MyGraphType.Oval);
             }
         });
 
         bLine.addActionListener(e -> {
-            if (rightArea.board != null){
-                rightArea.board.setSelection(selects.CreateJGraph);
-                rightArea.board.setGraphType(MyGraphType.Line);
+            if (rightArea.board != null) {
+                toolBox.setSelection(selects.CreatJGraph);
+                toolBox.setGraphType(MyGraphType.Line);
             }
         });
 
@@ -261,35 +261,11 @@ public class InterfaceAbove extends JPanel {
         return colorTable;
     }
 
-    public JPanel setSearchTable() {
-        JPanel SearchTable = new JPanel();
-        GridBagLayout gbl = new GridBagLayout();
-        SearchTable.setLayout(gbl);
-        GridBagConstraints gbc = new GridBagConstraints();
 
-        // 搜索框
-        JTextField tfSearch = new JTextField();
 
-        Button bConfirm = new Button("Confirm");
-        Button bClear = new Button("Clear");
-
-        gbc.fill = GridBagConstraints.BOTH;
-        gbc.insets = inner;
-        gbc.weightx = 1;
-        gbc.weighty = 1;
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        addComponent(SearchTable, tfSearch, gbl, gbc);
-        gbc.gridwidth = 1;
-        gbc.weightx = 1;
-        addComponent(SearchTable, bClear, gbl, gbc);
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        addComponent(SearchTable, bConfirm, gbl, gbc);
-
-        return SearchTable;
-    }
-
-    public InterfaceAbove() {
-        //测试
+    public InterfaceAbove(ToolBox toolBox) {
+        //加载工具和
+        this.toolBox = toolBox;
         setBackground(Color.white);
         // 负责为上方工具栏提供控件
         GridBagLayout gbl = new GridBagLayout();
@@ -308,7 +284,7 @@ public class InterfaceAbove extends JPanel {
         cbThickness.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 if (cbThickness.getSelectedItem() != null && rightArea.board != null)
-                    rightArea.board.setDrawLineStroke(Integer.parseInt((String) cbThickness.getSelectedItem()));
+                    toolBox.setDrawLineStroke(Integer.parseInt((String) cbThickness.getSelectedItem()));
             }
         });
 
@@ -383,9 +359,9 @@ public class InterfaceAbove extends JPanel {
 
     class SearchComboBoxListener implements KeyListener, ItemListener {
 
-        private JTextField editor;
+        private final JTextField editor;
         private ComboBoxModel items;
-        private SearchComboBox parent;
+        private final SearchComboBox parent;
 
         public SearchComboBoxListener(SearchComboBox jcb) {
             parent = jcb;
@@ -447,7 +423,7 @@ public class InterfaceAbove extends JPanel {
         @Override
         public void itemStateChanged(ItemEvent e) {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                rightArea.board.setSelection(selects.CreateJGraph);
+                rightArea.board.setSelection(selects.CreatJGraph);
                 MyGraphType myGraphType = null;
                 switch ((String)e.getItem()){
                     case "Rect"->
@@ -463,7 +439,7 @@ public class InterfaceAbove extends JPanel {
                     case "IsoscelesLadder"->
                             myGraphType = MyGraphType.IsoscelesLadder;
                 }
-                rightArea.board.setGraphType(myGraphType);
+                toolBox.setGraphType(myGraphType);
             }
         }
     }
@@ -474,7 +450,7 @@ public class InterfaceAbove extends JPanel {
             public void actionPerformed(ActionEvent actionEvent) {
                 super.actionPerformed(actionEvent);
                 if (rightArea.board != null)
-                    rightArea.board.setDrawLineColor(b.getBackground());
+                    toolBox.setDrawLineColor(b.getBackground());
             }
         });
     }
