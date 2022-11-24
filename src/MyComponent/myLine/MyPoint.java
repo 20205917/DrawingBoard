@@ -7,8 +7,14 @@ public class MyPoint {
         px = x;
         py = y;
     }
-    //投影到一维界面正负最大为5000
+    public MyPoint(int x){
+        px = x/5000;
+        py = x%5000-1000;
+        if(py<0)
+            py =0;
+    }
+    //投影到一维界面最大为5000
     public int toInt(){
-        return px*10000+py;
+        return px*5000+py+1000;
     }
 }

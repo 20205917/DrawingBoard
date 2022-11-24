@@ -43,14 +43,6 @@ public class InterfaceMenuBar extends JMenuBar {
 
         JMenu plotItem = new JMenu("绘图");
 
-        JMenu operatorOption = new JMenu("操作");
-        JMenuItem copy = new JMenuItem("复制");
-        JMenuItem paste = new JMenuItem("粘贴");
-        JMenuItem delete = new JMenuItem("删除");
-        operatorOption.add(copy);
-        operatorOption.add(paste);
-        operatorOption.add(delete);
-
         // 创建新文件
         newFile.addActionListener(e -> {
             FileDialog fileDialog = new FileDialog(parent, "选择要保存的位置", FileDialog.SAVE);
@@ -127,24 +119,9 @@ public class InterfaceMenuBar extends JMenuBar {
 
         });
 
-        // 复制
-        copy.addActionListener(e -> {
-            parent.rightArea.board.copy();
-        });
-        // 粘贴
-        paste.addActionListener(e -> {
-            parent.rightArea.board.paste();
-        });
-        // 删除
-        delete.addActionListener(e -> {
-            parent.rightArea.board.delete();
-        });
-
-
         add(fileOption);
         add(beginOption);
         add(plotItem);
-        add(operatorOption);
     }
 }
 

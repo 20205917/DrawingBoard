@@ -1,7 +1,6 @@
 package window.area.part;
 
 import MyComponent.MyComponent;
-import MyComponent.myGraph.JGraph;
 import MyComponent.myGraph.JGraphFactory;
 import MyComponent.myGraph.MyGraphType;
 import MyComponent.myLine.JDrawLine;
@@ -40,8 +39,6 @@ public class Board extends JLayeredPane {
     //当前图形
     private MyComponent chooseGraph;
 
-    private MyComponent copyGraph;
-
 
     public Board(ToolBox toolBox) {
         //加载工具栏
@@ -50,21 +47,19 @@ public class Board extends JLayeredPane {
         //白色画板
         background = new JPanel();
         background.setBackground(Color.white);
-
+        background.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                if (e.getClickCount() == 2) requestFocus();
+            }
+        });
         add(background, DEFAULT_LAYER - 1, 0);
 
         // 处理生成图形时，截获鼠标事件
         boardGlassPane = new BoardGlassPane(this);
         // 初始与底层，一般情况不截取
         add(boardGlassPane, FRAME_CONTENT_LAYER, 0);
-
-        background.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                if (e.getClickCount() == 2) boardGlassPane.requestFocus();
-            }
-        });
 
         //大小改变的自适配
         addComponentListener(new ComponentAdapter() {
@@ -77,15 +72,15 @@ public class Board extends JLayeredPane {
         });
         setSize(INITIAL_WIDTH, INITIAL_HEIGHT);
 
+        // 初始化字体
     }
 
-    public Board(String data, ToolBox toolBox) {
+    public Board(String data,ToolBox toolBox) {
         // 只有画板大小与画布颜色需要读取
         String[] settings = data.split("\n");
         int width = Integer.parseInt(settings[0].substring(settings[0].indexOf(':') + 1));
         int height = Integer.parseInt(settings[1].substring(settings[1].indexOf(':') + 1));
         int rgb = Integer.parseInt(settings[2].substring(settings[2].indexOf(':') + 1));
-        int layer = Integer.parseInt(settings[3].substring(settings[2].indexOf(':') + 1));
         //加载工具栏
         this.toolBox = toolBox;
         setLayout(null);
@@ -96,7 +91,7 @@ public class Board extends JLayeredPane {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                if (e.getClickCount() == 2) boardGlassPane.requestFocus();
+                if (e.getClickCount() == 2) requestFocus();
             }
         });
         add(background, DEFAULT_LAYER - 1, 0);
@@ -117,7 +112,6 @@ public class Board extends JLayeredPane {
             }
         });
         setSize(width, height);
-        maxLayer = layer;
     }
 
     @Override
@@ -141,9 +135,9 @@ public class Board extends JLayeredPane {
     }
 
     //添加图形
-    public void add(MyComponent myComponent, int Layer) {
-        add((Component) myComponent, Layer, 0);
-        myComponent.addMouseListener(new MouseAdapter() {
+    public void add(MyComponent myComponent,int Layer){
+        add((Component) myComponent,Layer,0);
+        addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
@@ -156,34 +150,10 @@ public class Board extends JLayeredPane {
 
     //重设鼠标拦截面位置
     public void resetBoardGlassPane() {
-        switch (toolBox.getSelection()) {
-            case Mouse, Rubber -> setLayer(boardGlassPane, FRAME_CONTENT_LAYER, 0);
-            default -> setLayer(boardGlassPane, MODAL_LAYER, 0);
-        }
-    }
-
-    public void copy() {
-        copyGraph = chooseGraph.clone();
-    }
-
-    public void paste() {
-        if(copyGraph != null) {
-            add(copyGraph, this.maxLayer++);
-            copyGraph.setBounds(copyGraph.getX() + 20,
-                    copyGraph.getY() + 20,
-                    copyGraph.getWidth(),
-                    copyGraph.getHeight());
-            copyGraph = copyGraph.clone();
-        }
-    }
-
-    public void delete() {
-        if (chooseGraph != null) {
-            System.out.println(chooseGraph);
-            this.remove((Component) chooseGraph);
-        }
-        repaint();
-        chooseGraph = null;
+        if(toolBox.getSelection() == selects.Mouse)
+            setLayer(boardGlassPane, FRAME_CONTENT_LAYER, 0);
+        else
+            setLayer(boardGlassPane, MODAL_LAYER, 0);
     }
 
     //文件保存
@@ -193,7 +163,7 @@ public class Board extends JLayeredPane {
         log.append("board-width:").append(getWidth()).append(System.getProperty("line.separator"));
         log.append("board-height:").append(getHeight()).append(System.getProperty("line.separator"));
         log.append("background-color:").append(background.getBackground().getRGB()).append(System.getProperty("line.separator"));
-        log.append("max-layer:").append(maxLayer).append(System.getProperty("line.separator"));
+
         //保存组件
         for (int i = 0; i < 400; i++) {
             if (getComponentCountInLayer(i) == 0) break;
@@ -233,18 +203,18 @@ public class Board extends JLayeredPane {
 
                 toolBox.setDrawLineStroke((int) stroke);
                 toolBox.setDrawLineColor(new Color(rgb));
-                myComponent = JGraphFactory.creatJGraph(toolBox, MyGraphType.valueOf(type));
+                myComponent = JGraphFactory.creatJGraph(toolBox,MyGraphType.valueOf(type));
 
-                myComponent.setBounds(x, y, width, height);
-                if ("Line".equals(type)) {
+                myComponent.setBounds(x,y,width,height);
+                if("Line".equals(type)){
                     String direction = info[6];
-                    if (direction.equals("JLine-WN"))
-                        myComponent.resize(new MyPoint(x, y), new MyPoint(x + width, y + height));
+                    if(direction.equals("JLine-WN"))
+                        myComponent.resize(new MyPoint(x, y),new MyPoint(x + width, y + height));
                     else
-                        myComponent.resize(new MyPoint(x, y + height), new MyPoint(x + width, y));
+                        myComponent.resize(new MyPoint(x, y + height),new MyPoint(x + width, y));
                 }
-            }
-            case "TextArea" -> {
+                }
+            case "TextArea" ->{
                 String content = info[8].substring(info[8].indexOf(':') + 1);
                 String temp = info[9].substring(info[9].indexOf(':') + 1);
                 int x = Integer.parseInt(temp.substring(0, temp.indexOf(' ')));
@@ -261,11 +231,11 @@ public class Board extends JLayeredPane {
                 boolean isUnderline = Boolean.parseBoolean(info[7].substring(info[7].indexOf(':') + 1));
                 newTextAttribute.put(TextAttribute.FAMILY, textStyle);
                 newTextAttribute.put(TextAttribute.SIZE, textSize);
-                if (isBold)
+                if(isBold)
                     newTextAttribute.put(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
-                if (isItalic)
+                if(isItalic)
                     newTextAttribute.put(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE);
-                if (isUnderline)
+                if(isUnderline)
                     newTextAttribute.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
 
                 Font newFont = new Font(newTextAttribute);

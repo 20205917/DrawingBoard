@@ -9,5 +9,4 @@ public class JGraphFactory {
             case Line -> new JLine(toolBox);
         };
     }
-
 }
