@@ -47,19 +47,21 @@ public class Board extends JLayeredPane {
         //白色画板
         background = new JPanel();
         background.setBackground(Color.white);
-        background.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                if (e.getClickCount() == 2) requestFocus();
-            }
-        });
+
         add(background, DEFAULT_LAYER - 1, 0);
 
         // 处理生成图形时，截获鼠标事件
         boardGlassPane = new BoardGlassPane(this);
         // 初始与底层，一般情况不截取
         add(boardGlassPane, FRAME_CONTENT_LAYER, 0);
+
+        background.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                if (e.getClickCount() == 2) boardGlassPane.requestFocus();
+            }
+        });
 
         //大小改变的自适配
         addComponentListener(new ComponentAdapter() {
@@ -72,7 +74,6 @@ public class Board extends JLayeredPane {
         });
         setSize(INITIAL_WIDTH, INITIAL_HEIGHT);
 
-        // 初始化字体
     }
 
     public Board(String data,ToolBox toolBox) {

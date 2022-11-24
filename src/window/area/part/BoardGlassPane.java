@@ -8,11 +8,9 @@ import MyComponent.textarea.JMyTextArea;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.*;
 
-public class BoardGlassPane extends JPanel implements MouseListener, MouseMotionListener {
+public class BoardGlassPane extends JPanel implements MouseListener, MouseMotionListener, KeyListener {
     private final Board board;
 
     private boolean isMake = false;
@@ -22,15 +20,22 @@ public class BoardGlassPane extends JPanel implements MouseListener, MouseMotion
         board = b;
         setLayout(null);
         setOpaque(false);
+        setFocusable(true);
+        requestFocus();
+        requestFocusInWindow();
 
         addMouseMotionListener(this);
         addMouseListener(this);
+        addKeyListener(this);
+
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
         if(e.getClickCount()>=2 )
             board.setSelection(selects.Mouse);
+        System.out.println("OK");
+        this.requestFocus();
     }
 
     @Override
@@ -83,6 +88,7 @@ public class BoardGlassPane extends JPanel implements MouseListener, MouseMotion
             }
         }
         board.changeChooseGraph(null);
+        this.requestFocus();
     }
 
     @Override
@@ -104,10 +110,34 @@ public class BoardGlassPane extends JPanel implements MouseListener, MouseMotion
                 default -> System.out.println( "创建失败"+board.toolBox.getSelection());
             }
         }
+        this.requestFocus();
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
         board.dispatchEvent(SwingUtilities.convertMouseEvent((BoardGlassPane)e.getSource(),e,board));
+        this.requestFocus();
+    }
+
+    // 打算实现ctrl-z ctrl-c ctrl-v delete
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        // delete
+        if(e.getKeyCode() == KeyEvent.VK_DELETE){
+            board.remove((Component) board.getChooseGraph());
+            repaint();
+            System.out.println("press delete");
+        }
+        System.out.println(e.getKeyCode());
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+
     }
 }
