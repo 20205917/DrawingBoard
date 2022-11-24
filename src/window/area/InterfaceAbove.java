@@ -160,7 +160,7 @@ public class InterfaceAbove extends JPanel {
         Button bRect = new Button("Rect");
         Button bOval = new Button("Oval");
         Button bLine = new Button("Line");
-        String[] shapes = {"Rect", "Oval", "Line", "Triangle", "Square", "IsoscelesLadder"};
+        String[] shapes = {"Rect", "Square", "Triangle", "IsoscelesLadder", "Oval", "Circle", "Line"};
         SearchComboBox cbSearch = new SearchComboBox(shapes);
 
 
