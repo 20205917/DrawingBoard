@@ -24,18 +24,14 @@ public class InterfaceRight extends JScrollPane {
             @Override
             public void componentResized(ComponentEvent e) {
                 super.componentResized(e);
-
                 //页面
                 if(board!=null)   {
-
                     rightPane.setPreferredSize(new Dimension(board.getWidth(),board.getHeight()));
                     board.setBounds((rightPane.getWidth()-board.getWidth())/2,(rightPane.getHeight()-board.getHeight())/2,board.getWidth(),board.getHeight());
                 }
-
                 repaint();
             }
         });
-
         rightPane.setBackground(Color.LIGHT_GRAY);
     }
 
@@ -43,9 +39,13 @@ public class InterfaceRight extends JScrollPane {
     public void updateBoard(Board b){
         if(board != null)
             rightPane.remove(board);
+
         board = b;
-        board.setSelection(b.toolBox.selection);
         board.setLocation((rightPane.getWidth()-board.getWidth())/2,(rightPane.getHeight()-board.getHeight())/2);
+        //更新初始鼠标截获面
+        board.resetBoardGlassPane();
+
+        //添加新画板
         rightPane.add(board);
         repaint();
     }

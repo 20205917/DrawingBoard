@@ -1,7 +1,7 @@
 package window.area;
 
-import window.area.part.selects;
 import MyComponent.myGraph.MyGraphType;
+import window.area.part.selects;
 
 import java.awt.*;
 import java.awt.font.TextAttribute;
@@ -24,6 +24,8 @@ public class ToolBox {
     protected String textStyle = "Times New Roman";
     // 默认字体大小
     protected int textSize = 25;
+    //更新监听器
+    public ToolBoxUpdateListenerInterface listener;
 
     protected Boolean isBold = false;
     protected Boolean isUnderline = false;
@@ -33,6 +35,18 @@ public class ToolBox {
     public ToolBox(){
         // 初始化字体
         setTextFont();
+    }
+
+    //添加工具栏监听器
+    public void addToolBoxUpdateListener(ToolBoxUpdateListenerInterface e){
+        listener = e;
+    }
+    //删除工具栏监听器
+    public void deleteToolBoxUpdateListener(){
+        listener = null;
+    }
+    public void fireToolBoxUpdateListener(ToolBoxUpdateEvent e){
+        if(listener!=null) listener.handleEvent(e);
     }
 
     //属性的设置与读取
@@ -92,6 +106,7 @@ public class ToolBox {
 
     public void setSelection(selects selection) {
         this.selection = selection;
+        fireToolBoxUpdateListener(new ToolBoxUpdateEvent(this));
     }
 
     public void setDrawLineStroke(int thickness) {
