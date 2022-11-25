@@ -160,7 +160,8 @@ public class InterfaceAbove extends JPanel {
         Button bRect = new Button("Rect");
         Button bSquare = new Button("Square");
         Button bOval = new Button("Oval");
-        Button bHollow = new Button("Hollow");
+        JButton bHollow = new JButton("Hollow");
+        bHollow.setBorder(BorderFactory.createRaisedBevelBorder());
         Button bCircle = new Button("Circle");
         String[] shapes = {"Rect", "Square", "Triangle", "IsoscelesLadder", "Oval", "Circle", "roundRect", "Line"};
         SearchComboBox cbSearch = new SearchComboBox(shapes);
@@ -198,8 +199,14 @@ public class InterfaceAbove extends JPanel {
         bHollow.addActionListener(e -> {
             if (rightArea.board != null) {
                 toolBox.switchHollow();
+                if(bHollow.getBorder() != BorderFactory.createLoweredBevelBorder())
+                    bHollow.setBorder(BorderFactory.createLoweredBevelBorder());
+                else
+                    bHollow.setBorder(BorderFactory.createRaisedBevelBorder());
             }
         });
+
+
 
         bSquare.addActionListener(e -> {
             if (rightArea.board != null) {
