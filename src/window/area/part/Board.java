@@ -85,7 +85,7 @@ public class Board extends JLayeredPane {
         int width = Integer.parseInt(settings[0].substring(settings[0].indexOf(':') + 1));
         int height = Integer.parseInt(settings[1].substring(settings[1].indexOf(':') + 1));
         int rgb = Integer.parseInt(settings[2].substring(settings[2].indexOf(':') + 1));
-        int layer = Integer.parseInt(settings[3].substring(settings[2].indexOf(':') + 1));
+        int layer = Integer.parseInt(settings[3].substring(settings[3].indexOf(':') + 1));
         //加载工具栏
         this.toolBox = toolBox;
         setLayout(null);
@@ -208,13 +208,23 @@ public class Board extends JLayeredPane {
         log.append("background-color:").append(background.getBackground().getRGB()).append(System.getProperty("line.separator"));
         log.append("max-layer:").append(maxLayer).append(System.getProperty("line.separator"));
         //保存组件
-        for (int i = 0; i < 400; i++) {
-            if (getComponentCountInLayer(i) == 0) break;
+//        for(Component component : getComponents()){
+//            if (component instanceof MyComponent){
+//                log.append("#####").append(System.getProperty("line.separator"));
+//                log.append("Layer:").append(getLayer(component)).append(System.getProperty("line.separator"));
+//                log.append(((MyComponent) component).save());
+//            }
+//        }
+
+        for (int i = 0; i < maxLayer; i++) {
+            // System.out.println(getComponentCountInLayer(i));
+            if (getComponentCountInLayer(i) == 0) continue;
             for (Component component : getComponentsInLayer(i)) {
                 if (component instanceof MyComponent) {
                     log.append("#####").append(System.getProperty("line.separator"));
                     log.append("Layer:").append(i).append(System.getProperty("line.separator"));
                     log.append(((MyComponent) component).save());
+                    System.out.println(i);
                 }
             }
         }
@@ -235,7 +245,7 @@ public class Board extends JLayeredPane {
         // graph
         MyComponent myComponent = null;
         switch (type) {
-            case "Rect", "Oval", "Line", "Triangle", "Square", "IsoscelesLadder" -> {
+            case "Rect", "Oval", "Circle", "RoundRect","Line", "Triangle", "Square", "IsoscelesLadder" -> {
                 float stroke = Float.parseFloat(info[3].substring(info[3].indexOf(':') + 1));
                 String temp = info[4].substring(info[4].indexOf(':') + 1);
                 int x = Integer.parseInt(temp.substring(0, temp.indexOf(' ')));
@@ -243,9 +253,11 @@ public class Board extends JLayeredPane {
                 temp = info[5].substring(info[5].indexOf(':') + 1);
                 int width = Integer.parseInt(temp.substring(0, temp.indexOf(' ')));
                 int height = Integer.parseInt(temp.substring(temp.indexOf(' ') + 1));
+                boolean isHollow = Boolean.parseBoolean(info[6].substring(info[6].indexOf(':') + 1));
 
                 toolBox.setDrawLineStroke((int) stroke);
                 toolBox.setDrawLineColor(new Color(rgb));
+                toolBox.setHollow(isHollow);
                 myComponent = JGraphFactory.creatJGraph(toolBox, MyGraphType.valueOf(type));
 
                 myComponent.setBounds(x, y, width, height);

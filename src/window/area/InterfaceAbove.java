@@ -160,7 +160,7 @@ public class InterfaceAbove extends JPanel {
         Button bRect = new Button("Rect");
         Button bSquare = new Button("Square");
         Button bOval = new Button("Oval");
-        Button bLine = new Button("Line");
+        Button bHollow = new Button("Hollow");
         Button bCircle = new Button("Circle");
         String[] shapes = {"Rect", "Square", "Triangle", "IsoscelesLadder", "Oval", "Circle", "roundRect", "Line"};
         SearchComboBox cbSearch = new SearchComboBox(shapes);
@@ -177,7 +177,7 @@ public class InterfaceAbove extends JPanel {
         addComponent(shapeTable, bCircle, gbl, gbc);
         gbc.gridwidth = 1;
         gbc.weightx = 1;
-        addComponent(shapeTable, bLine, gbl, gbc);
+        addComponent(shapeTable, bHollow, gbl, gbc);
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         addComponent(shapeTable, cbSearch, gbl, gbc);
 
@@ -195,10 +195,23 @@ public class InterfaceAbove extends JPanel {
             }
         });
 
-        bLine.addActionListener(e -> {
+        bHollow.addActionListener(e -> {
+            if (rightArea.board != null) {
+                toolBox.switchHollow();
+            }
+        });
+
+        bSquare.addActionListener(e -> {
             if (rightArea.board != null) {
                 toolBox.setSelection(selects.CreatJGraph);
-                toolBox.setGraphType(MyGraphType.Line);
+                toolBox.setGraphType(MyGraphType.Square);
+            }
+        });
+
+        bCircle.addActionListener(e -> {
+            if (rightArea.board != null) {
+                toolBox.setSelection(selects.CreatJGraph);
+                toolBox.setGraphType(MyGraphType.Circle);
             }
         });
 
@@ -233,7 +246,8 @@ public class InterfaceAbove extends JPanel {
         bBlue.setBackground(Color.blue);
         Button bPurple = new Button();
         bPurple.setBackground(Color.magenta);
-        Button bMore = new Button("More");
+        Button bMore = new Button();
+        bMore.setBackground(Color.white);
 
 
         gbc.fill = GridBagConstraints.BOTH;
@@ -264,6 +278,7 @@ public class InterfaceAbove extends JPanel {
         setColorButtonListener(bGreen);
         setColorButtonListener(bBlue);
         setColorButtonListener(bPurple);
+        setColorButtonListener(bMore);
 
         return colorTable;
     }

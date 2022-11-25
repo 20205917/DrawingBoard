@@ -182,7 +182,7 @@ public class InterfaceMenuBar extends JMenuBar {
         });
 
         roundRect.addActionListener(e->{
-            parent.toolBox.setGraphType(MyGraphType.roundRect);
+            parent.toolBox.setGraphType(MyGraphType.RoundRect);
         });
 
         line.addActionListener(e->{

@@ -162,7 +162,7 @@ public class UserInterface extends JFrame {
 
                 String[] boardData = board.split("#####\n");
 
-                Board newBoard = new Board(boardData[0],toolBox);
+                Board newBoard = new Board(boardData[0], toolBox);
                 for (int i = 1; i < boardData.length; i++) {
                     newBoard.addGraphic(boardData[i]);
                 }
