@@ -74,6 +74,12 @@ public class InterfaceMenuBar extends JMenuBar {
         operatorOption.add(paste);
         operatorOption.add(delete);
 
+        JMenu playOption = new JMenu("播放");
+        JMenuItem startAllOver = new JMenuItem("从头开始");
+        JMenuItem startHere = new JMenuItem("当前页开始");
+        playOption.add(startAllOver);
+        playOption.add(startHere);
+
         // 创建新文件
         newFile.addActionListener(e -> {
             FileDialog fileDialog = new FileDialog(parent, "选择要保存的位置", FileDialog.SAVE);
@@ -196,11 +202,21 @@ public class InterfaceMenuBar extends JMenuBar {
             parent.rightArea.board.delete();
         });
 
+        // 从头播放
+        startAllOver.addActionListener(e -> {
+            parent.slide.play();
+        });
+
+        // 从当前页播放
+        startHere.addActionListener(e -> {
+
+        });
 
         add(fileOption);
         add(beginOption);
         add(plotItem);
         add(operatorOption);
+        add(playOption);
     }
 }
 

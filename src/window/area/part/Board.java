@@ -120,6 +120,19 @@ public class Board extends JLayeredPane {
         maxLayer = layer;
     }
 
+    public Board(Board specificBoard) {
+        background = new JPanel();
+        background.setBackground(Color.white);
+        add(background, DEFAULT_LAYER - 1, 0);
+        boardGlassPane = new BoardGlassPane(this);
+        for(Component c:specificBoard.getComponents()){
+            if(c instanceof JGraph){
+                add(c);
+            }
+        }
+        setSize(INITIAL_WIDTH, INITIAL_HEIGHT);
+    }
+
     @Override
     public void paint(Graphics g) {
         super.paint(g);
