@@ -208,23 +208,15 @@ public class Board extends JLayeredPane {
         log.append("background-color:").append(background.getBackground().getRGB()).append(System.getProperty("line.separator"));
         log.append("max-layer:").append(maxLayer).append(System.getProperty("line.separator"));
         //保存组件
-//        for(Component component : getComponents()){
-//            if (component instanceof MyComponent){
-//                log.append("#####").append(System.getProperty("line.separator"));
-//                log.append("Layer:").append(getLayer(component)).append(System.getProperty("line.separator"));
-//                log.append(((MyComponent) component).save());
-//            }
-//        }
 
+        changeChooseGraph(null);
         for (int i = 0; i < maxLayer; i++) {
-            // System.out.println(getComponentCountInLayer(i));
             if (getComponentCountInLayer(i) == 0) continue;
             for (Component component : getComponentsInLayer(i)) {
                 if (component instanceof MyComponent) {
                     log.append("#####").append(System.getProperty("line.separator"));
                     log.append("Layer:").append(i).append(System.getProperty("line.separator"));
                     log.append(((MyComponent) component).save());
-                    System.out.println(i);
                 }
             }
         }
