@@ -166,24 +166,20 @@ public class InterfaceMenuBar extends JMenuBar {
         line.addActionListener(e-> parent.toolBox.setGraphType(MyGraphType.Line));
 
         // 复制
-        copy.addActionListener(e -> {
-            parent.rightArea.board.copy();
-        });
+        copy.addActionListener(e -> parent.rightArea.board.copy());
         // 粘贴
-        paste.addActionListener(e -> {
-            parent.rightArea.board.paste();
-        });
+        paste.addActionListener(e -> parent.rightArea.board.paste());
         // 删除
-        delete.addActionListener(e -> {
-            parent.rightArea.board.delete();
-        });
+        delete.addActionListener(e -> parent.rightArea.board.delete());
 
         // 从头播放
-        startAllOver.addActionListener(e ->  new Slide(parent.leftArea.getBoards()));
+        startAllOver.addActionListener(e ->  new Slide(parent.leftArea.getBoards()).setVisible(true));
 
         // 从当前页播放
         startHere.addActionListener(e -> {
-
+            Slide slide = new Slide(parent.leftArea.getBoards());
+            slide.setShowPage(parent.leftArea.getCurrentNum());
+            slide.setVisible(true);
         });
 
         add(fileOption);

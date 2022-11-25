@@ -87,7 +87,6 @@ public class InterfaceLeft extends JScrollPane {
     public Page deletePage() {
         if (currentPage == null)
             return null;
-
         Page page = currentPage;
         int index = leftPane.getComponentZOrder(page) - 1;
 
@@ -105,19 +104,15 @@ public class InterfaceLeft extends JScrollPane {
 
     public void upPage() {
         if (currentPage == null) return;
-
         //重新排布小窗口顺序
         leftPane.add(currentPage, leftPane.getComponentZOrder(currentPage) - 1);
-
         revalidate();
     }
 
     public void downPage() {
         if (currentPage == null) return;
-
         //重新排布小窗口顺序
         leftPane.add(currentPage, leftPane.getComponentZOrder(currentPage) + 1);
-
         revalidate();
     }
 
@@ -125,7 +120,9 @@ public class InterfaceLeft extends JScrollPane {
     public Page getCurrentPage() {
         return currentPage;
     }
-
+    public int getCurrentNum(){
+        return leftPane.getComponentZOrder(currentPage);
+    }
     public void setCurrentPage(Page page) {
         if (currentPage != null) {
             currentPage.setBorderPainted(false);
@@ -134,13 +131,6 @@ public class InterfaceLeft extends JScrollPane {
         currentPage.setBorderPainted(true);
     }
 
-    public JPanel getLeftPane() {
-        return leftPane;
-    }
-
-    public Board getSpecificBoard(int index){
-        return ((Page)leftPane.getComponent(index)).board;
-    }
     public Board[] getBoards() {
         Component[] pages = leftPane.getComponents();
         int size = leftPane.getComponentCount();
