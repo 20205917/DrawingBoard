@@ -169,10 +169,10 @@ public class Board extends JLayeredPane {
 
     //重设鼠标拦截面位置
     public void resetBoardGlassPane() {
-        switch (toolBox.getSelection()) {
-            case Mouse, Rubber -> setLayer(boardGlassPane, FRAME_CONTENT_LAYER, 0);
-            default -> setLayer(boardGlassPane, MODAL_LAYER, 0);
-        }
+        if(toolBox.getSelection() == selects.Mouse)
+            setLayer(boardGlassPane, FRAME_CONTENT_LAYER, 0);
+        else
+            setLayer(boardGlassPane, MODAL_LAYER, 0);
     }
 
     public void copy() {

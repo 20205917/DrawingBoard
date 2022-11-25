@@ -8,7 +8,9 @@ import MyComponent.textarea.JMyTextArea;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 
 public class BoardGlassPane extends JPanel implements MouseListener, MouseMotionListener {
     private final Board board;
@@ -21,17 +23,14 @@ public class BoardGlassPane extends JPanel implements MouseListener, MouseMotion
         setLayout(null);
         setOpaque(false);
 
-
         addMouseMotionListener(this);
         addMouseListener(this);
-
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
         if(e.getClickCount()>=2 )
             board.toolBox.setSelection(selects.Mouse);
-
     }
 
     @Override
@@ -39,9 +38,8 @@ public class BoardGlassPane extends JPanel implements MouseListener, MouseMotion
         mousePressedPoint = new MyPoint(e.getX(),e.getY());
         switch (board.toolBox.getSelection()){
             //鼠标选择
-
             case Mouse-> System.out.println("点到底部了");
-
+            case Rubber -> isMake = true;
             case Pen->{
                 isMake = true;
                 board.jDrawLines.add(new JDrawLine(board.toolBox.getDrawLineColor(),board.toolBox.getDrawLineStroke()));
@@ -69,10 +67,6 @@ public class BoardGlassPane extends JPanel implements MouseListener, MouseMotion
             isMake = false;
             switch (board.toolBox.getSelection()){
                 case Pen-> board.jDrawLines.get(board.jDrawLines.size()-1).drawLine(getGraphics());
-                case Rubber -> {
-
-
-                }
                 case CreatJGraph,CreatTextArea->{
                     //如果大小为零，则删除（防误触）
                     MyComponent myComponent = board.getChooseGraph();
@@ -84,7 +78,6 @@ public class BoardGlassPane extends JPanel implements MouseListener, MouseMotion
             }
         }
         board.changeChooseGraph(null);
-
     }
 
     @Override
@@ -99,19 +92,25 @@ public class BoardGlassPane extends JPanel implements MouseListener, MouseMotion
     public void mouseDragged(MouseEvent e) {
         if(isMake){
             switch (board.toolBox.getSelection()){
-                case Pen->{
-                    board.jDrawLines.get(board.jDrawLines.size()-1).addPoint(new MyPoint(e.getX(),e.getY()));
-                    board.jDrawLines.get(board.jDrawLines.size()-1).drawLine(getGraphics()); }
+                case Rubber -> {
+                    board.jDrawLines.removeIf(jDrawLine -> {
+                        //如果有删除,删除后为空，则删除线段记录
+                        if(jDrawLine.deletePoint(new MyPoint(e.getX(), e.getY()),(int)board.toolBox.getDrawLineStroke().getLineWidth()*3))
+                            return jDrawLine.isEmpty();
+                        return false;
+                    });
+                    board.repaint();
+                }
+                case Pen->
+                    board.jDrawLines.get(board.jDrawLines.size()-1).addAndDrawPoint(new MyPoint(e.getX(),e.getY()),getGraphics());
                 case CreatJGraph,CreatTextArea-> board.getChooseGraph().resize(mousePressedPoint,new MyPoint(e.getX(),e.getY()));
                 default -> System.out.println( "创建失败"+board.toolBox.getSelection());
             }
         }
-
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
         board.dispatchEvent(SwingUtilities.convertMouseEvent((BoardGlassPane)e.getSource(),e,board));
     }
-
 }
