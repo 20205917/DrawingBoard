@@ -43,6 +43,8 @@ public interface MyComponent {
     void addMouseMotionListener(MouseMotionListener l);
     void addFocusListener(FocusListener l);
 
+    MyComponent clone();
+
 
 
     default String saveBounds(){

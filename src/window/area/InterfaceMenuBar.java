@@ -161,21 +161,21 @@ public class InterfaceMenuBar extends JMenuBar {
 
         oval.addActionListener(e-> parent.toolBox.setGraphType(MyGraphType.Oval));
 
-        roundRect.addActionListener(e-> parent.toolBox.setGraphType(MyGraphType.roundRect));
+        roundRect.addActionListener(e-> parent.toolBox.setGraphType(MyGraphType.RoundRect));
 
         line.addActionListener(e-> parent.toolBox.setGraphType(MyGraphType.Line));
 
         // 复制
         copy.addActionListener(e -> {
-            //parent.rightArea.board.copy();
+            parent.rightArea.board.copy();
         });
         // 粘贴
         paste.addActionListener(e -> {
-            //parent.rightArea.board.paste();
+            parent.rightArea.board.paste();
         });
         // 删除
         delete.addActionListener(e -> {
-            //parent.rightArea.board.delete();
+            parent.rightArea.board.delete();
         });
 
         // 从头播放

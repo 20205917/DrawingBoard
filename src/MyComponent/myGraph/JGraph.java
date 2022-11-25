@@ -14,12 +14,21 @@ public class JGraph extends JPanel implements MyComponent {
     protected boolean isHollow = false;
 
 
-    protected JGraph(MyGraphType type, ToolBox toolbox boolean isHollow){
+    protected JGraph(MyGraphType type, ToolBox toolbox){
         this.stroke = toolbox.getDrawLineStroke();
         this.color = toolbox.getDrawLineColor();
         this.type = type;
-        this.isHollow = isHollow;
         this.isHollow = toolbox.getHollow();
+        setOpaque(false);
+        //移动变形所需监听器
+        addListener();
+    }
+
+    public JGraph(Color color, BasicStroke stroke, MyGraphType type, boolean isHollow) {
+        this.color = color;
+        this.stroke = stroke;
+        this.type = type;
+        this.isHollow = isHollow;
         setOpaque(false);
         //移动变形所需监听器
         addListener();
