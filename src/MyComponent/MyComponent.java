@@ -1,6 +1,7 @@
 package MyComponent;
 
 import MyComponent.myLine.MyPoint;
+import window.area.ToolBox;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -42,6 +43,9 @@ public interface MyComponent {
     void addMouseListener(MouseListener l);
     void addMouseMotionListener(MouseMotionListener l);
     void addFocusListener(FocusListener l);
+
+    void changeToolBox(ToolBox toolBox);
+
 
     MyComponent clone();
 

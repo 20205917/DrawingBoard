@@ -145,12 +145,15 @@ public class Board extends JLayeredPane {
         //前图形回到原来位置
         if (chooseGraph != null)
             setLayer((Component) chooseGraph, frontLayer);
-        if (next == null)
+        if (next == null) {
             return;
+        }
         //如果有新图形，将其放于拖动层
         frontLayer = getLayer((Component) next);
         setLayer((Component) next, DRAG_LAYER);
         chooseGraph = next;
+
+
     }
 
     //添加图形
@@ -162,6 +165,7 @@ public class Board extends JLayeredPane {
                 super.mouseClicked(e);
                 if (e.getClickCount() >= 2) {
                     changeChooseGraph(myComponent);
+
                 }
             }
         });
