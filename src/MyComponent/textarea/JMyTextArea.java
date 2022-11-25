@@ -63,4 +63,11 @@ public class JMyTextArea extends JTextArea implements MyComponent {
         return log.toString();
     }
 
+    @Override
+    public MyComponent clone() {
+        JMyTextArea clone = new JMyTextArea(this.getFont(), this.getCaretColor());
+        clone.setText(this.getText());
+        return clone;
+    }
+
 }

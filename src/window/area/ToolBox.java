@@ -14,6 +14,8 @@ public class ToolBox {
     private MyGraphType graphType = MyGraphType.Rect;
     //图形颜色
     protected Color drawLineColor = Color.blue;
+    // 是否空心
+    protected boolean isHollow = false;
     // 线条宽度
     protected BasicStroke drawLineStroke = new BasicStroke(2);
     // 字体设置
@@ -132,5 +134,17 @@ public class ToolBox {
 
     public Font getTextFont() {
         return textFont;
+    }
+
+    public void switchHollow(){
+        isHollow = !isHollow;
+    }
+
+    public void setHollow(boolean isHollow) {
+        this.isHollow = isHollow;
+    }
+
+    public boolean getHollow() {
+        return isHollow;
     }
 }
