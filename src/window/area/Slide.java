@@ -14,6 +14,7 @@ public class Slide extends JFrame {
 
     public Slide(Board[] boards) {
         setUndecorated(true);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setBounds(0, 0, getToolkit().getScreenSize().width, getToolkit().getScreenSize().height);
         setLayout(null);
 
@@ -25,40 +26,25 @@ public class Slide extends JFrame {
         for (int i=0;i<boards.length;i++)
             mainPane.add("第"+i+"z张",new MyPanel(boards[i]));
 
-//        JButton back = new JButton("<-");
-//        back.setContentAreaFilled(false);
-//        back.setBorderPainted(false);
-//        back.setBounds(0, getToolkit().getScreenSize().height - buttonSize, buttonSize, buttonSize);
-//        add(back);
-//
-//        JButton forward = new JButton("->");
-//        forward.setContentAreaFilled(false);
-//        forward.setBorderPainted(false);
-//        forward.setBounds(buttonSize, getToolkit().getScreenSize().height - buttonSize, buttonSize, buttonSize);
-//        add(forward);
-//
-//        JButton quit = new JButton("x");
-//        quit.setContentAreaFilled(false);
-//        quit.setBorderPainted(false);
-//        quit.setBounds(2 * buttonSize, getToolkit().getScreenSize().height - buttonSize, buttonSize, buttonSize);
-//        add(quit);
-
 
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                cardLayout.next(mainPane);
+                if(e.getButton() == MouseEvent.BUTTON1)
+                    cardLayout.next(mainPane);
             }
         });
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
                 super.keyTyped(e);
-
+                if(e.getKeyCode() == KeyEvent.VK_ESCAPE)
+                    Slide.this.dispose();
             }
         });
         add(mainPane);
+
         setVisible(true);
     }
 }
