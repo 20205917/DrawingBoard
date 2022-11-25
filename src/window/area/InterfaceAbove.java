@@ -158,9 +158,11 @@ public class InterfaceAbove extends JPanel {
         GridBagConstraints gbc = new GridBagConstraints();
 
         Button bRect = new Button("Rect");
+        Button bSquare = new Button("Square");
         Button bOval = new Button("Oval");
         Button bLine = new Button("Line");
-        String[] shapes = {"Rect", "Oval", "Line", "Triangle", "Square", "IsoscelesLadder"};
+        Button bCircle = new Button("Circle");
+        String[] shapes = {"Rect", "Square", "Triangle", "IsoscelesLadder", "Oval", "Circle", "roundRect", "Line"};
         SearchComboBox cbSearch = new SearchComboBox(shapes);
 
 
@@ -169,8 +171,10 @@ public class InterfaceAbove extends JPanel {
         gbc.weightx = 1;
         gbc.weighty = 1;
         addComponent(shapeTable, bRect, gbl, gbc);
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        addComponent(shapeTable, bSquare, gbl, gbc);
         addComponent(shapeTable, bOval, gbl, gbc);
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        addComponent(shapeTable, bCircle, gbl, gbc);
         gbc.gridwidth = 1;
         gbc.weightx = 1;
         addComponent(shapeTable, bLine, gbl, gbc);
@@ -265,7 +269,6 @@ public class InterfaceAbove extends JPanel {
     }
 
 
-
     public InterfaceAbove(ToolBox toolBox) {
         //加载工具和
         this.toolBox = toolBox;
@@ -313,9 +316,6 @@ public class InterfaceAbove extends JPanel {
     public void setInner(Insets inner) {
         this.inner = inner;
     }
-
-
-
 
 
     class SearchComboBoxListener implements KeyListener, ItemListener {
@@ -384,7 +384,7 @@ public class InterfaceAbove extends JPanel {
         public void itemStateChanged(ItemEvent e) {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 toolBox.setSelection(selects.CreatJGraph);
-                toolBox.setGraphType(MyGraphType.valueOf((String)e.getItem()));
+                toolBox.setGraphType(MyGraphType.valueOf((String) e.getItem()));
             }
         }
     }

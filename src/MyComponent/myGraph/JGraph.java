@@ -42,16 +42,21 @@ public class JGraph extends JPanel implements MyComponent {
             case Line -> {
             }                                                                                                          //线段
             case Oval ->
-                    g2d.drawOval(drawGap, drawGap, getWidth() - drawGap, getHeight() - drawGap);                          //椭圆形
+                    g2d.drawOval(drawGap, drawGap, getWidth() - 2 * drawGap, getHeight() -  2 * drawGap);                          //椭圆形
+            case roundRect ->
+                    g2d.drawRoundRect(drawGap, drawGap, getWidth() -  2 * drawGap, getHeight() -  2 * drawGap, gap, gap);
             case Rect ->
-                    g2d.drawRect(drawGap, drawGap, getWidth() - drawGap, getHeight() - drawGap);                          //长方形
+                    g2d.drawRect(drawGap, drawGap, getWidth() -  2 * drawGap, getHeight() -  2 * drawGap);                          //长方形
+            case Circle ->
+                    g2d.drawOval(drawGap, drawGap, Math.min(getWidth(), getHeight()) -  2 * drawGap, Math.min(getWidth(), getHeight()) -  2 * drawGap);  // 圆形
             case Square ->
-                    g2d.drawRect(drawGap, drawGap, Math.min(getWidth(), getHeight()) - 2, Math.min(getWidth(), getHeight()));  //正方形
+                    g2d.drawRect(drawGap, drawGap, Math.min(getWidth(), getHeight()) -  2 * drawGap, Math.min(getWidth(), getHeight()) -  2 * drawGap);  //正方形
             case Triangle -> {                                                                                                       //等腰三角形
 //                g2d.drawLine(getX(),getY()+getHeight()+drawGap,getX()+getWidth(),getY()+getHeight()+drawGap);
 //                g2d.drawLine(getX()+getWidth()/2,getY(),getX(),getY()+getHeight());
 //                g2d.drawLine(getX()+getWidth()/2,getY(),getX()+getWidth(),getY()+getHeight());
                 // System.out.println("Tri");
+
                 g2d.drawLine(g2d.getClipBounds().x, g2d.getClipBounds().y + getHeight() - drawGap, g2d.getClipBounds().x + getWidth(), g2d.getClipBounds().y + getHeight() - drawGap);
                 g2d.drawLine(g2d.getClipBounds().x + getWidth() / 2, g2d.getClipBounds().y, g2d.getClipBounds().x, g2d.getClipBounds().y + getHeight());
                 g2d.drawLine(g2d.getClipBounds().x + getWidth() / 2, g2d.getClipBounds().y, g2d.getClipBounds().x + getWidth(), g2d.getClipBounds().y + getHeight());
@@ -59,8 +64,8 @@ public class JGraph extends JPanel implements MyComponent {
             case IsoscelesLadder -> {                                                                                                 //等腰梯型
                 g2d.drawLine(g2d.getClipBounds().x + getWidth() / 4, g2d.getClipBounds().y + drawGap, g2d.getClipBounds().x + getWidth() * 3 / 4, g2d.getClipBounds().y + drawGap);
                 g2d.drawLine(g2d.getClipBounds().x, g2d.getClipBounds().y + getHeight() - drawGap, g2d.getClipBounds().x + getWidth(), g2d.getClipBounds().y + getHeight() - drawGap);
-                g2d.drawLine(g2d.getClipBounds().x + getWidth() / 4, g2d.getClipBounds().y + drawGap, g2d.getClipBounds().x, g2d.getClipBounds().y + getHeight() - drawGap);
-                g2d.drawLine(g2d.getClipBounds().x + getWidth() * 3 / 4, g2d.getClipBounds().y + drawGap, g2d.getClipBounds().x + getWidth(), g2d.getClipBounds().y + getHeight() - drawGap);
+                g2d.drawLine(g2d.getClipBounds().x + getWidth() / 4, g2d.getClipBounds().y + drawGap, g2d.getClipBounds().x, g2d.getClipBounds().y + getHeight() + drawGap);
+                g2d.drawLine(g2d.getClipBounds().x + getWidth() * 3 / 4, g2d.getClipBounds().y + drawGap, g2d.getClipBounds().x + getWidth(), g2d.getClipBounds().y + getHeight() + drawGap);
             }
         }
 
@@ -71,16 +76,17 @@ public class JGraph extends JPanel implements MyComponent {
     @Override
     public String save() {
         StringBuilder log = new StringBuilder();
-
-        switch (type) {
-            case Line -> log.append("Line");
-            case Rect -> log.append("Rect");
-            case Oval -> log.append("Oval");
-            case Triangle -> log.append("Triangle");
-            case Square -> log.append("Square");
-            case IsoscelesLadder -> log.append("IsoscelesLadder");
-            default -> log.append("Error");
-        }
+        log.append(type.toString());
+//        switch (type) {
+//            case Line -> log.append("Line");
+//            case Rect -> log.append("Rect");
+//            case Oval -> log.append("Oval");
+//            case Triangle -> log.append("Triangle");
+//            case Square -> log.append("Square");
+//            case IsoscelesLadder -> log.append("IsoscelesLadder");
+//            case Circle -> log.append("Circle");
+//            default -> log.append("Error");
+//        }
         log.append(System.getProperty("line.separator"));
         log.append("color:").append(color.getRGB()).append(System.getProperty("line.separator"))
                 .append("stroke:").append(stroke.getLineWidth()).append(System.getProperty("line.separator"));
