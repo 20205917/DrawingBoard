@@ -129,10 +129,10 @@ public class UserInterface extends JFrame {
 
     public void save(String Path) {
         path = Path;
-        {
-            for (Board board : allBoard)
-                System.out.print(board.save());
-        }
+//        {
+//            for (Board board : allBoard)
+//                System.out.print(board.save());
+//        }
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
             for (Board board : allBoard) {
