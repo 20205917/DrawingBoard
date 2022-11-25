@@ -27,8 +27,6 @@ public class UserInterface extends JFrame {
     public InterfaceRight rightArea;
     //滚动界面，装左侧预览小窗口
     public InterfaceLeft leftArea;
-    // 幻灯片，用于播放
-    public Slide slide;
     //画板集合
     HashSet<Board> allBoard = new HashSet<>();
     //工具盒
@@ -60,10 +58,6 @@ public class UserInterface extends JFrame {
         leftArea = new InterfaceLeft();
         add(leftArea);
 
-        // 幻灯片
-        slide = new Slide();
-        // 将左侧面板传入以控制播放
-        slide.setLeftArea(leftArea);
 
         //布局管理
         int x = getContentPane().getWidth();

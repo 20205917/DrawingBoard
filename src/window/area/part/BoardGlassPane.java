@@ -93,13 +93,16 @@ public class BoardGlassPane extends JPanel implements MouseListener, MouseMotion
         if(isMake){
             switch (board.toolBox.getSelection()){
                 case Rubber -> {
-                    for(JDrawLine jDrawLine : board.jDrawLines)
-                        jDrawLine.deletePoint(new MyPoint(e.getX(),e.getY()));
+                    board.jDrawLines.removeIf(jDrawLine -> {
+                        //如果有删除,删除后为空，则删除线段记录
+                        if(jDrawLine.deletePoint(new MyPoint(e.getX(), e.getY()),(int)board.toolBox.getDrawLineStroke().getLineWidth()*3))
+                            return jDrawLine.isEmpty();
+                        return false;
+                    });
                     board.repaint();
                 }
-                case Pen->{
-                    board.jDrawLines.get(board.jDrawLines.size()-1).addPoint(new MyPoint(e.getX(),e.getY()));
-                    board.jDrawLines.get(board.jDrawLines.size()-1).drawLine(getGraphics()); }
+                case Pen->
+                    board.jDrawLines.get(board.jDrawLines.size()-1).addAndDrawPoint(new MyPoint(e.getX(),e.getY()),getGraphics());
                 case CreatJGraph,CreatTextArea-> board.getChooseGraph().resize(mousePressedPoint,new MyPoint(e.getX(),e.getY()));
                 default -> System.out.println( "创建失败"+board.toolBox.getSelection());
             }

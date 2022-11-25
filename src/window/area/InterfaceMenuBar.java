@@ -138,74 +138,48 @@ public class InterfaceMenuBar extends JMenuBar {
         });
 
 
-        createPage.addActionListener(e -> {
-            parent.addPage(new Board(parent.toolBox));
-        });
-        deletePage.addActionListener(e ->{
-            parent.deletePage();
-        });
+        createPage.addActionListener(e -> parent.addPage(new Board(parent.toolBox)));
+        deletePage.addActionListener(e -> parent.deletePage());
 
-        upPage.addActionListener(e ->{
-            parent.upPage();
-        });
-        downPage.addActionListener(e ->{
-            parent.downPage();
-        });
+        upPage.addActionListener(e -> parent.upPage());
+        downPage.addActionListener(e -> parent.downPage());
 
         designPage.addActionListener(e ->{
 
         });
 
         // 绘制
-        triangle.addActionListener(e -> {
-            parent.toolBox.setGraphType(MyGraphType.Triangle);
-        });
+        triangle.addActionListener(e -> parent.toolBox.setGraphType(MyGraphType.Triangle));
 
-        square.addActionListener(e->{
-            parent.toolBox.setGraphType(MyGraphType.Square);
-        });
+        square.addActionListener(e-> parent.toolBox.setGraphType(MyGraphType.Square));
 
-        rect.addActionListener(e->{
-            parent.toolBox.setGraphType(MyGraphType.Rect);
-        });
+        rect.addActionListener(e-> parent.toolBox.setGraphType(MyGraphType.Rect));
 
-        isoscelesLadder.addActionListener(e->{
-            parent.toolBox.setGraphType(MyGraphType.IsoscelesLadder);
-        });
+        isoscelesLadder.addActionListener(e-> parent.toolBox.setGraphType(MyGraphType.IsoscelesLadder));
 
-        circle.addActionListener(e->{
-            parent.toolBox.setGraphType(MyGraphType.Circle);
-        });
+        circle.addActionListener(e-> parent.toolBox.setGraphType(MyGraphType.Circle));
 
-        oval.addActionListener(e->{
-            parent.toolBox.setGraphType(MyGraphType.Oval);
-        });
+        oval.addActionListener(e-> parent.toolBox.setGraphType(MyGraphType.Oval));
 
-        roundRect.addActionListener(e->{
-            parent.toolBox.setGraphType(MyGraphType.roundRect);
-        });
+        roundRect.addActionListener(e-> parent.toolBox.setGraphType(MyGraphType.roundRect));
 
-        line.addActionListener(e->{
-            parent.toolBox.setGraphType(MyGraphType.Line);
-        });
+        line.addActionListener(e-> parent.toolBox.setGraphType(MyGraphType.Line));
 
         // 复制
         copy.addActionListener(e -> {
-            parent.rightArea.board.copy();
+            //parent.rightArea.board.copy();
         });
         // 粘贴
         paste.addActionListener(e -> {
-            parent.rightArea.board.paste();
+            //parent.rightArea.board.paste();
         });
         // 删除
         delete.addActionListener(e -> {
-            parent.rightArea.board.delete();
+            //parent.rightArea.board.delete();
         });
 
         // 从头播放
-        startAllOver.addActionListener(e -> {
-            parent.slide.play();
-        });
+        startAllOver.addActionListener(e ->  new Slide(parent.leftArea.getBoards()));
 
         // 从当前页播放
         startHere.addActionListener(e -> {

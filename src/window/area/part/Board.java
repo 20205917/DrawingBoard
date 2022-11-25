@@ -1,6 +1,7 @@
 package window.area.part;
 
 import MyComponent.MyComponent;
+import MyComponent.myGraph.JGraph;
 import MyComponent.myGraph.JGraphFactory;
 import MyComponent.myGraph.MyGraphType;
 import MyComponent.myLine.JDrawLine;
