@@ -1,4 +1,4 @@
-package window.area.part;
+package MyComponent;
 
 import javax.swing.*;
 import java.util.regex.Pattern;

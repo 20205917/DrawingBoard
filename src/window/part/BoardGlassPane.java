@@ -1,4 +1,4 @@
-package window.area.part;
+package window.part;
 
 import MyComponent.MyComponent;
 import MyComponent.myGraph.JGraphFactory;

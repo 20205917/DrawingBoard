@@ -1,4 +1,4 @@
-package window.area.part;
+package window.otherwindow;
 
 import MyComponent.myLine.MyPoint;
 

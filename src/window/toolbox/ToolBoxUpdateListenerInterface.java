@@ -1,4 +1,4 @@
-package window.area;
+package window.toolbox;
 
 import java.util.EventListener;
 

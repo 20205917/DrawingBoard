@@ -1,10 +1,10 @@
 package window.area;
 
 import MyComponent.myGraph.MyGraphType;
-import window.ErrorDialog;
 import window.UserInterface;
-import window.area.part.Board;
-import window.area.part.DesignPageDialog;
+import window.otherwindow.DesignPageDialog;
+import window.otherwindow.ErrorDialog;
+import window.part.Board;
 
 import javax.swing.*;
 import java.awt.*;

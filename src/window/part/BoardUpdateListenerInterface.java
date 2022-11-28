@@ -1,6 +1,4 @@
-package window.area.part;
-
-import window.area.ToolBoxUpdateEvent;
+package window.part;
 
 import java.util.EventListener;
 

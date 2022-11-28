@@ -1,6 +1,6 @@
 package MyComponent.myGraph;
 
-import window.area.ToolBox;
+import window.toolbox.ToolBox;
 
 public class JGraphFactory {
     public static JGraph creatJGraph(final ToolBox toolBox, MyGraphType type){
