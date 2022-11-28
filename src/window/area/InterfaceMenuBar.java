@@ -134,6 +134,7 @@ public class InterfaceMenuBar extends JMenuBar {
             } else{
                 parent.save(openFilePath);
                 System.out.println(openFilePath);
+
             }
         });
 

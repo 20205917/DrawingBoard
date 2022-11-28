@@ -78,15 +78,16 @@ public class UserInterface extends JFrame {
         });
         //对工具箱经行监听，更新board状态
         toolBox.addToolBoxUpdateListener(e->{
-            if(rightArea.getBoard()!=null)
+            if(rightArea.getBoard()!=null){
                 rightArea.getBoard().resetBoardGlassPane();
-                if(rightArea.board.getChooseGraph() != null){
+                if(rightArea.getBoard().getChooseGraph() != null){
                     leftArea.getCurrentPage().updateCopyBoard();
-                    rightArea.board.getChooseGraph().changeToolBox(toolBox);
+                    rightArea.getBoard().getChooseGraph().changeToolBox(toolBox);
                 }
             }
+        }
 
-        });
+        );
         //主界面设计
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
@@ -146,7 +147,7 @@ public class UserInterface extends JFrame {
         }
     }
 
-    public void readFile(String filePath, UserInterface userInterface) {
+    public void readFile(String filePath, UserInterface userInterface){
         path = filePath;
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(

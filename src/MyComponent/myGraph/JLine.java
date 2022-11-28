@@ -43,11 +43,11 @@ public class JLine extends JGraph {
     public String save() {
         String sup = super.save();
         StringBuilder log =  new StringBuilder();
+        log.append(sup);
         if (pointA.px<pointB.px == pointA.py<pointB.py)
             log.append("JLine-WN").append(System.getProperty("line.separator"));
         else
             log.append("JLine-EN").append(System.getProperty("line.separator"));
-        log.append(sup);
         return log.toString();
     }
 }

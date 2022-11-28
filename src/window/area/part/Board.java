@@ -28,7 +28,7 @@ public class Board extends JLayeredPane {
     //背景
     final JPanel background;
     //画图笔轨迹集合
-    public final ArrayList<JDrawLine> jDrawLines = new ArrayList<>();
+    public ArrayList<JDrawLine> jDrawLines = new ArrayList<>();
     //最大层
     public int maxLayer = 0;
     //选择层
@@ -160,6 +160,7 @@ public class Board extends JLayeredPane {
                 add(clone, specificBoard.getLayer(c));
             }
         }
+        jDrawLines = specificBoard.jDrawLines;
         maxLayer = specificBoard.maxLayer;
         setSize(specificBoard.getWidth(), specificBoard.getHeight());
         setSize(board_width, board_height);
@@ -270,6 +271,11 @@ public class Board extends JLayeredPane {
                 }
             }
         }
+        for(JDrawLine j : jDrawLines){
+            log.append("#####").append(System.getProperty("line.separator"));
+            log.append("Layer:").append(400).append(System.getProperty("line.separator"));
+            log.append(j.save());
+        }
         log.append("\n");
 
         return log.toString();
@@ -308,12 +314,24 @@ public class Board extends JLayeredPane {
 
                 myComponent.setBounds(x, y, width, height);
                 if ("Line".equals(type)) {
-                    String direction = info[6];
+                    String direction = info[7];
                     if (direction.equals("JLine-WN"))
                         myComponent.resize(new MyPoint(x, y), new MyPoint(x + width, y + height));
                     else
                         myComponent.resize(new MyPoint(x, y + height), new MyPoint(x + width, y));
                 }
+            }
+            case "JDrawLine"->{
+                float stroke = Float.parseFloat(info[3].substring(info[3].indexOf(':') + 1));
+                JDrawLine drawLine = new JDrawLine(new Color(rgb), new BasicStroke(stroke));
+                for(int i = 4; i < info.length; i++){
+                    int index = Integer.parseInt(info[i].substring(0, info[i].indexOf(':')));
+                    String temp = info[i].substring(info[i].indexOf(':') + 1);
+                    int x = Integer.parseInt(temp.substring(0, temp.indexOf(',')));
+                    int y = Integer.parseInt(temp.substring(temp.indexOf(',') + 1));
+                    drawLine.loadLine(index, new MyPoint(x, y));
+                }
+                jDrawLines.add(drawLine);
             }
             case "TextArea" -> {
                 String content = info[8].substring(info[8].indexOf(':') + 1);
@@ -346,10 +364,13 @@ public class Board extends JLayeredPane {
                 myComponent = textArea;
 
             }
+
             default -> System.out.println("error");
         }
-        add(myComponent, layer);
-        changeChooseGraph(myComponent);
+        if(myComponent != null) {
+            add(myComponent, layer);
+            changeChooseGraph(myComponent);
+        }
     }
 
     public MyComponent getChooseGraph() {
