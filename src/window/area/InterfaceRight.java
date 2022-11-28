@@ -1,5 +1,6 @@
 package window.area;
 
+import MyComponent.myLine.MyPoint;
 import window.area.part.Board;
 
 import javax.swing.*;
@@ -10,14 +11,12 @@ import java.awt.event.ComponentEvent;
 public class InterfaceRight extends JScrollPane {
     final JPanel rightPane;
 
-    public Board board;
+    private Board board;
     public InterfaceRight() {
         super();
         rightPane = new JPanel();
         rightPane.setLayout(null);
         getViewport().setView(rightPane);
-
-
         //滚动页面
         addComponentListener(new ComponentAdapter() {
             //重设小窗口大小
@@ -48,5 +47,27 @@ public class InterfaceRight extends JScrollPane {
         //添加新画板
         rightPane.add(board);
         repaint();
+    }
+
+    public Board getBoard(){return board;}
+
+    //改变Board大小
+    public void resizeBoardSize(int w,int h){
+        if(board == null)
+            return;
+        w = w > 0 ? w:board.getWidth();
+        h = h > 0 ? h:board.getWidth();
+        board.setBoardSize(w,h);
+        board.setSize(w,h);
+        board.setLocation((rightPane.getWidth()-board.getWidth())/2,(rightPane.getHeight()-board.getHeight())/2);
+    }
+
+    public MyPoint getBoardSize(){
+        int w =0 ,h=0;
+        if(board!=null){
+            w = board.getWidth();
+            h = board.getHeight();
+        }
+        return new MyPoint(w,h);
     }
 }

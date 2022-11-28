@@ -78,8 +78,8 @@ public class UserInterface extends JFrame {
         });
         //对工具箱经行监听，更新board状态
         toolBox.addToolBoxUpdateListener(e->{
-            if(rightArea.board!=null) {
-                rightArea.board.resetBoardGlassPane();
+            if(rightArea.getBoard()!=null)
+                rightArea.getBoard().resetBoardGlassPane();
                 if(rightArea.board.getChooseGraph() != null){
                     leftArea.getCurrentPage().updateCopyBoard();
                     rightArea.board.getChooseGraph().changeToolBox(toolBox);

@@ -8,6 +8,7 @@ public class JDrawLine {
     final BasicStroke stroke;
     final Color color;
     HashMap<Integer, HashSet<MyPoint>> myLines = new HashMap<>();
+
     MyPoint frontPoint = null;
     public JDrawLine(Color color, BasicStroke stroke){
         this.stroke = stroke;
