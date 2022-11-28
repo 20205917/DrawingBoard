@@ -55,18 +55,21 @@ public class ToolBox {
 
     public void setDrawLineColor(Color drawLineColor) {
         this.drawLineColor = drawLineColor;
+        fireToolBoxUpdateListener(new ToolBoxUpdateEvent(this));
     }
 
     public void setTextStyle(String textStyle) {
         this.textStyle = textStyle;
         this.textAttribute.put(TextAttribute.FAMILY, textStyle);
         setTextFont();
+        fireToolBoxUpdateListener(new ToolBoxUpdateEvent(this));
     }
 
     public void setTextSize(int textSize) {
         this.textSize = textSize;
         this.textAttribute.put(TextAttribute.SIZE, textSize);
         setTextFont();
+        fireToolBoxUpdateListener(new ToolBoxUpdateEvent(this));
     }
 
     public void setIsBold() {
@@ -76,6 +79,7 @@ public class ToolBox {
         else
             this.textAttribute.put(TextAttribute.WEIGHT, TextAttribute.WEIGHT_REGULAR);
         setTextFont();
+        fireToolBoxUpdateListener(new ToolBoxUpdateEvent(this));
     }
 
     public void setIsItalic() {
@@ -85,6 +89,7 @@ public class ToolBox {
         else
             this.textAttribute.put(TextAttribute.POSTURE, TextAttribute.POSTURE_REGULAR);
         setTextFont();
+        fireToolBoxUpdateListener(new ToolBoxUpdateEvent(this));
     }
 
     public void setIsUnderline() {
@@ -94,10 +99,12 @@ public class ToolBox {
         else
             this.textAttribute.remove(TextAttribute.UNDERLINE);
         setTextFont();
+        fireToolBoxUpdateListener(new ToolBoxUpdateEvent(this));
     }
 
     public void setTextFont() {
         this.textFont = new Font(textAttribute);
+        fireToolBoxUpdateListener(new ToolBoxUpdateEvent(this));
     }
 
 
@@ -113,6 +120,7 @@ public class ToolBox {
 
     public void setDrawLineStroke(int thickness) {
         this.drawLineStroke = new BasicStroke(thickness);
+        fireToolBoxUpdateListener(new ToolBoxUpdateEvent(this));
     }
 
     public MyGraphType getGraphType() {
@@ -126,6 +134,7 @@ public class ToolBox {
 
     public Color getDrawLineColor() {
         return drawLineColor;
+
     }
 
     public BasicStroke getDrawLineStroke() {
@@ -137,11 +146,14 @@ public class ToolBox {
     }
 
     public void switchHollow(){
+
         isHollow = !isHollow;
+        fireToolBoxUpdateListener(new ToolBoxUpdateEvent(this));
     }
 
     public void setHollow(boolean isHollow) {
         this.isHollow = isHollow;
+        fireToolBoxUpdateListener(new ToolBoxUpdateEvent(this));
     }
 
     public boolean getHollow() {

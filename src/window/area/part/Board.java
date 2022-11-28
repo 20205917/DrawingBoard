@@ -41,6 +41,7 @@ public class Board extends JLayeredPane {
     private MyComponent chooseGraph;
 
     private MyComponent copyGraph;
+    public BoardUpdateListenerInterface listener;
 
 
     public Board(ToolBox toolBox) {
@@ -121,17 +122,61 @@ public class Board extends JLayeredPane {
     }
 
     public Board(Board specificBoard) {
+        setLayout(null);
+        toolBox = specificBoard.toolBox;
+
+
         background = new JPanel();
         background.setBackground(Color.white);
+        background.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                if (e.getClickCount() == 2) boardGlassPane.requestFocus();
+            }
+        });
         add(background, DEFAULT_LAYER - 1, 0);
         boardGlassPane = new BoardGlassPane(this);
+        // 初始与底层，一般情况不截取
+        add(boardGlassPane, FRAME_CONTENT_LAYER, 0);
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                super.componentResized(e);
+                background.setSize(getWidth(), getHeight());
+                boardGlassPane.setSize(getWidth(), getHeight());
+            }
+        });
+
         for(Component c:specificBoard.getComponents()){
             if(c instanceof JGraph){
-                add(c);
+                MyComponent clone = ((JGraph) c).clone();
+                if(c == specificBoard.getChooseGraph()) {
+                    specificBoard.changeChooseGraph(null);
+                    add(clone, specificBoard.getLayer(c));
+                    specificBoard.changeChooseGraph((MyComponent) c);
+                    changeChooseGraph(clone);
+                }
+                add(clone, specificBoard.getLayer(c));
             }
         }
+        maxLayer = specificBoard.maxLayer;
+        setSize(specificBoard.getWidth(), specificBoard.getHeight());
         setSize(board_width, board_height);
     }
+
+    //添加监听器
+    public void addBoardUpdateListener(BoardUpdateListenerInterface e){
+        listener = e;
+    }
+    //删除监听器
+    public void deleteBoardUpdateListener(){
+        listener = null;
+    }
+    public void inspireBoardUpdateListener(BoardUpdateEvent e){
+        if(listener!=null) listener.handleEvent(e);
+    }
+
 
     @Override
     public void paint(Graphics g) {
@@ -145,16 +190,20 @@ public class Board extends JLayeredPane {
         //前图形回到原来位置
         if (chooseGraph != null)
             setLayer((Component) chooseGraph, frontLayer);
-        if (next == null)
+        if (next == null) {
             return;
+        }
         //如果有新图形，将其放于拖动层
         frontLayer = getLayer((Component) next);
         setLayer((Component) next, DRAG_LAYER);
         chooseGraph = next;
+
+
     }
 
     //添加图形
     public void add(MyComponent myComponent, int Layer) {
+        inspireBoardUpdateListener(new BoardUpdateEvent(this));
         add((Component) myComponent, Layer, 0);
         myComponent.addMouseListener(new MouseAdapter() {
             @Override
@@ -162,6 +211,7 @@ public class Board extends JLayeredPane {
                 super.mouseClicked(e);
                 if (e.getClickCount() >= 2) {
                     changeChooseGraph(myComponent);
+
                 }
             }
         });
@@ -192,7 +242,7 @@ public class Board extends JLayeredPane {
 
     public void delete() {
         if (chooseGraph != null) {
-            System.out.println(chooseGraph);
+            inspireBoardUpdateListener(new BoardUpdateEvent(this));
             this.remove((Component) chooseGraph);
         }
         repaint();

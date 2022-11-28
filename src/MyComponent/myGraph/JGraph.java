@@ -9,7 +9,7 @@ import java.awt.*;
 
 public class JGraph extends JPanel implements MyComponent {
     protected Color color;
-    protected final BasicStroke stroke;
+    protected BasicStroke stroke;
     protected final MyGraphType type;
     protected boolean isHollow;
 
@@ -143,6 +143,13 @@ public class JGraph extends JPanel implements MyComponent {
         JGraph clone = new JGraph(this.color, this.stroke, this.type, this.isHollow);
         clone.setBounds(getX(), getY(), getWidth(), getHeight());
         return clone;
+    }
+
+    public void changeToolBox(ToolBox toolBox){
+         isHollow = toolBox.getHollow();
+         color = toolBox.getDrawLineColor();
+         stroke = toolBox.getDrawLineStroke();
+         repaint();
     }
 
 }

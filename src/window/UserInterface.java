@@ -80,6 +80,12 @@ public class UserInterface extends JFrame {
         toolBox.addToolBoxUpdateListener(e->{
             if(rightArea.getBoard()!=null)
                 rightArea.getBoard().resetBoardGlassPane();
+                if(rightArea.board.getChooseGraph() != null){
+                    leftArea.getCurrentPage().updateCopyBoard();
+                    rightArea.board.getChooseGraph().changeToolBox(toolBox);
+                }
+            }
+
         });
         //主界面设计
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
