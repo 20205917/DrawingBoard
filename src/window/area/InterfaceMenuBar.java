@@ -4,6 +4,7 @@ import MyComponent.myGraph.MyGraphType;
 import window.ErrorDialog;
 import window.UserInterface;
 import window.area.part.Board;
+import window.area.part.DesignPageDialog;
 
 import javax.swing.*;
 import java.awt.*;
@@ -27,13 +28,13 @@ public class InterfaceMenuBar extends JMenuBar {
 
 
 
-
         JMenu beginOption = new JMenu("开始");
         JMenuItem createPage = new JMenuItem("创建新幻灯片");
         JMenuItem deletePage = new JMenuItem("删除当期幻灯片");
         JMenuItem upPage = new JMenuItem("前移当前幻灯片");
         JMenuItem downPage = new JMenuItem("后移当前幻灯片");
         JMenuItem designPage = new JMenuItem("页面设计");
+
         beginOption.add(createPage);
         beginOption.add(deletePage);
         beginOption.addSeparator();
@@ -41,6 +42,8 @@ public class InterfaceMenuBar extends JMenuBar {
         beginOption.add(downPage);
         beginOption.addSeparator();
         beginOption.add(designPage);
+
+
 
         JMenu plotItem = new JMenu("绘图");
         JMenu polygon = new JMenu("多边形");
@@ -95,17 +98,10 @@ public class InterfaceMenuBar extends JMenuBar {
                 throw new RuntimeException(ex);
             }
 
-
-            /*
-
-                初始化配置文件
-
-            */
             System.out.println(openFilePath);
             parent.ManagementSystem.creatNewWindow(openFilePath);
 
         });
-
 
         // 打开其他文件
         openFile.addActionListener(e -> {
@@ -114,14 +110,11 @@ public class InterfaceMenuBar extends JMenuBar {
             // 用户选择的文件路径
             String openFilePath = fileDialog.getDirectory() + fileDialog.getFile();
             parent.ManagementSystem.creatNewWindow(openFilePath);
-            // parent.readFile(openFilePath);
 
         });
 
-
         //保存
         saveFile.addActionListener(e -> parent.save(parent.path));
-
 
         //另存为
         saveAsFile.addActionListener(e -> {
@@ -137,40 +130,38 @@ public class InterfaceMenuBar extends JMenuBar {
             }
         });
 
-
+        //增加白板
         createPage.addActionListener(e -> parent.addPage(new Board(parent.toolBox)));
+        //删除白板
         deletePage.addActionListener(e -> parent.deletePage());
-
+        //前移白板
         upPage.addActionListener(e -> parent.upPage());
+        //后移白板
         downPage.addActionListener(e -> parent.downPage());
-
-        designPage.addActionListener(e ->{
-
+        //页面设计
+        designPage.addActionListener(e -> {
+            DesignPageDialog x = new DesignPageDialog(parent,parent.rightArea.getBoardSize());
+            x.addConfimListener(e1 -> parent.rightArea.resizeBoardSize(x.getNewSize().px,x.getNewSize().py));
+            x.setVisible(true);
         });
 
         // 绘制
         triangle.addActionListener(e -> parent.toolBox.setGraphType(MyGraphType.Triangle));
-
         square.addActionListener(e-> parent.toolBox.setGraphType(MyGraphType.Square));
-
         rect.addActionListener(e-> parent.toolBox.setGraphType(MyGraphType.Rect));
-
         isoscelesLadder.addActionListener(e-> parent.toolBox.setGraphType(MyGraphType.IsoscelesLadder));
-
         circle.addActionListener(e-> parent.toolBox.setGraphType(MyGraphType.Circle));
-
         oval.addActionListener(e-> parent.toolBox.setGraphType(MyGraphType.Oval));
-
         roundRect.addActionListener(e-> parent.toolBox.setGraphType(MyGraphType.RoundRect));
-
         line.addActionListener(e-> parent.toolBox.setGraphType(MyGraphType.Line));
 
+
         // 复制
-        copy.addActionListener(e -> parent.rightArea.board.copy());
+        copy.addActionListener(e -> parent.rightArea.getBoard().copy());
         // 粘贴
-        paste.addActionListener(e -> parent.rightArea.board.paste());
+        paste.addActionListener(e -> parent.rightArea.getBoard().paste());
         // 删除
-        delete.addActionListener(e -> parent.rightArea.board.delete());
+        delete.addActionListener(e -> parent.rightArea.getBoard().delete());
 
         // 从头播放
         startAllOver.addActionListener(e ->  new Slide(parent.leftArea.getBoards()).setVisible(true));

@@ -11,15 +11,25 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
 public class Slide extends JFrame {
-
+    private JPanel myJPanel;
     public Slide(Board[] boards) {
 
         //窗口设置
-        setBackground(Color.black);
         setUndecorated(true);
+        setLayout(null);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setBounds(0, 0, getToolkit().getScreenSize().width, getToolkit().getScreenSize().height);
 
+        myJPanel = new JPanel();
+        add(myJPanel);
+        myJPanel.setBackground(Color.gray);
+        //防止抢占焦点
+        myJPanel.setFocusable(false);
+        myJPanel.setBounds(0,0,getToolkit().getScreenSize().width, getToolkit().getScreenSize().height);
+
+        //卡片布局管理器
+        CardLayout cardLayout = new CardLayout();
+        myJPanel.setLayout(cardLayout);
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -30,31 +40,28 @@ public class Slide extends JFrame {
         });
         if (boards.length==0) return;
 
-        //卡片布局管理器
-        CardLayout cardLayout = new CardLayout();
-        setLayout(cardLayout);
         for (int i=0;i<boards.length;i++)
-            add("第"+i+"张",new MyPanel(boards[i]));
+            myJPanel.add("第"+i+"张",new MyPanel(boards[i]));
 
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 if(e.getButton() == MouseEvent.BUTTON1)
-                    cardLayout.next(getContentPane());
+                    cardLayout.next(myJPanel);
             }
         });
     }
 
     void setShowPage(int i){
-        ((CardLayout)getContentPane().getLayout()).show(getContentPane(),"第"+i+"张");
+        ((CardLayout)myJPanel.getLayout()).show(myJPanel,"第"+i+"张");
     }
 }
 
 class MyPanel extends JPanel {
     public BufferedImage showImage;
-    float radio;
     public MyPanel(Board board) {
+        setBackground(Color.black);
         int w = board.getWidth();
         int h = board.getHeight();
         showImage = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
@@ -65,10 +72,12 @@ class MyPanel extends JPanel {
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        if(getWidth()*showImage.getHeight()>getHeight()*showImage.getWidth())
-            setPreferredSize(new Dimension(getWidth(),getHeight()*showImage.getWidth()/showImage.getHeight()));
+        int w = getToolkit().getScreenSize().width;
+        int h = getToolkit().getScreenSize().height;
+
+        if(w*showImage.getHeight()>h*showImage.getWidth())
+            g.drawImage(showImage, (w-h*showImage.getWidth()/showImage.getHeight())/2, 0,h*showImage.getWidth()/showImage.getHeight(),h, null);
         else
-            setPreferredSize(new Dimension(getWidth()*showImage.getHeight()/showImage.getWidth(),getHeight()));
-        g.drawImage(showImage, 0, 0,getPreferredSize().width,getPreferredSize().height, null);
+            g.drawImage(showImage,0,(h-w*showImage.getHeight()/showImage.getWidth())/2 , w,w*showImage.getHeight()/showImage.getWidth(), null);
     }
 }

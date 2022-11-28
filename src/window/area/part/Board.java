@@ -23,8 +23,8 @@ import java.util.HashMap;
 //单页画布
 public class Board extends JLayeredPane {
     // 画布大小
-    protected static final int INITIAL_WIDTH = 500;
-    protected static final int INITIAL_HEIGHT = 450;
+    protected  int board_width = 450;
+    protected  int board_height = 320;
     //背景
     final JPanel background;
     //画图笔轨迹集合
@@ -75,7 +75,7 @@ public class Board extends JLayeredPane {
                 boardGlassPane.setSize(getWidth(), getHeight());
             }
         });
-        setSize(INITIAL_WIDTH, INITIAL_HEIGHT);
+        setSize(board_width, board_height);
 
     }
 
@@ -130,7 +130,7 @@ public class Board extends JLayeredPane {
                 add(c);
             }
         }
-        setSize(INITIAL_WIDTH, INITIAL_HEIGHT);
+        setSize(board_width, board_height);
     }
 
     @Override
@@ -225,6 +225,10 @@ public class Board extends JLayeredPane {
         return log.toString();
     }
 
+    public void setBoardSize(int width,int height){
+        board_width = width;
+        board_height = height;
+    }
 
     public void addGraphic(String graphicData) {
         // System.out.println(graphicData);
