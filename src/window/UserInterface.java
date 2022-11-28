@@ -1,8 +1,9 @@
 package window;
 
 import window.area.*;
-import window.area.part.Board;
-import window.area.part.Page;
+import window.part.Board;
+import window.part.Page;
+import window.toolbox.ToolBox;
 
 import javax.swing.*;
 import java.awt.*;

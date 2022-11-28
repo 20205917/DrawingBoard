@@ -1,8 +1,9 @@
 package window.area;
 
 import MyComponent.myGraph.MyGraphType;
-import window.area.part.SearchComboBox;
-import window.area.part.selects;
+import MyComponent.SearchComboBox;
+import window.part.selects;
+import window.toolbox.ToolBox;
 
 import javax.swing.*;
 import java.awt.*;

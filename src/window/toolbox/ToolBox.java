@@ -1,7 +1,7 @@
-package window.area;
+package window.toolbox;
 
 import MyComponent.myGraph.MyGraphType;
-import window.area.part.selects;
+import window.part.selects;
 
 import java.awt.*;
 import java.awt.font.TextAttribute;

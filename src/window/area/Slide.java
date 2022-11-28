@@ -1,6 +1,6 @@
 package window.area;
 
-import window.area.part.Board;
+import window.part.Board;
 
 import javax.swing.*;
 import java.awt.*;

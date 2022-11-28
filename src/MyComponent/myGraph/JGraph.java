@@ -2,7 +2,7 @@ package MyComponent.myGraph;
 
 import MyComponent.MyComponent;
 import MyComponent.myLine.MyPoint;
-import window.area.ToolBox;
+import window.toolbox.ToolBox;
 
 import javax.swing.*;
 import java.awt.*;

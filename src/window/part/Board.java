@@ -1,4 +1,4 @@
-package window.area.part;
+package window.part;
 
 import MyComponent.MyComponent;
 import MyComponent.myGraph.JGraph;
@@ -7,7 +7,7 @@ import MyComponent.myGraph.MyGraphType;
 import MyComponent.myLine.JDrawLine;
 import MyComponent.myLine.MyPoint;
 import MyComponent.textarea.JMyTextArea;
-import window.area.ToolBox;
+import window.toolbox.ToolBox;
 
 import javax.swing.*;
 import java.awt.*;
@@ -287,7 +287,6 @@ public class Board extends JLayeredPane {
     }
 
     public void addGraphic(String graphicData) {
-        // System.out.println(graphicData);
         String[] info = graphicData.split("\n");
 
         int layer = Integer.parseInt(info[0].substring(info[0].indexOf(':') + 1));
@@ -364,9 +363,9 @@ public class Board extends JLayeredPane {
                 myComponent = textArea;
 
             }
-
             default -> System.out.println("error");
         }
+
         if(myComponent != null) {
             add(myComponent, layer);
             changeChooseGraph(myComponent);

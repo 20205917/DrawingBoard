@@ -1,4 +1,4 @@
-package window.area.part;
+package window.part;
 
 import java.util.EventObject;
 

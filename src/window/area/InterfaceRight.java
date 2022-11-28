@@ -1,7 +1,7 @@
 package window.area;
 
 import MyComponent.myLine.MyPoint;
-import window.area.part.Board;
+import window.part.Board;
 
 import javax.swing.*;
 import java.awt.*;
