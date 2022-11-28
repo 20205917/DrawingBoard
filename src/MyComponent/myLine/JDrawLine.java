@@ -74,6 +74,11 @@ public class JDrawLine {
         return ifDelete;
     }
 
+    public void loadLine(int index, MyPoint point){
+        myLines.computeIfAbsent(index, k -> new HashSet<>());
+        myLines.get(index).add(point);
+    }
+
     //判断是否为空
     public boolean isEmpty(){return myLines.isEmpty();}
 
@@ -92,15 +97,13 @@ public class JDrawLine {
     public String save(){
         StringBuilder log = new StringBuilder();
         log.append("JDrawLine").append(System.getProperty("line.separator"));
-        log.append("color:").append(color.getRGB()).append("stroke:").append(stroke.getLineWidth())
-                .append(System.getProperty("line")).append(System.getProperty("line.separator"));
-//        int i=0;
-//        for (MyPoint point : myPoints){
-//            log.append(point.px).append(" ").append(point.py).append(" ");
-//            if(++i==10){
-//                i=0; log.append(System.getProperty("line.separator"));
-//            }
-//        }
+        log.append("color:").append(color.getRGB()).append(System.getProperty("line.separator"));
+        log.append("stroke:").append(stroke.getLineWidth()).append(System.getProperty("line.separator"));
+        for(int i:myLines.keySet()){
+            for(MyPoint p : myLines.get(i)){
+                log.append(i).append(":").append(p.px).append(",").append(p.py).append(System.getProperty("line.separator"));
+            }
+        }
 
         return log.toString();
     }

@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class Management {
     HashMap<String , UserInterface> openedSet = new HashMap<>();
@@ -17,7 +18,10 @@ public class Management {
     public void creatNewWindow(String path){
         synchronized (this){
             Management management = this;
-
+            // 若关闭则无事发生
+            if(Objects.equals(path, "nullnull")){
+                return;
+            }
             if(management.openedSet.containsKey(path)){
                 JDialog  dialog = new ErrorDialog("该文件已经打开");
                 dialog.setVisible(true);
@@ -28,7 +32,14 @@ public class Management {
                     public void run() {
                         UserInterface userInterface = new UserInterface(management);
                         management.openedSet.put(path,userInterface);
-                        userInterface.load(path, userInterface);
+                        try {
+                            userInterface.load(path, userInterface);
+                        }
+                        catch (Exception e){
+                            JDialog  dialog = new ErrorDialog("该文件格式错误");
+                            dialog.setVisible(true);
+                            return;
+                        }
                         userInterface.setVisible(true);
                         // 关闭时将窗口信息从openSet中移除
                         userInterface.addWindowListener(new WindowAdapter() {

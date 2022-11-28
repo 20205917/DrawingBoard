@@ -25,20 +25,22 @@ public class Page extends JButton {
     }
 
     public void updateCopyBoard(){
-        redo = true;
+        redo = false;
         copyBoard = new Board(board);
     }
 
     public void undo(){
-        redo = true;
-        Board temp = board;
-        board = copyBoard;
-        board.addBoardUpdateListener(e->{
-            updateCopyBoard();
-        });
-        copyBoard = temp;
-        board.repaint();
-        updateImage();
+        if(!redo) {
+            redo = true;
+            Board temp = board;
+            board = copyBoard;
+            board.addBoardUpdateListener(e -> {
+                updateCopyBoard();
+            });
+            copyBoard = temp;
+            board.repaint();
+            updateImage();
+        }
     }
 
     public void redo(){
