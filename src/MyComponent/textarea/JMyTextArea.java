@@ -2,6 +2,7 @@ package MyComponent.textarea;
 
 import MyComponent.MyComponent;
 import MyComponent.myLine.MyPoint;
+import window.area.ToolBox;
 
 import javax.swing.*;
 import java.awt.*;
@@ -69,6 +70,13 @@ public class JMyTextArea extends JTextArea implements MyComponent {
         clone.setBounds(getX(), getY(), getWidth(), getHeight());
         clone.setText(this.getText());
         return clone;
+    }
+
+    public void changeToolBox(ToolBox toolBox){
+        setCaretColor(toolBox.getDrawLineColor());
+        setDisabledTextColor(toolBox.getDrawLineColor());
+        setFont(toolBox.getTextFont());
+        repaint();
     }
 
 }

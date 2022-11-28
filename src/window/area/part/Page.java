@@ -8,12 +8,51 @@ import java.awt.image.BufferedImage;
 public class Page extends JButton {
     public static  double AspectrRatio = 4/5.0;
     public Board board;
+    // 副本 TODO
+    private Board copyBoard;
+
+    private boolean redo = false;
     // 缩略图
     public Image thumbnail;
     public Page(Board B){
         board = B;
+        copyBoard = new Board(B);
+        board.addBoardUpdateListener(e->{
+            updateCopyBoard();
+        });
         setBackground(Color.white);
         setFocusable(false);
+    }
+
+    public void updateCopyBoard(){
+        redo = true;
+        copyBoard = new Board(board);
+    }
+
+    public void undo(){
+        redo = true;
+        Board temp = board;
+        board = copyBoard;
+        board.addBoardUpdateListener(e->{
+            updateCopyBoard();
+        });
+        copyBoard = temp;
+        board.repaint();
+        updateImage();
+    }
+
+    public void redo(){
+        if(redo){
+            Board temp = board;
+            board = copyBoard;
+            board.addBoardUpdateListener(e->{
+                updateCopyBoard();
+            });
+            copyBoard = temp;
+            redo = false;
+        }
+        board.repaint();
+        updateImage();
     }
 
     public void updateImage(){
