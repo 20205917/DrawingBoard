@@ -59,26 +59,13 @@ public class InterfaceAbove extends JPanel {
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         addComponent(toolsTable, bMouse, gbl, gbc);
 
-        bPen.addActionListener(e -> {
-            if (rightArea.board != null)
-                toolBox.setSelection(selects.Pen);
-        });
+        bPen.addActionListener(e -> toolBox.setSelection(selects.Pen));
 
-        bText.addActionListener(e -> {
-            if (rightArea.board != null)
-                toolBox.setSelection(selects.CreatTextArea);
-        });
+        bText.addActionListener(e -> toolBox.setSelection(selects.CreatTextArea));
 
-        bRubber.addActionListener(e -> {
-            if (rightArea.board != null)
-                toolBox.setSelection(selects.Rubber);
-        });
+        bRubber.addActionListener(e -> toolBox.setSelection(selects.Rubber));
 
-        bMouse.addActionListener(e -> {
-            if (rightArea.board != null)
-                toolBox.setSelection(selects.Mouse);
-
-        });
+        bMouse.addActionListener(e -> toolBox.setSelection(selects.Mouse));
 
         return toolsTable;
     }
@@ -120,33 +107,23 @@ public class InterfaceAbove extends JPanel {
         addComponent(textTable, bUnderline, gbl, gbc);
         cbTextFont.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                if (cbTextSize.getSelectedItem() != null && rightArea.board != null)
+                if (cbTextSize.getSelectedItem() != null )
                     toolBox.setTextStyle((String) cbTextFont.getSelectedItem());
             }
         });
 
         cbTextSize.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                if (cbTextSize.getSelectedItem() != null && rightArea.board != null)
+                if (cbTextSize.getSelectedItem() != null )
                     toolBox.setTextSize(Integer.parseInt((String) cbTextSize.getSelectedItem()));
             }
         });
 
-        bBold.addActionListener(e -> {
-            if (rightArea.board != null)
-                toolBox.setIsBold();
-        });
+        bBold.addActionListener(e -> toolBox.setIsBold());
 
-        bItalic.addActionListener(e -> {
-            if (rightArea.board != null)
-                toolBox.setIsItalic();
-        });
+        bItalic.addActionListener(e -> toolBox.setIsItalic());
 
-        bUnderline.addActionListener(e -> {
-            if (rightArea.board != null)
-                toolBox.setIsUnderline();
-        });
-
+        bUnderline.addActionListener(e -> toolBox.setIsUnderline());
 
         return textTable;
     }
@@ -183,47 +160,34 @@ public class InterfaceAbove extends JPanel {
         addComponent(shapeTable, cbSearch, gbl, gbc);
 
         bRect.addActionListener(e -> {
-            if (rightArea.board != null) {
-                toolBox.setSelection(selects.CreatJGraph);
-                toolBox.setGraphType(MyGraphType.Rect);
-            }
+            toolBox.setSelection(selects.CreatJGraph);
+            toolBox.setGraphType(MyGraphType.Rect);
         });
 
         bOval.addActionListener(e -> {
-            if (rightArea.board != null) {
-                toolBox.setSelection(selects.CreatJGraph);
-                toolBox.setGraphType(MyGraphType.Oval);
-            }
+            toolBox.setSelection(selects.CreatJGraph);
+            toolBox.setGraphType(MyGraphType.Oval);
         });
 
         bHollow.addActionListener(e -> {
-            if (rightArea.board != null) {
-                toolBox.switchHollow();
-                if(bHollow.getBorder() != BorderFactory.createLoweredBevelBorder())
-                    bHollow.setBorder(BorderFactory.createLoweredBevelBorder());
-                else
-                    bHollow.setBorder(BorderFactory.createRaisedBevelBorder());
-            }
+            toolBox.switchHollow();
+            if(bHollow.getBorder() != BorderFactory.createLoweredBevelBorder())
+                bHollow.setBorder(BorderFactory.createLoweredBevelBorder());
+            else
+                bHollow.setBorder(BorderFactory.createRaisedBevelBorder());
         });
 
-
-
         bSquare.addActionListener(e -> {
-            if (rightArea.board != null) {
-                toolBox.setSelection(selects.CreatJGraph);
-                toolBox.setGraphType(MyGraphType.Square);
-            }
+            toolBox.setSelection(selects.CreatJGraph);
+            toolBox.setGraphType(MyGraphType.Square);
         });
 
         bCircle.addActionListener(e -> {
-            if (rightArea.board != null) {
                 toolBox.setSelection(selects.CreatJGraph);
                 toolBox.setGraphType(MyGraphType.Circle);
-            }
         });
 
         cbSearch.addItemListener(new SearchComboBoxListener(cbSearch));
-
 
         return shapeTable;
     }
@@ -311,7 +275,7 @@ public class InterfaceAbove extends JPanel {
         cbThickness.setSelectedItem(0);
         cbThickness.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                if (cbThickness.getSelectedItem() != null && rightArea.board != null)
+                if (cbThickness.getSelectedItem() != null)
                     toolBox.setDrawLineStroke(Integer.parseInt((String) cbThickness.getSelectedItem()));
             }
         });
@@ -412,10 +376,7 @@ public class InterfaceAbove extends JPanel {
     }
 
     public void setColorButtonListener(Button b) {
-        b.addActionListener(actionEvent -> {
-            if (rightArea.board != null)
-                toolBox.setDrawLineColor(b.getBackground());
-        });
+        b.addActionListener(actionEvent -> toolBox.setDrawLineColor(b.getBackground()));
     }
 
     public void setRightArea(InterfaceRight rightArea) {
