@@ -80,6 +80,13 @@ public class InterfaceMenuBar extends JMenuBar {
         playOption.add(startAllOver);
         playOption.add(startHere);
 
+        JMenu control = new JMenu("控制");
+        JMenuItem undo = new JMenuItem("撤销");
+        JMenuItem redo = new JMenuItem("取消撤销");
+        control.add(undo);
+        control.add(redo);
+
+
         // 创建新文件
         newFile.addActionListener(e -> {
             FileDialog fileDialog = new FileDialog(parent, "选择要保存的位置", FileDialog.SAVE);
@@ -182,11 +189,23 @@ public class InterfaceMenuBar extends JMenuBar {
             slide.setVisible(true);
         });
 
+        // 撤销 TODO
+        undo.addActionListener(e -> {
+            parent.leftArea.getCurrentPage().undo();
+            parent.rightArea.updateBoard(parent.leftArea.getCurrentPage().board);
+        });
+        // 取消撤销
+        redo.addActionListener(e -> {
+            parent.leftArea.getCurrentPage().redo();
+            parent.rightArea.updateBoard(parent.leftArea.getCurrentPage().board);
+        });
+
         add(fileOption);
         add(beginOption);
         add(plotItem);
         add(operatorOption);
         add(playOption);
+        add(control);
     }
 }
 

@@ -81,6 +81,7 @@ public class UserInterface extends JFrame {
             if(rightArea.board!=null) {
                 rightArea.board.resetBoardGlassPane();
                 if(rightArea.board.getChooseGraph() != null){
+                    leftArea.getCurrentPage().updateCopyBoard();
                     rightArea.board.getChooseGraph().changeToolBox(toolBox);
                 }
             }
