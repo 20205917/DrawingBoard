@@ -14,8 +14,8 @@ import java.util.HashSet;
 
 public class UserInterface extends JFrame {
 
-    private static final int MinWidth = 400;
-    private static final int MinHeight = 250;
+    private static final int InitialWidth = 400;
+    private static final int InitialHeight = 250;
     //控制系统
     public Management ManagementSystem;
     //文件路径
@@ -36,7 +36,7 @@ public class UserInterface extends JFrame {
     public UserInterface(Management parent) {
         ManagementSystem = parent;
         //主界面格式设置
-        setBounds(200, 200, MinWidth * 2, MinHeight * 2);
+        setBounds(200, 200, InitialWidth * 2, InitialHeight * 2);
         setBackground(Color.gray);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLayout(null);

@@ -343,6 +343,8 @@ public class InterfaceAbove extends JPanel {
                 parent.setModel(items);
                 parent.showPopup();
                 parent.setText(input);
+                toolBox.setSelection(selects.CreatJGraph);
+                toolBox.setGraphType(MyGraphType.valueOf(opts.get(0)));
             } else if (opts == null) {
                 assert parent != null;
                 items = parent.allItems;
@@ -370,8 +372,13 @@ public class InterfaceAbove extends JPanel {
         @Override
         public void itemStateChanged(ItemEvent e) {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                toolBox.setSelection(selects.CreatJGraph);
-                toolBox.setGraphType(MyGraphType.valueOf((String) e.getItem()));
+                try {
+                    toolBox.setSelection(selects.CreatJGraph);
+                    toolBox.setGraphType(MyGraphType.valueOf((String) e.getItem()));
+                }
+                catch (IllegalArgumentException ignored){
+
+                }
             }
         }
     }
