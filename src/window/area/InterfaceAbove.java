@@ -141,7 +141,7 @@ public class InterfaceAbove extends JPanel {
         JButton bHollow = new JButton("Hollow");
         bHollow.setBorder(BorderFactory.createLoweredBevelBorder());
         Button bCircle = new Button("Circle");
-        String[] shapes = {"Rect", "Square", "Triangle", "IsoscelesLadder", "Oval", "Circle", "roundRect", "Line"};
+        String[] shapes = {"Rect", "Square", "Triangle", "IsoscelesLadder", "Oval", "Circle", "RoundRect", "Line"};
         SearchComboBox cbSearch = new SearchComboBox(shapes);
 
 

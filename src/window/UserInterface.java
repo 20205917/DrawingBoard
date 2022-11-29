@@ -14,7 +14,7 @@ import java.util.HashSet;
 
 public class UserInterface extends JFrame {
 
-    private static final int MinWith = 400;
+    private static final int MinWidth = 400;
     private static final int MinHeight = 250;
     //控制系统
     public Management ManagementSystem;
@@ -36,7 +36,7 @@ public class UserInterface extends JFrame {
     public UserInterface(Management parent) {
         ManagementSystem = parent;
         //主界面格式设置
-        setBounds(200, 200, MinWith * 2, MinHeight * 2);
+        setBounds(200, 200, MinWidth * 2, MinHeight * 2);
         setBackground(Color.gray);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLayout(null);
@@ -138,7 +138,6 @@ public class UserInterface extends JFrame {
 //            for (Board board : allBoard)
 //                System.out.print(board.save());
 //        }
-
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
             for (Board board : allBoard) {
                 writer.write(board.save());
@@ -162,18 +161,14 @@ public class UserInterface extends JFrame {
                 return;
             }
             String[] boardsData = (allData.toString()).split("\n\n");
-
             for (String board : boardsData) {
-
                 String[] boardData = board.split("#####\n");
-
                 Board newBoard = new Board(boardData[0], toolBox);
                 for (int i = 1; i < boardData.length; i++) {
                     newBoard.addGraphic(boardData[i]);
                 }
                 userInterface.addPage(newBoard);
             }
-
             in.close();
         } catch (IOException e) {
             e.printStackTrace();

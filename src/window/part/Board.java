@@ -297,28 +297,7 @@ public class Board extends JLayeredPane {
         MyComponent myComponent = null;
         switch (type) {
             case "Rect", "Oval", "Circle", "RoundRect","Line", "Triangle", "Square", "IsoscelesLadder" -> {
-                float stroke = Float.parseFloat(info[3].substring(info[3].indexOf(':') + 1));
-                String temp = info[4].substring(info[4].indexOf(':') + 1);
-                int x = Integer.parseInt(temp.substring(0, temp.indexOf(' ')));
-                int y = Integer.parseInt(temp.substring(temp.indexOf(' ') + 1));
-                temp = info[5].substring(info[5].indexOf(':') + 1);
-                int width = Integer.parseInt(temp.substring(0, temp.indexOf(' ')));
-                int height = Integer.parseInt(temp.substring(temp.indexOf(' ') + 1));
-                boolean isHollow = Boolean.parseBoolean(info[6].substring(info[6].indexOf(':') + 1));
-
-                toolBox.setDrawLineStroke((int) stroke);
-                toolBox.setDrawLineColor(new Color(rgb));
-                toolBox.setHollow(isHollow);
-                myComponent = JGraphFactory.creatJGraph(toolBox, MyGraphType.valueOf(type));
-
-                myComponent.setBounds(x, y, width, height);
-                if ("Line".equals(type)) {
-                    String direction = info[7];
-                    if (direction.equals("JLine-WN"))
-                        myComponent.resize(new MyPoint(x, y), new MyPoint(x + width, y + height));
-                    else
-                        myComponent.resize(new MyPoint(x, y + height), new MyPoint(x + width, y));
-                }
+                myComponent = JGraphFactory.creatJGraph(graphicData);
             }
             case "JDrawLine"->{
                 float stroke = Float.parseFloat(info[3].substring(info[3].indexOf(':') + 1));
